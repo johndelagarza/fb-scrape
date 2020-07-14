@@ -1,20 +1,41 @@
 {
-  "name": "app",
+  "name": "facebook-scrape",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "concurrently": "^5.2.0",
+    "cross-env": "^7.0.2",
+    "discord.js": "^12.2.0",
+    "electron": "^9.0.5",
+    "electron-builder": "^22.7.0",
+    "electron-is-dev": "^1.2.0",
+    "electron-log": "^4.2.2",
+    "electron-updater": "^4.3.1",
+    "moment": "^2.27.0",
+    "puppeteer": "^5.0.0",
+    "puppeteer-core": "^5.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1"
+    "react-notifications-component": "^2.4.0",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.1",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.88.2",
+    "styled-components": "^5.1.1",
+    "wait-on": "^5.0.1",
+    "winston": "^3.3.3"
   },
+  "main": "public/electron.js",
+  "homepage": "./",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "react-start": "react-scripts start",
+    "react-build": "react-scripts build",
+    "electron-build": "electron-builder",
+    "build": "yarn react-build && yarn electron-build",
+    "start": "concurrently \"cross-env BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && electron .\""
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -29,6 +50,29 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "author": {
+    "name": "John DeLaGarza",
+    "email": "johndelagarza@mail.com",
+    "url": "https://github.com/johndelagarza"
+  },
+  "build": {
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "http://127.0.0.1:8080/"
+      }
+    ],
+    "appId": "com.johndelagarza.fb-scrape",
+    "win": {
+      "icon": "build/icon.png"
+    },
+    "productName": "FB-Scrape",
+    "copyright": "Copyright © 2020 John DeLaGarza",
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
     ]
   }
 }

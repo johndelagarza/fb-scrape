@@ -1,26 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react';
+import { HashRouter as Router, Route, Switch, Redirect } from "react-router-dom";
+import ReactNotification from 'react-notifications-component';
+import 'react-notifications-component/dist/theme.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import NavigationHeader from './components/NavigationHeader';
+import Home from './pages/Home';
+import Keywords from './pages/Keywords';
+import Settings from './pages/Settings';
+import Logs from './pages/Logs';
+
+function App(props) {
+
+  // useEffect(async ()=> {
+  //   let keywords = JSON.parse(localStorage.getItem('keywords'));
+
+  //   keywords = await keywords.map(keyword => {
+  //     if (keyword.online === true) {
+  //       return { ...keyword, online: false };
+  //     } else return keyword;
+  //   });
+  //   return localStorage.setItem('keywords', JSON.stringify(keywords));
+  // }, []);
+
+return (
+  <div>
+    <Router>
+    <ReactNotification />
+        <NavigationHeader />
+          <Switch>
+            <Route exact path="/Home" component={Home} />
+            <Route exact path="/Keywords" component={Keywords} />
+            <Route exact path="/Settings" component={Settings} />
+            <Route exact path="/Logs" component={Logs} />
+          </Switch>
+      </Router>
+  </div> 
+  )
+};
 
 export default App;
