@@ -59,7 +59,7 @@ async function getListings(path, url, randomUserAgent, proxy) {
     await page.goto(url);
     const listings = await page.waitForSelector('a[tabindex="0"]', {timeout: 10000})
         .then(async ()=> {
-            console.log('finding products now...');
+            console.log('finding products now....');
             const products = await page.evaluate(() => {
                 let pageItems = Array.from(document.querySelectorAll('div[style="max-width: 390px; min-width: 190px;"]')); 
                 //pageItems.length = 5;  
