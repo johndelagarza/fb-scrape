@@ -6,18 +6,21 @@ import 'react-notifications-component/dist/theme.css'
 import { store } from 'react-notifications-component';
 
 function DeleteKeyword(props) {
-    const [showConfirm, setConfirm] = useState(false);
+    const [confirm, setConfirm] = useState(false);
     
     return (
-        <Icon size="large" style={{margin:"10px"}} color="black" name='trash' link onClick={()=> setConfirm(true)}>
+        <Icon size="large" style={{margin:"10px"}} color="black" name='trash' link onClick={()=> setConfirm(!confirm)}>
             <Confirm
-                open={showConfirm}
+                open={confirm}
                 content='Are you sure you want to delete this keyword?'
                 confirmButton="Confirm"
-                onCancel={()=> setConfirm(false)}
+                cancelButton="Cancel"
+                onCancel={()=> {
+                    return setConfirm(!confirm)
+                }}
                 onConfirm={()=> {
                     deleteKeyword(props.keyword).then(()=> props.refreshKeywords());
-                    return setConfirm(false);
+                    return setConfirm(!confirm);
                 }}
                 size='mini'
             />

@@ -1,6 +1,6 @@
 {
-  "name": "facebook-scrape",
-  "version": "0.1.0",
+  "name": "fb-scrape",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
@@ -9,10 +9,9 @@
     "concurrently": "^5.2.0",
     "cross-env": "^7.0.2",
     "discord.js": "^12.2.0",
-    "electron": "^9.0.5",
-    "electron-builder": "^22.7.0",
     "electron-is-dev": "^1.2.0",
     "electron-log": "^4.2.2",
+    "electron-redux": "^1.5.3",
     "electron-updater": "^4.3.1",
     "moment": "^2.27.0",
     "puppeteer": "^5.0.0",
@@ -20,8 +19,10 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-notifications-component": "^2.4.0",
+    "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
+    "redux": "^4.0.5",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.88.2",
     "styled-components": "^5.1.1",
@@ -74,5 +75,9 @@
       "build/**/*",
       "node_modules/**/*"
     ]
+  },
+  "devDependencies": {
+    "electron": "^9.0.5",
+    "electron-builder": "^22.7.0"
   }
 }

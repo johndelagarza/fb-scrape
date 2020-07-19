@@ -38,7 +38,6 @@ const addUrl = async (url) => {
     const parsed = queryString.parse(url);
     console.log(parsed)
     let currentUrls = localStorage.getItem('keywords');
-    console.log(currentUrls);
    
     if (!currentUrls) {
         let newKeywords = [{keyword: parsed.query, url: url, online: false}];

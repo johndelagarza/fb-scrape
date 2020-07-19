@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { Container, Image, Menu, Modal, Header, Portal, Segment, Form, Button, Icon, Input, Divider, Dropdown } from 'semantic-ui-react';
 import { Link, withRouter, Redirect } from 'react-router-dom';
 import 'react-notifications-component/dist/theme.css'
-import { store } from 'react-notifications-component';
-const Discord = require('discord.js');
 
-const ipcRenderer = window.require('electron').ipcRenderer;
+const Discord = require('discord.js');
+const { ipcRenderer, remote } = window.require('electron');
+
+let interval;
 
 function StartKeyword(props) {
     const [showConfirm, setConfirm] = useState(false);
-
     return (
         <Icon size="large" style={{margin:"10px"}} color="green" name='play' link onClick={()=> {
             startKeyword(props.keyword).then(()=> props.refreshKeywords());
@@ -19,6 +19,12 @@ function StartKeyword(props) {
 };
 
 const startKeyword = async (keyword) => {
+    clearInterval(interval);
+    interval = null;
+    let settings = await JSON.parse(localStorage.getItem('settings'));
+    if (!settings || !settings.hasOwnProperty('chromePath')) return alert('Error: Please set your path to Google Chrome in Settings.');
+    if (!settings.hasOwnProperty('discordWebhook')) return alert('Error: Please set your Discord Webhook in Settings.');
+    if (!settings.hasOwnProperty('interval')) return alert('Error: Please set an interval in Settings.');
     let keywords = await JSON.parse(localStorage.getItem('keywords'));
 
     const elementIdex = await keywords.findIndex(e => {
@@ -28,11 +34,12 @@ const startKeyword = async (keyword) => {
     let newKeywords = await keywords.map(e => e.keyword === keyword.keyword ? updatedKeyword : e);
     localStorage.setItem('keywords', JSON.stringify(newKeywords));
 
-    let settings = await JSON.parse(localStorage.getItem('settings'));
     let path = await settings.chromePath.replace(/(.exe)/g, '');
     try {
         scrape(keyword, path, settings)
-        return setInterval(()=> scrape(keyword, path, settings), 60000);
+        return interval = setInterval(()=> {
+            return scrape(keyword, path, settings)
+        }, parseInt(settings.interval));
     } catch (error) {
         return console.log(error)
     };
@@ -48,11 +55,11 @@ const scrape = async (keyword, path, settings) => {
     if (keywords[elementIdex].online === false) return clearInterval(scrape);
 
     try {
-        console.log('Starting scrape for: ' + keyword.keyword)
+        //console.log('Starting scrape for: ' + keyword.keyword)
         const listings = await ipcRenderer.invoke('startScrape', {
             path: path, 
             url: keyword.url, 
-            proxies: settings.proxies, 
+            proxies: settings.hasOwnProperty('proxies') ? settings.proxies : null, 
             discordWebhook: settings.discordWebhook
         });
         console.log(listings);

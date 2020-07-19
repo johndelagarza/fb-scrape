@@ -1,17 +1,20 @@
 const { app, BrowserWindow, dialog } = require('electron');
 const { autoUpdater } = require("electron-updater");
-const log = require('electron-log');
+//const log = require('electron-log');
 const ipcMain = require('electron').ipcMain;
 const path = require('path');
 const isDev = require('electron-is-dev');
 const url = require('url');
-const scrape = require('../facebook/scrape');
+const scrape = require('./scrape');
 const fs = require('fs'); 
 var shell = require('electron').shell;
+const queryString = require('query-string');
+// autoUpdater.logger = log;
+// autoUpdater.logger.transports.file.level = 'info';
+// log.info('App starting...');
 
-autoUpdater.logger = log;
-autoUpdater.logger.transports.file.level = 'info';
-log.info('App starting...');
+global.state = 'products found';
+global.chair = 'scraping now';
 
 let mainWindow;
 
@@ -24,8 +27,8 @@ function createWindow() {
           title: "FB Scrape"
       });
   mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
-
-  mainWindow.setMenu(null);
+  
+  //mainWindow.setMenu(null);
   if (isDev) {
     mainWindow.webContents.openDevTools();
   }
@@ -53,8 +56,14 @@ ipcMain.handle('setChromePath', async () => {
 });
 
 ipcMain.handle('startScrape', async (event, config) => {
-  //console.log(config)
-  const newListings = await scrape.scrape(config.path, config.url, config.proxies, config.discordWebhook);
+  const urlParsed = queryString.parse(url);
+  const keyword = urlParsed.query;
+  function log(msg) {
+    console.log(msg)
+    return mainWindow.webContents.send(msg.keyword, msg);
+  }
+  console.log(config)
+  const newListings = await scrape.scrape(config, log);
   return newListings;
 });
 
@@ -66,6 +75,7 @@ ipcMain.handle('get-logs', async (event, config) => {
   });
   return logs;
 });
+
 
 ipcMain.handle('open-listing', async (event, url) => {
   return shell.openExternal(url);

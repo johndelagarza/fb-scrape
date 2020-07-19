@@ -50,10 +50,11 @@ const getAllListings = async () => {
     let listings = [];
 
     const keywords = await JSON.parse(localStorage.getItem('keywords'));
+    if (!keywords) return;
     await keywords.forEach(keyword => {
         //keyword.currentListings.length = 3;
+        if (!keyword.hasOwnProperty('currentListings')) return;
         return listings = [...listings, keyword.currentListings[0]]
-        //return listings = [...listings].concat(keyword.currentListings)
     });
     console.log(listings);
     return listings;

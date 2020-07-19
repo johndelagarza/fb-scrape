@@ -18,7 +18,9 @@ function Settings() {
             <Header margin={"20px"}>Settings</Header>
             <Divider />
             <Container>
-                <Header margin={"20px"}>Chrome File Path</Header>
+                <Header margin={"20px"}>Chrome File Path
+                    <p style={{display: "inline", fontSize:"13px", margin: "5px", fontWeight: "lighter"}}>(required)</p>
+                </Header>
                     <Button onClick={()=> {
                         changeChromePath().then(newPath => {
                             if (newPath === undefined) return;
@@ -26,16 +28,23 @@ function Settings() {
                         })
                     }}>Select File Path</Button>
                     <Segment>{settings ? settings.chromePath : null}</Segment>
-                <Header>Discord Webhook</Header>
-                <Button onClick={()=> testWebhook(settings.discordWebhook)}>Test Webhook</Button>
+                <Header>Discord Webhook
+                    <p style={{display: "inline", fontSize:"13px", margin: "5px", fontWeight: "lighter"}}>(required)</p>
+                </Header>
+                <Button style={{marginBottom: "20px"}} onClick={()=> {
+                        if (!settings || !settings.hasOwnProperty('discordWebhook')) return alert('Error: No Discord Webhook inserted.')
+                        return testWebhook(settings.discordWebhook)
+                    }}>Test Webhook</Button>
                 <Input 
                     value={settings ? settings.discordWebhook : null}
                     fluid 
                     placeholder="Webhook URL" 
                     onChange={(e)=> setSettings({...settings, discordWebhook: e.target.value.replace(/\s+/g, '')})}
                 />
-                <Header>Proxies</Header>
-                <TextArea value={settings ? 
+                <Header>Proxies 
+                    <p style={{display: "inline", fontSize:"13px", margin: "5px", fontWeight: "lighter"}}>(optional - will use local connection to scrape if no proxies are inserted)</p>
+                </Header>
+                <TextArea value={settings && settings.hasOwnProperty('proxies') ? 
                         `${(settings.proxies.map(proxy => proxy + '\n')).toString().replace(/,/g, '')}` 
                     : null
                     } 
@@ -49,9 +58,23 @@ IP:PORT:USERNAME:PASSWORD`}
                         return setSettings({...settings, proxies: proxyList})
                     }} 
                 />
-                
+                <Header>Interval
+                    <p style={{display: "inline", fontSize:"13px", margin: "5px", fontWeight: "lighter"}}>(required)</p>
+                </Header>
+                <Input
+                    value={settings ? settings.interval : null}
+                    fluid 
+                    placeholder="Time between each scrape in milliseconds. ex: 60000" 
+                    onChange={(e)=> {
+                        return setSettings({...settings, interval: e.target.value.replace(/\s+/g, '')})
+                    }}
+                />
             </Container>
-            <Button fluid style={{marginTop:"50px"}} onClick={()=> saveSettings(settings)}>
+            <Button fluid style={{marginTop:"50px"}} onClick={()=> {
+                    if (!settings) return alert('Error: No settings to save.')
+                    if (settings.interval < 120000 && !settings.hasOwnProperty('proxies')) return alert('Error: You cannot set an interval lower than 2 minutes (120000ms) without proxies.');
+                    return saveSettings(settings)
+                }}>
                 Save Changes
             </Button>
         </Container>

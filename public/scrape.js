@@ -1,44 +1,36 @@
 const puppeteer = require('puppeteer-core');
-const discord = require('./discordWebhook');
 const queryString = require('query-string');
-const { createLogger, transports, format } = require('winston');
 const moment = require('moment');
+//const log = require('electron-log');
 
-const logger = createLogger({
-    transports: [
-        new transports.Console({
-            format: format.combine(format.timestamp(), format.json())
-        }),
-        new transports.File({ filename: 'scrapes.log', format: format.printf((info) => {
-            let message = `[${moment().format('MMMM Do YYYY, h:mm:ss a')}] | ${info.message} ..`
-            return message
-          }) 
-        })
-      ]
-  });
-
-async function scrape(path, url, proxies) {
+async function scrape(config, log) {
+    console.log(log)
+    console.log(typeof log)
+    const { path, url, proxies } = config;
     const urlParsed = queryString.parse(url);
-    let randomUserAgent = userAgents[randomProxy(userAgents)];
-    let proxy = '--proxy-server=' + proxies[randomProxy(proxies)];  
-    //logger.log('info', 'Scrape started for: ' + urlParsed.query.toUpperCase());
+    const keyword = urlParsed.query;
+    log({keyword: keyword, message: 'Running scrape'});
 
+    let proxy;
+    
+    let randomUserAgent = userAgents[randomProxy(userAgents)];
+    proxies !== null ? proxy == '--proxy-server=' + proxies[randomProxy(proxies)] : null;
+    
+    log({keyword: keyword, message: proxy});
     let maxPrice = parseInt(urlParsed.maxPrice) + (Math.floor(Math.random() * 25) + 1);
 
     let newUrl = url + `&maxPrice=${maxPrice}`;
-   
-    //logger.log('info', 'user-agent: ' + randomUserAgent);
-    //logger.log('info', 'proxy selected: ' + proxy);
-    const products = await getListings(path, newUrl, randomUserAgent, proxy);
-    //logger.log('info', `${products.length} ${urlParsed.query.toUpperCase()} listings found.`);
+    log({keyword: keyword, message: 'Pulling Listings'});
+    const products = await getListings(path, newUrl, randomUserAgent, proxy, keyword, log);
+    log({keyword: keyword, message: 'Done'});
     return products;
 };
 
-async function getListings(path, url, randomUserAgent, proxy) {
+async function getListings(path, url, randomUserAgent, proxy, keyword, log) {
     const browser = await puppeteer.launch({
         headless: true,
         executablePath: path,
-        args: [proxy]
+        args: (proxy ? [proxy] : ['--no-proxy-server'])
     });
     const context = await browser.createIncognitoBrowserContext(); // Launch incognito browser
     const page = await context.newPage();
@@ -55,15 +47,15 @@ async function getListings(path, url, randomUserAgent, proxy) {
             req.continue();
         }
     });
-
+    
+    log({keyword: keyword, message: 'Opening Facebook Marketplace'});
     await page.goto(url);
     const listings = await page.waitForSelector('a[tabindex="0"]', {timeout: 10000})
         .then(async ()=> {
-            console.log('finding products now....');
             const products = await page.evaluate(() => {
                 let pageItems = Array.from(document.querySelectorAll('div[style="max-width: 390px; min-width: 190px;"]')); 
                 //pageItems.length = 5;  
-                console.log('page items: ' + pageItems.length)   
+                //log({[keyword]: 'Listings found: ' + pageItems.length});   
                 return pageItems.map((listing)=> {
                         console.log(listing)
                         const title = listing.querySelector('div:nth-child(2) > div:nth-child(2)') 
@@ -86,21 +78,23 @@ async function getListings(path, url, randomUserAgent, proxy) {
             
                 return products.filter(product => product.url !== null);
         });
+        
+    log({keyword: keyword, message: 'Listings found: ' + listings.length});
     return listings;
     //await page.screenshot({path: `${config.username + config.keyword}.png`});
 };
 
-const previousListings = async (username, url) => {
-    let urlBeingScraped = await User.findOne({ username: username })
-        .then((user)=> {
-            let currentScrapes = user.currentScrapes;
-            let currentUrl = currentScrapes.find((item)=> item.url === url);
-            return currentUrl.currentItems;
-        });
-    console.log(`Checking ${urlBeingScraped.length} last scraped items for any new items.`)
+// const previousListings = async (username, url) => {
+//     let urlBeingScraped = await User.findOne({ username: username })
+//         .then((user)=> {
+//             let currentScrapes = user.currentScrapes;
+//             let currentUrl = currentScrapes.find((item)=> item.url === url);
+//             return currentUrl.currentItems;
+//         });
+//     console.log(`Checking ${urlBeingScraped.length} last scraped items for any new items.`)
 
-    return urlBeingScraped
-};
+//     return urlBeingScraped
+// };
 
 function generateRandomNumber() {
     var min = 0.00001,

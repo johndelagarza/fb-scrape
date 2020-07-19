@@ -10,7 +10,7 @@ let user = JSON.parse(localStorage.getItem('user'));
 function NavigationHeader(props) {
     const [activeItem, setActiveItem] = useState('');
 
-    if (props.location.pathname.includes('/login')) return null;
+    if (props.location.pathname.includes('/home')) return setActiveItem('home');
     if (props.location.pathname.includes('/register')) return null;
     if (props.location.pathname.includes('/reset-password')) return null;
     console.log(activeItem)
@@ -19,31 +19,31 @@ function NavigationHeader(props) {
             <Menu secondary widths={6} size="massive">
                 <Menu.Item
                     as={ Link }
-                    to="/home"
+                    to="/"
                     name='home'
-                    active={activeItem === 'home'}
-                    onClick={(e, { name })=> setActiveItem(name)}
+                    active={props.location.pathname === '/'}
+                    //onClick={(e, { name })=> setActiveItem(name)}
                 />
                 <Menu.Item
                     as={ Link }
                     to="/keywords"
                     name='keywords'
-                    active={activeItem === 'keywords'}
-                    onClick={(e, { name })=> setActiveItem(name)}
+                    active={props.location.pathname.includes('/keywords')}
+                    //onClick={(e, { name })=> setActiveItem(name)}
                 />
                 <Menu.Item
                     as={ Link }
                     to="/logs"
                     name='logs'
-                    active={activeItem === 'logs'}
-                    onClick={(e, { name })=> setActiveItem(name)}
+                    active={props.location.pathname.includes('/logs')}
+                    //onClick={(e, { name })=> setActiveItem(name)}
                 />
                 <Menu.Item
                     as={ Link }
                     to="/settings"
                     name='settings'
-                    active={activeItem === 'settings'}
-                    onClick={(e, { name })=> setActiveItem(name)}
+                    active={props.location.pathname.includes('/settings')}
+                    //onClick={(e, { name })=> setActiveItem(name)}
                 />
             </Menu>
         </Container>

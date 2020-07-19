@@ -28,7 +28,7 @@ return (
     <ReactNotification />
         <NavigationHeader />
           <Switch>
-            <Route exact path="/Home" component={Home} />
+            <Route exact path="/" component={Home} />
             <Route exact path="/Keywords" component={Keywords} />
             <Route exact path="/Settings" component={Settings} />
             <Route exact path="/Logs" component={Logs} />
