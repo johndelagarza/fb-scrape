@@ -12,11 +12,12 @@ async function scrape(config, log) {
     log({keyword: keyword, message: 'Running scrape'});
 
     let proxy;
-    
+    if (proxies) proxy = '--proxy-server=' + proxies[randomProxy(proxies)];
+    console.log(proxy)
     let randomUserAgent = userAgents[randomProxy(userAgents)];
-    proxies !== null ? proxy == '--proxy-server=' + proxies[randomProxy(proxies)] : null;
+    //proxies !== null ? proxy == '--proxy-server=' + proxies[randomProxy(proxies)] : null;
     
-    log({keyword: keyword, message: proxy});
+    log({keyword: keyword, message: `${proxies ? 'Selecting proxy' : 'No proxy'}`});
     let maxPrice = parseInt(urlParsed.maxPrice) + (Math.floor(Math.random() * 25) + 1);
 
     let newUrl = url + `&maxPrice=${maxPrice}`;
@@ -27,6 +28,7 @@ async function scrape(config, log) {
 };
 
 async function getListings(path, url, randomUserAgent, proxy, keyword, log) {
+    console.log(proxy)
     const browser = await puppeteer.launch({
         headless: true,
         executablePath: path,

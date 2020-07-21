@@ -1,5 +1,5 @@
-const { app, BrowserWindow, dialog } = require('electron');
-const { autoUpdater } = require("electron-updater");
+const { app, BrowserWindow, dialog, autoUpdater } = require('electron');
+//const { autoUpdater } = require("electron-updater");
 //const log = require('electron-log');
 const ipcMain = require('electron').ipcMain;
 const path = require('path');
@@ -13,22 +13,23 @@ const queryString = require('query-string');
 // autoUpdater.logger.transports.file.level = 'info';
 // log.info('App starting...');
 
-global.state = 'products found';
-global.chair = 'scraping now';
-
 let mainWindow;
 
 function createWindow() {
     mainWindow = new BrowserWindow({
-          width: 1200, 
-          height: 800,
+          minWidth: 790, 
+          minHeight: 890,
           frame: true,
+          // resizable: false,
           webPreferences: { nodeIntegration: true },
-          title: "FB Scrape"
+          title: "FB Scrape",
+          icon: path.join(__dirname, './icon.png'),
+          name: ''
       });
   mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
   
-  //mainWindow.setMenu(null);
+  mainWindow.setMenu(null);
+  //startAutoUpdater(squirrelUrl)
   if (isDev) {
     mainWindow.webContents.openDevTools();
   }
@@ -37,8 +38,8 @@ function createWindow() {
 
 app.on('ready', createWindow);
 
-app.on('ready', function()  {
-  autoUpdater.checkForUpdatesAndNotify();
+app.on('window-all-closed', () => {
+  app.quit()
 });
 
 ipcMain.handle('setChromePath', async () => {
@@ -76,31 +77,53 @@ ipcMain.handle('get-logs', async (event, config) => {
   return logs;
 });
 
-
 ipcMain.handle('open-listing', async (event, url) => {
   return shell.openExternal(url);
 });
 
+// const squirrelUrl = "https://discord.com/api/download?platform=win";
 
-autoUpdater.on('checking-for-update', () => {
-  sendStatusToWindow('Checking for update...');
-})
-autoUpdater.on('update-available', (info) => {
-  sendStatusToWindow('Update available.');
-})
-autoUpdater.on('update-not-available', (info) => {
-  sendStatusToWindow('Update not available.');
-})
-autoUpdater.on('error', (err) => {
-  sendStatusToWindow('Error in auto-updater. ' + err);
-})
-autoUpdater.on('download-progress', (progressObj) => {
-  let log_message = "Download speed: " + progressObj.bytesPerSecond;
-  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
-  log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
-  sendStatusToWindow(log_message);
-})
-autoUpdater.on('update-downloaded', (info) => {
-  sendStatusToWindow('Update downloaded');
-});
+// const startAutoUpdater = (squirrelUrl) => {
+//   // The Squirrel application will watch the provided URL
+//   autoUpdater.setFeedURL(`${squirrelUrl}`);
+
+//   // Display a success message on successful update
+//   autoUpdater.addListener("update-downloaded", (event, releaseNotes, releaseName) => {
+//     dialog.showMessageBox({"message": `The release ${releaseName} has been downloaded`});
+//   });
+
+//   // Display an error message on update error
+//   autoUpdater.addListener("error", (error) => {
+//     dialog.showMessageBox({"message": "Auto updater error: " + error});
+//   });
+
+//   // tell squirrel to check for updates
+//   autoUpdater.checkForUpdates();
+// };
+
+// const handleSquirrelEvent = () => {
+//   if (process.argv.length === 1) {
+//     return false;
+//   }
+
+//   const squirrelEvent = process.argv[1];
+//   switch (squirrelEvent) {
+//     case '--squirrel-install':
+//     case '--squirrel-updated':
+//     case '--squirrel-uninstall':
+//       setTimeout(app.quit, 1000);
+//       return true;
+
+//     case '--squirrel-obsolete':
+//       app.quit();
+//       return true;
+//   }
+// }
+
+// if (handleSquirrelEvent()) {
+//   // squirrel event handled and app will exit in 1000ms, so don't do anything else
+//   return;
+// }
+
+
 

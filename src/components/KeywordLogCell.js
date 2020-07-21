@@ -11,12 +11,12 @@ function KeywordLogCell(props) {
             return setLog(msg.message);
         });
     }, [log]);
-    
+    console.log(props.active)
     return (
         <Table.Cell style={{paddingLeft: "90px", paddingRight: "90px", position:"fixed" }}>
-        {log === 'Done' ? 'Waiting...' 
-            : !log ? 'Stopped'
-            : log
+        {!props.active ? 'Stopped' 
+            : log ? log
+            : ''
         }
         </Table.Cell>                
     )

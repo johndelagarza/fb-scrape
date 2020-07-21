@@ -7,27 +7,30 @@ import { store } from 'react-notifications-component';
 
 function StopKeyword(props) {
     const [showConfirm, setConfirm] = useState(false);
+
+    const stopKeyword = async (keyword) => {
+        let keywords = localStorage.getItem('keywords');
+        keywords = JSON.parse(keywords);
+    
+        const elementIdex = keywords.findIndex(e => {
+            return e.keyword === keyword.keyword;
+        });
+        let updatedKeyword = keywords[elementIdex] = {...keywords[elementIdex], online: false};
+    
+        keywords = keywords.map(e => e.keyword === keyword.keyword ? updatedKeyword : e);
+        
+        localStorage.setItem('keywords', JSON.stringify(keywords));
+        return props.saveKeywords(keywords);
+    };
     
     return (
         <Icon size="large" style={{margin:"10px"}} color="red" name='stop' link onClick={()=> {
-            stopKeyword(props.keyword).then(()=> props.refreshKeywords());
+            stopKeyword(props.keyword);
         }}>
         </Icon>
     );
 };
 
-const stopKeyword = async (keyword) => {
-    let keywords = localStorage.getItem('keywords');
-    keywords = JSON.parse(keywords);
 
-    const elementIdex = keywords.findIndex(e => {
-        return e.keyword === keyword.keyword;
-    });
-    let updatedKeyword = keywords[elementIdex] = {...keywords[elementIdex], online: false};
-
-    keywords = keywords.map(e => e.keyword === keyword.keyword ? updatedKeyword : e);
-    
-    return localStorage.setItem('keywords', JSON.stringify(keywords));
-};
 
 export default StopKeyword;

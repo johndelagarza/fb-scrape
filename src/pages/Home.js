@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react'
-import { Link, withRouter, Redirect } from 'react-router-dom';
-import { Container, Image, Menu, Dropdown, Button, Divider, List } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import { Container, Image, Divider, List } from 'semantic-ui-react';
 import { Header } from '../components/styled/elements';
 
 const moment = require('moment');
 const ipcRenderer = window.require('electron').ipcRenderer;
 
-function Home() {
+function Home(props) {
     const [listings, setListings] = useState(null);
 
     useEffect(()=> {
-        getAllListings().then(data => setListings(data));
-    }, []);
-
+        getAllListings(props.status.keywords)
+            .then(data => setListings(data));
+    }, [props.status.keywords]);
+    console.log(props.status)
     return (
         <Container>
             <Header margin={"20px"}>Newly Added Items</Header>
@@ -21,6 +22,7 @@ function Home() {
                 {
                     !listings ? null
                     : listings.map(listing => {
+                        if (!listing) return null;
                         return (
                             <List.Item>
                                 <Image 
@@ -33,7 +35,6 @@ function Home() {
                                     <List.Header>{`${listing.title} - ${listing.price.replace(/[a-zA-Z](.*)/, '')}`}</List.Header>
                                     <List.Description>
                                         {listing.location}
-                                       
                                     </List.Description>
                                     {listing.time ? moment.unix(listing.time).format('MMMM Do YYYY, h:mm:ss a').toString() : null}
                                 </List.Content>
@@ -46,10 +47,9 @@ function Home() {
     )
 };
 
-const getAllListings = async () => {
+const getAllListings = async (keywords) => {
     let listings = [];
 
-    const keywords = await JSON.parse(localStorage.getItem('keywords'));
     if (!keywords) return;
     await keywords.forEach(keyword => {
         //keyword.currentListings.length = 3;
@@ -60,4 +60,8 @@ const getAllListings = async () => {
     return listings;
 };
 
-export default Home
+const mapStateToProps = state => {
+    return { status: state.status }
+  };
+
+export default connect(mapStateToProps)(Home)

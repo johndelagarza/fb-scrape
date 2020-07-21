@@ -1,3 +1,0 @@
-const UPDATE_TASK_LOG = 'UPDATE_TASK_LOG';
-
-module.exports = { UPDATE_TASK_LOG: UPDATE_TASK_LOG }

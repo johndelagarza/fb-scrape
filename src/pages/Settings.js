@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from 'react'
-import { Link, withRouter, Redirect } from 'react-router-dom';
-import { Container, Image, Menu, Dropdown, Button, Divider, Input, TextArea, Segment } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import { Container, Button, Divider, Input, TextArea, Segment } from 'semantic-ui-react';
 import { Header } from '../components/styled/elements';
+import { updateSettings } from "../store/actions/action";
 
 const ipcRenderer = window.require('electron').ipcRenderer;
 const Discord = require('discord.js');
 
-function Settings() {
-    const [settings, setSettings] = useState(null);
+function Settings(props) {
+    const [settings, setSettings] = useState(props.status.settings ? props.status.settings : null);
 
-    useEffect(()=> {
-        getSettings().then(settings => setSettings(settings));
-    }, []);
+    const saveSettings = async (settings) => {
+        localStorage.setItem('settings', JSON.stringify(settings));
+        return props.updateSettings(settings);
+    };
+ 
     console.log(settings)
+    console.log(props.status.settings);
     return (
         <Container>
             <Header margin={"20px"}>Settings</Header>
@@ -70,7 +74,7 @@ IP:PORT:USERNAME:PASSWORD`}
                     }}
                 />
             </Container>
-            <Button fluid style={{marginTop:"50px"}} onClick={()=> {
+            <Button fluid style={{marginTop:"20px", marginBottom: "50px"}} onClick={()=> {
                     if (!settings) return alert('Error: No settings to save.')
                     if (settings.interval < 120000 && !settings.hasOwnProperty('proxies')) return alert('Error: You cannot set an interval lower than 2 minutes (120000ms) without proxies.');
                     return saveSettings(settings)
@@ -81,23 +85,19 @@ IP:PORT:USERNAME:PASSWORD`}
     )
 };
 
-export default Settings
-
-const getSettings = async () => {
-    let settings = localStorage.getItem('settings');
-
-    if (!settings) {
-        return null;
-    } else if (settings) {
-        return JSON.parse(settings);
+const mapDispatchToProps = dispatch => {
+    return {
+        updateSettings: (settings) => dispatch(updateSettings(settings))
     };
 };
 
-const saveSettings = async (settings) => {
-    return localStorage.setItem('settings', JSON.stringify(settings));
-};
+const mapStateToProps = state => {
+    return { status: state.status }
+  };
 
-const changeChromePath = async (settings) => {
+export default connect(mapStateToProps, mapDispatchToProps)(Settings);
+
+const changeChromePath = async () => {
     const newPath = await ipcRenderer.invoke('setChromePath');
     console.log(newPath);
     return newPath;
@@ -118,9 +118,3 @@ const testWebhook = async (discordWebhook) => {
     
     return hook.send(embed);
 };
-
-// const listProxies = async (proxies) => {
-//     JSON.parse(settings.proxies).map(proxy => {
-//         return proxy + '\n';                   
-//       })
-// };

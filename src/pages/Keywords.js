@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react'
+import { connect } from 'react-redux';
+
 import { Container, Table, Divider} from 'semantic-ui-react';
 import { Header } from '../components/styled/elements';
 import AddKeyword from '../components/AddKeyword';
@@ -7,21 +9,22 @@ import StartKeyword from '../components/StartKeyword';
 import StopKeyword from '../components/StopKeyword';
 import KeywordLogCell from '../components/KeywordLogCell';
 
-function Keywords() {
-    const [keywords, setKeywords] = useState([]);
+import { updateKeywords } from "../store/actions/action";
+
+function Keywords(props) {
+    const [keywords, setKeywords] = useState(props.status.keywords);
 
     useEffect(()=> {
-        getKeywords().then(keywords => {
-            return setKeywords(keywords);
-        })
+        return setKeywords(keywords);
     }, []);
-
+    
+    console.log(props.status)
     return (
         <Container>
             <h1>{}</h1>
             <Header margin={"20px"}>Current Keywords</Header>
             <Divider />
-            <AddKeyword refreshKeywords={()=> getKeywords().then(keywords => setKeywords(keywords))}/>
+            <AddKeyword saveKeywords={props.updateKeywords}/>
             <Table>
                 <Table.Header>
                     <Table.Row>
@@ -31,7 +34,7 @@ function Keywords() {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {keywords.length === 0 ? null : keywords.map((keyword)=> { 
+                    {props.status.keywords.length === 0 ? null : props.status.keywords.map((keyword)=> { 
                         return (
                             <Table.Row>                                       
                                 <Table.Cell>{keyword.keyword.toUpperCase()}</Table.Cell>
@@ -39,15 +42,15 @@ function Keywords() {
                                 <Table.Cell textAlign='right'>
                                     <StartKeyword 
                                         keyword={keyword} 
-                                        refreshKeywords={()=> getKeywords().then(keywords => setKeywords(keywords))}
+                                        saveKeywords={props.updateKeywords}
                                     />
                                     <StopKeyword 
                                         keyword={keyword} 
-                                        refreshKeywords={()=> getKeywords().then(keywords => setKeywords(keywords))}
+                                        saveKeywords={props.updateKeywords}
                                     />
                                     <DeleteKeyword 
                                         keyword={keyword.keyword} 
-                                        refreshKeywords={()=> getKeywords().then(keywords => setKeywords(keywords))}
+                                        saveKeywords={props.updateKeywords}
                                     />
                                 </Table.Cell>
                             </Table.Row>
@@ -60,7 +63,17 @@ function Keywords() {
     )
 };
 
-export default Keywords
+const mapStateToProps = state => {
+    return { status: state.status }
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        updateKeywords: (keywords) => dispatch(updateKeywords(keywords))
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Keywords);
 
 const getKeywords = async () => {
     let keywords = localStorage.getItem('keywords');
