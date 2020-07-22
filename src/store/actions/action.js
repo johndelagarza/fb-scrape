@@ -14,10 +14,19 @@ export const updateKeywords = (keywords) => {
   };
 };
 
-// export const log = (keyword, message) => {
-//   return {
-//     type: actionTypes.LOG,
-//     keyword: keyword,
-//     message: message
-//   };
-// };
+export const startKeyword = (keyword, path, settings, saveKeywords) => {
+  return {
+    type: actionTypes.START_KEYWORD,
+    keyword: keyword,
+    path: path,
+    settings: settings,
+    saveKeywords: saveKeywords
+  };
+};
+
+export const stopKeyword = (keyword, saveKeywords) => {
+  return {
+    type: actionTypes.STOP_KEYWORD,
+    keyword: keyword
+  };
+};

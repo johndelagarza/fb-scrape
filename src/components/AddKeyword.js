@@ -12,7 +12,7 @@ function AddKeyword(props) {
         console.log(parsed)
         if (!parsed.maxPrice) return alert('Error: URL must include max price filter.');
         if (!parsed.query) return alert('Error: URL is missing a keyword.');
-        if (parsed.sortBy !== 'creation_time_descend') return alert('Error: URL must include creation_time_descend filter.');
+        //if (parsed.sortBy !== 'creation_time_descend') return alert('Error: URL must include creation_time_descend filter.');
         let currentUrls = localStorage.getItem('keywords');
        
         if (!currentUrls) {

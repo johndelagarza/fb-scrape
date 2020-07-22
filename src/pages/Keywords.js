@@ -42,7 +42,7 @@ function Keywords(props) {
                                 <Table.Cell textAlign='right'>
                                     <StartKeyword 
                                         keyword={keyword} 
-                                        saveKeywords={props.updateKeywords}
+                                        
                                     />
                                     <StopKeyword 
                                         keyword={keyword} 

@@ -20,10 +20,11 @@ async function scrape(config, log) {
     log({keyword: keyword, message: `${proxies ? 'Selecting proxy' : 'No proxy'}`});
     let maxPrice = parseInt(urlParsed.maxPrice) + (Math.floor(Math.random() * 25) + 1);
 
-    let newUrl = url + `&maxPrice=${maxPrice}`;
+    let newUrl = url + `&maxPrice=${maxPrice}&daysSinceListed=1&sortBy=creation_time_descend`;
+    console.log(newUrl)
     log({keyword: keyword, message: 'Pulling Listings'});
     const products = await getListings(path, newUrl, randomUserAgent, proxy, keyword, log);
-    log({keyword: keyword, message: 'Done'});
+    log({keyword: keyword, message: 'Waiting...'});
     return products;
 };
 
@@ -38,20 +39,21 @@ async function getListings(path, url, randomUserAgent, proxy, keyword, log) {
     const page = await context.newPage();
     await page.setExtraHTTPHeaders({'Accept-Language': 'en'}); // Make sure webpage displays english.
     await page.setViewport({width: 1920, height: 1080}); // Set screen size to insure it loads everything.
-    await page.setUserAgent(randomUserAgent); // Set user-agent to insure we don't receive mobile version.
-    await page.setRequestInterception(true);
+    //await page.setUserAgent(randomUserAgent); // Set user-agent to insure we don't receive mobile version.
+    //await page.setRequestInterception(true);
 
-    page.on('request', (req) => {
-        if(req.resourceType() == 'font' || req.resourceType() == 'image'){
-            req.abort();
-        }
-        else {
-            req.continue();
-        }
-    });
+    // page.on('request', (req) => {
+    //     if(req.resourceType() == 'font' || req.resourceType() == 'image'){
+    //         req.abort();
+    //     }
+    //     else {
+    //         req.continue();
+    //     }
+    // });
     
     log({keyword: keyword, message: 'Opening Facebook Marketplace'});
     await page.goto(url);
+    await timeout(3000);
     const listings = await page.waitForSelector('a[tabindex="0"]', {timeout: 10000})
         .then(async ()=> {
             const products = await page.evaluate(() => {
@@ -62,8 +64,8 @@ async function getListings(path, url, randomUserAgent, proxy, keyword, log) {
                         console.log(listing)
                         const title = listing.querySelector('div:nth-child(2) > div:nth-child(2)') 
                             ? listing.querySelector('div:nth-child(2) > div:nth-child(2)').textContent : null;
-                        const price = listing.querySelector('div:nth-child(2) > div:nth-child(1)') 
-                            ? listing.querySelector('div:nth-child(2) > div:nth-child(1)').textContent : null;
+                        const price = listing.querySelector('[dir]')
+                            ? listing.querySelector('[dir]').textContent : null;
                         const location = listing.querySelector('div:nth-child(2) > div:nth-child(3)') 
                             ? listing.querySelector('div:nth-child(2) > div:nth-child(3)').textContent : null;
                         const url = listing.querySelector('[href]')
@@ -76,9 +78,17 @@ async function getListings(path, url, randomUserAgent, proxy, keyword, log) {
                     });
                 });
                 
-                browser.close();
-            
-                return products.filter(product => product.url !== null);
+                await browser.close();
+                console.log(products.length)
+                let elementIdex = products.findIndex(product => {
+                    return product.title === null;
+                });
+                console.log(elementIdex);
+                if (elementIdex > -1) products.length = elementIdex;
+                
+                let finalProducts = products.filter(product => product.url !== null);
+                console.log(finalProducts)
+                return finalProducts;
         });
         
     log({keyword: keyword, message: 'Listings found: ' + listings.length});
@@ -114,6 +124,10 @@ function randomProxy(proxies) {
     return ~~highlightedNumber;
 };
 
+function timeout(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 let userAgents = [
 	"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.112 Safari/537.36",
 	"Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_6; en-en) AppleWebKit/533.19.4 (KHTML, like Gecko) Version/5.0.3 Safari/533.19.4",
@@ -146,4 +160,3 @@ let userAgents = [
 ];
 
 module.exports = { scrape: scrape };
-

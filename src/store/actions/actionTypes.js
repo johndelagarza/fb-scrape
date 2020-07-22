@@ -1,3 +1,4 @@
 export const UPDATE_SETTINGS = 'UPDATE_SETTINGS';
 export const UPDATE_KEYWORDS = 'UPDATE_KEYWORDS';
-// export const LOG = 'LOG';
+export const START_KEYWORD = 'START_KEYWORD';
+export const STOP_KEYWORD = 'STOP_KEYWORD';

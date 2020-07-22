@@ -1,36 +1,29 @@
-import React, { useState, useEffect } from 'react'
-import { Container, Image, Menu, Modal, Header, Portal, Segment, Form, Button, Icon, Input, Divider, Dropdown } from 'semantic-ui-react';
-import { Link, withRouter, Redirect } from 'react-router-dom';
-
-import 'react-notifications-component/dist/theme.css'
-import { store } from 'react-notifications-component';
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { Icon } from 'semantic-ui-react';
+import { updateKeywords, stopKeyword } from "../store/actions/action";
+import 'react-notifications-component/dist/theme.css';
 
 function StopKeyword(props) {
     const [showConfirm, setConfirm] = useState(false);
-
-    const stopKeyword = async (keyword) => {
-        let keywords = localStorage.getItem('keywords');
-        keywords = JSON.parse(keywords);
-    
-        const elementIdex = keywords.findIndex(e => {
-            return e.keyword === keyword.keyword;
-        });
-        let updatedKeyword = keywords[elementIdex] = {...keywords[elementIdex], online: false};
-    
-        keywords = keywords.map(e => e.keyword === keyword.keyword ? updatedKeyword : e);
-        
-        localStorage.setItem('keywords', JSON.stringify(keywords));
-        return props.saveKeywords(keywords);
-    };
     
     return (
         <Icon size="large" style={{margin:"10px"}} color="red" name='stop' link onClick={()=> {
-            stopKeyword(props.keyword);
+            props.stopKeyword(props.keyword);
         }}>
         </Icon>
     );
 };
 
+const mapStateToProps = state => {
+    return { status: state.status }
+};
 
+const mapDispatchToProps = dispatch => {
+    return {
+        updateKeywords: (keywords) => dispatch(updateKeywords(keywords)),
+        stopKeyword: (keyword) => dispatch(stopKeyword(keyword))
+    };
+};
 
-export default StopKeyword;
+export default connect(mapStateToProps, mapDispatchToProps)(StopKeyword);
