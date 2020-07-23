@@ -1,5 +1,18 @@
 import * as actionTypes from './actionTypes';
 
+export const addLog = (log) => {
+  return {
+    type: actionTypes.ADD_LOG,
+    log: log
+  };
+};
+
+export const clearLogs = () => {
+  return {
+    type: actionTypes.CLEAR_LOGS
+  };
+};
+
 export const updateSettings = (settings) => {
     return {
       type: actionTypes.UPDATE_SETTINGS,
@@ -24,9 +37,16 @@ export const startKeyword = (keyword, path, settings, saveKeywords) => {
   };
 };
 
-export const stopKeyword = (keyword, saveKeywords) => {
+export const stopKeyword = (keyword) => {
   return {
     type: actionTypes.STOP_KEYWORD,
+    keyword: keyword
+  };
+};
+
+export const deleteKeyword = (keyword) => {
+  return {
+    type: actionTypes.DELETE_KEYWORD,
     keyword: keyword
   };
 };

@@ -9,7 +9,7 @@ async function scrape(config, log) {
     const { path, url, proxies } = config;
     const urlParsed = queryString.parse(url);
     const keyword = urlParsed.query;
-    log({keyword: keyword, message: 'Running scrape'});
+    log({keyword: keyword, message: 'Initializing scrape...', time: Math.floor(Date.now() / 1000) });
 
     let proxy;
     if (proxies) proxy = '--proxy-server=' + proxies[randomProxy(proxies)];
@@ -17,14 +17,16 @@ async function scrape(config, log) {
     let randomUserAgent = userAgents[randomProxy(userAgents)];
     //proxies !== null ? proxy == '--proxy-server=' + proxies[randomProxy(proxies)] : null;
     
-    log({keyword: keyword, message: `${proxies ? 'Selecting proxy' : 'No proxy'}`});
+    log({keyword: keyword, message: `${proxies ? proxy : 'No proxy'}`, time: Math.floor(Date.now() / 1000)});
+    log({keyword: keyword, message: randomUserAgent, time: Math.floor(Date.now() / 1000) });
     let maxPrice = parseInt(urlParsed.maxPrice) + (Math.floor(Math.random() * 25) + 1);
-
+    
     let newUrl = url + `&maxPrice=${maxPrice}&daysSinceListed=1&sortBy=creation_time_descend`;
     console.log(newUrl)
-    log({keyword: keyword, message: 'Pulling Listings'});
+    log({keyword: keyword, message: newUrl, time: Math.floor(Date.now() / 1000)});
+    //log({keyword: keyword, message: 'Pulling Listings', time: Math.floor(Date.now() / 1000)});
     const products = await getListings(path, newUrl, randomUserAgent, proxy, keyword, log);
-    log({keyword: keyword, message: 'Waiting...'});
+    log({keyword: keyword, message: 'Returning listings.', time: Math.floor(Date.now() / 1000)});
     return products;
 };
 
@@ -39,29 +41,31 @@ async function getListings(path, url, randomUserAgent, proxy, keyword, log) {
     const page = await context.newPage();
     await page.setExtraHTTPHeaders({'Accept-Language': 'en'}); // Make sure webpage displays english.
     await page.setViewport({width: 1920, height: 1080}); // Set screen size to insure it loads everything.
-    //await page.setUserAgent(randomUserAgent); // Set user-agent to insure we don't receive mobile version.
-    //await page.setRequestInterception(true);
-
-    // page.on('request', (req) => {
-    //     if(req.resourceType() == 'font' || req.resourceType() == 'image'){
-    //         req.abort();
-    //     }
-    //     else {
-    //         req.continue();
-    //     }
-    // });
+    await page.setUserAgent(randomUserAgent); // Set user-agent to insure we don't receive mobile version.
+    await page.setRequestInterception(true);
     
-    log({keyword: keyword, message: 'Opening Facebook Marketplace'});
-    await page.goto(url);
-    await timeout(3000);
-    const listings = await page.waitForSelector('a[tabindex="0"]', {timeout: 10000})
+    page.on('request', (req) => {
+        if(req.resourceType() == 'font' || req.resourceType() == 'image'){
+            req.abort();
+        }
+        else {
+            req.continue();
+        }
+    });
+    
+    log({keyword: keyword, message: 'Opening Facebook Marketplace', time: Math.floor(Date.now() / 1000)});
+    
+
+    try {
+        await page.goto(url, {timeout: 10000});
+        await timeout(3000);
+        const listings = await page.waitForSelector('a[tabindex="0"]', {timeout: 10000})
         .then(async ()=> {
             const products = await page.evaluate(() => {
                 let pageItems = Array.from(document.querySelectorAll('div[style="max-width: 390px; min-width: 190px;"]')); 
-                //pageItems.length = 5;  
+                pageItems.length = 7;  
                 //log({[keyword]: 'Listings found: ' + pageItems.length});   
                 return pageItems.map((listing)=> {
-                        console.log(listing)
                         const title = listing.querySelector('div:nth-child(2) > div:nth-child(2)') 
                             ? listing.querySelector('div:nth-child(2) > div:nth-child(2)').textContent : null;
                         const price = listing.querySelector('[dir]')
@@ -73,27 +77,21 @@ async function getListings(path, url, randomUserAgent, proxy, keyword, log) {
                         const image = listing.querySelector('img') 
                             ? listing.querySelector('img').getAttribute('src') : null;
                         
-                        //console.log({ title: title, price: price, location: location, url: url, image: image })
                         return { title: title, price: price, location: location, url: url, image: image, time: Math.floor(Date.now() / 1000)};
                     });
                 });
-                
-                await browser.close();
-                console.log(products.length)
-                let elementIdex = products.findIndex(product => {
-                    return product.title === null;
-                });
-                console.log(elementIdex);
-                if (elementIdex > -1) products.length = elementIdex;
-                
                 let finalProducts = products.filter(product => product.url !== null);
-                console.log(finalProducts)
                 return finalProducts;
         });
-        
-    log({keyword: keyword, message: 'Listings found: ' + listings.length});
-    return listings;
-    //await page.screenshot({path: `${config.username + config.keyword}.png`});
+        browser.close();
+        log({keyword: keyword, message: 'Listings found: ' + listings.length, time: Math.floor(Date.now() / 1000)});
+        return listings;
+    } catch (error) {
+        console.log(error.message);
+        log({keyword: keyword, message: error.message, time: Math.floor(Date.now() / 1000)});
+        browser.close();
+        return null;
+    };
 };
 
 // const previousListings = async (username, url) => {

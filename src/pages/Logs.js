@@ -1,41 +1,58 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { Link, withRouter, Redirect } from 'react-router-dom';
-import { Container, Image, Menu, Dropdown, Button, Divider, Message, Segment } from 'semantic-ui-react';
+import { Container, Image, Menu, Dropdown, Button, Divider, Table } from 'semantic-ui-react';
 import { Header } from '../components/styled/elements';
+import { clearLogs } from "../store/actions/action";
 
+const moment = require('moment');
 const ipcRenderer = window.require('electron').ipcRenderer;
 
-function Logs() {
-    const [logs, setLogs] = useState(null);
+function Logs(props) {
+    const [logs, setLogs] = useState([]);
 
     useEffect(()=> {
-        getLogs().then(data => setLogs(data));
-    }, []);
-    
+        return setLogs(props.status.logs);
+    }, [props.status.logs]);
+    console.log(props.status)
     return (
         <Container>
             <Header margin={"20px"}>Scrape Logs</Header>
             <Divider />
-            <Segment>
-                
-            </Segment>
+            <Button onClick={()=> props.clearLogs()}>Clear Logs</Button>
+            <Table fixed basic='very'> 
+                <Table.Header>
+                    <Table.Row>
+                        <Table.HeaderCell>Keyword</Table.HeaderCell>
+                        <Table.HeaderCell>Event</Table.HeaderCell>
+                        <Table.HeaderCell>Date</Table.HeaderCell>
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                    {props.status.logs.length === 0 ? null : props.status.logs.reverse().map((log)=> { 
+                        return (
+                            <Table.Row>                                       
+                                <Table.Cell>{log.keyword}</Table.Cell>
+                                <Table.Cell>{log.message}</Table.Cell>
+                                <Table.Cell>{moment.unix(log.time).format('MMMM Do YYYY, h:mm:ss a').toString()}</Table.Cell>
+                            </Table.Row>
+                            );                                 
+                        })
+                    }                      
+                </Table.Body>
+            </Table>
         </Container>
     )
 };
 
-const getLogs = async () => {
-    const logs = await ipcRenderer.invoke('get-logs');
-    return logs;
+const mapStateToProps = state => {
+    return { status: state.status }
 };
 
-export default Logs
+const mapDispatchToProps = dispatch => {
+    return {
+        clearLogs: () => dispatch(clearLogs())
+    };
+};
 
-
-{/* <Message color="red">
-                {!logs ? null : logs.split(" ..").slice(0).reverse().map(log => {
-                    let d = log.split(/\[(.*?)\]/)
-                return <p>{d[1]}
-                            <p style={{color: 'black', display: 'inline'}}>{d[2]}</p>
-                        </p>
-                })}
-            </Message> */}
+export default connect(mapStateToProps, mapDispatchToProps)(Logs);

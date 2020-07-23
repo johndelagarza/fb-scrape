@@ -12,9 +12,12 @@ import { updateKeywords, startKeyword } from "../store/actions/action";
 
 function StartKeyword(props) {
     const [showConfirm, setConfirm] = useState(false);
-    console.log(props)
+    //console.log(props.keyword)
     return (
         <Icon size="large" style={{margin:"10px"}} color="green" name='play' link onClick={()=> {
+            if (props.keyword.hasOwnProperty('pid')) {
+                return alert('Please stop task first.');
+            }
             const notification = new window.Notification(`Task started: ${props.keyword.keyword}`, {body: `Scraping for new listings...`, icon: fbLogo});
             return startScrape(props.startKeyword, props.status.settings, props.keyword, props.updateKeywords);
         }}>

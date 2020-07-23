@@ -51,13 +51,15 @@ const getAllListings = async (keywords) => {
     let listings = [];
 
     if (!keywords) return;
+
     await keywords.forEach(keyword => {
-        //keyword.currentListings.length = 3;
-        if (!keyword.hasOwnProperty('currentListings')) return;
-        return listings = [...listings, keyword.currentListings[0]]
+        console.log(keyword.currentListings)
+        return listings = listings.concat(keyword.currentListings)
     });
-    console.log(listings);
-    return listings;
+    console.log(listings)
+    let newestFirst = listings.sort((a, b) => b.time - a.time);
+    console.log(newestFirst);
+    return newestFirst;
 };
 
 const mapStateToProps = state => {

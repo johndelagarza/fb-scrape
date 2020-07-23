@@ -10,6 +10,7 @@ import StopKeyword from '../components/StopKeyword';
 import KeywordLogCell from '../components/KeywordLogCell';
 
 import { updateKeywords } from "../store/actions/action";
+const { ipcRenderer } = window.require('electron');
 
 function Keywords(props) {
     const [keywords, setKeywords] = useState(props.status.keywords);
@@ -18,18 +19,18 @@ function Keywords(props) {
         return setKeywords(keywords);
     }, []);
     
-    console.log(props.status)
+    //console.log(props.status)
     return (
         <Container>
             <h1>{}</h1>
             <Header margin={"20px"}>Current Keywords</Header>
             <Divider />
             <AddKeyword saveKeywords={props.updateKeywords}/>
-            <Table>
+            <Table fixed basic='very'>
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell>Keyword</Table.HeaderCell>
-                        <Table.HeaderCell style={{paddingLeft: "90px", paddingRight: "90px"}}>Log</Table.HeaderCell>
+                        <Table.HeaderCell>Log</Table.HeaderCell>
                         <Table.HeaderCell textAlign='right' style={{paddingRight: "60px"}}>Actions</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
@@ -39,6 +40,7 @@ function Keywords(props) {
                             <Table.Row>                                       
                                 <Table.Cell>{keyword.keyword.toUpperCase()}</Table.Cell>
                                 <KeywordLogCell keyword={keyword.keyword} active={keyword.online} />
+                                
                                 <Table.Cell textAlign='right'>
                                     <StartKeyword 
                                         keyword={keyword} 
@@ -49,7 +51,7 @@ function Keywords(props) {
                                         saveKeywords={props.updateKeywords}
                                     />
                                     <DeleteKeyword 
-                                        keyword={keyword.keyword} 
+                                        keyword={keyword} 
                                         saveKeywords={props.updateKeywords}
                                     />
                                 </Table.Cell>

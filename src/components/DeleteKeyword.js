@@ -1,23 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { Container, Image, Menu, Modal, Header, Portal, Segment, Form, Button, Icon, Input, Divider, Confirm, Dropdown } from 'semantic-ui-react';
 import { Link, withRouter, Redirect } from 'react-router-dom';
-
-import 'react-notifications-component/dist/theme.css'
+import { updateKeywords, deleteKeyword } from "../store/actions/action";
+import 'react-notifications-component/dist/theme.css';
 import { store } from 'react-notifications-component';
 
 function DeleteKeyword(props) {
     const [confirm, setConfirm] = useState(false);
 
-    const deleteKeyword = async (keyword) => {
-        let keywords = localStorage.getItem('keywords');
-        keywords = JSON.parse(keywords);
-    
-        const newKeywords = keywords.filter(item => item.keyword !== keyword);
-        console.log(newKeywords)
-        localStorage.setItem('keywords', JSON.stringify(newKeywords));
-        return props.saveKeywords(newKeywords);
-    };
-    
     return (
         <Icon size="large" style={{margin:"10px"}} color="black" name='trash' link onClick={()=> setConfirm(!confirm)}>
             <Confirm
@@ -29,7 +20,7 @@ function DeleteKeyword(props) {
                     return setConfirm(!confirm)
                 }}
                 onConfirm={()=> {
-                    deleteKeyword(props.keyword);
+                    props.deleteKeyword(props.keyword);
                     return setConfirm(!confirm);
                 }}
                 size='mini'
@@ -38,13 +29,15 @@ function DeleteKeyword(props) {
     );
 };
 
-const deleteKeyword = async (keyword) => {
-    let keywords = localStorage.getItem('keywords');
-    keywords = JSON.parse(keywords);
-
-    const newKeywords = keywords.filter(item => item.keyword !== keyword);
-    console.log(newKeywords)
-    return localStorage.setItem('keywords', JSON.stringify(newKeywords));
+const mapStateToProps = state => {
+    return { status: state.status }
 };
 
-export default DeleteKeyword;
+const mapDispatchToProps = dispatch => {
+    return {
+        updateKeywords: (keywords) => dispatch(updateKeywords(keywords)),
+        deleteKeyword: (keyword, saveKeywords) => dispatch(deleteKeyword(keyword, saveKeywords))
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DeleteKeyword);
