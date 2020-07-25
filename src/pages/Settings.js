@@ -14,9 +14,7 @@ function Settings(props) {
         localStorage.setItem('settings', JSON.stringify(settings));
         return props.updateSettings(settings);
     };
- 
-    console.log(settings)
-    console.log(props.status.settings);
+    
     return (
         <Container>
             <Header margin={"20px"}>Settings</Header>
@@ -84,6 +82,7 @@ IP:PORT:USERNAME:PASSWORD`}
         </Container>
     )
 };
+
 
 const mapDispatchToProps = dispatch => {
     return {

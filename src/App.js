@@ -15,10 +15,13 @@ const ipcRenderer = window.require('electron').ipcRenderer;
 
 function App(props) {
   const [appVersion, setAppVersion] = useState('');
-  useEffect(async ()=> {
-    let appVersion = await ipcRenderer.invoke('app-version').then(version => version);
-    
-    return setAppVersion(appVersion);
+  useEffect(()=> {
+    ipcRenderer.send('app_version');
+    ipcRenderer.on('app_version', (event, arg) => {
+      console.log('getting app version')
+      ipcRenderer.removeAllListeners('app_version');
+      return setAppVersion(arg.version);
+    });
   }, []);
 
 return (

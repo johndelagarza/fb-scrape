@@ -1,6 +1,5 @@
-const { app, BrowserWindow, dialog, autoUpdater } = require('electron');
-//const { autoUpdater } = require("electron-updater");
-//const log = require('electron-log');
+const { app, BrowserWindow, dialog} = require('electron');
+const { autoUpdater } = require("electron-updater");
 const ipcMain = require('electron').ipcMain;
 const path = require('path');
 const isDev = require('electron-is-dev');
@@ -9,9 +8,6 @@ const scrape = require('./scrape');
 const fs = require('fs'); 
 var shell = require('electron').shell;
 const queryString = require('query-string');
-// autoUpdater.logger = log;
-// autoUpdater.logger.transports.file.level = 'info';
-// log.info('App starting...');
 
 let mainWindow;
 
@@ -29,12 +25,18 @@ function createWindow() {
   mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
   
   mainWindow.setMenu(null);
-  //startAutoUpdater(squirrelUrl)
+  
   if (isDev) {
     mainWindow.webContents.openDevTools();
   }
+  mainWindow.once('ready-to-show', () => {
+    console.log('checking for updates')
+    if (!isDev) autoUpdater.checkForUpdatesAndNotify();
+  });
   mainWindow.on('closed', () => mainWindow = null);
 };
+
+
 
 app.on('ready', createWindow);
 
@@ -81,20 +83,24 @@ ipcMain.handle('open-listing', async (event, url) => {
   return shell.openExternal(url);
 });
 
-ipcMain.handle('app-version', (event) => {
-  let version = app.getVersion();
-  return version;
+ipcMain.on('app_version', (event) => {
+  console.log('checking for updates')
+  if (!isDev) autoUpdater.checkForUpdates();
+  event.sender.send('app_version', { version: app.getVersion() });
 });
 
+autoUpdater.on('update-available', () => {
+  console.log('update available')
+  mainWindow.webContents.send('update_available');
+});
 
+autoUpdater.on('update-downloaded', () => {
+  mainWindow.webContents.send('update_downloaded');
+});
 
-// const squirrelUrl = "http://45.76.59.62:3050";
-
-// const startAutoUpdater = (squirrelUrl) => {
-//   // The Squirrel application will watch the provided URL
-//   autoUpdater.setFeedURL(squirrelUrl);
-//   autoUpdater.checkForUpdates();
-// };
+ipcMain.on('restart_app', () => {
+  autoUpdater.quitAndInstall();
+});
 
 
 
