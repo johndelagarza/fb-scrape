@@ -81,49 +81,20 @@ ipcMain.handle('open-listing', async (event, url) => {
   return shell.openExternal(url);
 });
 
-// const squirrelUrl = "https://discord.com/api/download?platform=win";
+ipcMain.handle('app-version', (event) => {
+  let version = app.getVersion();
+  return version;
+});
+
+
+
+// const squirrelUrl = "http://45.76.59.62:3050";
 
 // const startAutoUpdater = (squirrelUrl) => {
 //   // The Squirrel application will watch the provided URL
-//   autoUpdater.setFeedURL(`${squirrelUrl}`);
-
-//   // Display a success message on successful update
-//   autoUpdater.addListener("update-downloaded", (event, releaseNotes, releaseName) => {
-//     dialog.showMessageBox({"message": `The release ${releaseName} has been downloaded`});
-//   });
-
-//   // Display an error message on update error
-//   autoUpdater.addListener("error", (error) => {
-//     dialog.showMessageBox({"message": "Auto updater error: " + error});
-//   });
-
-//   // tell squirrel to check for updates
+//   autoUpdater.setFeedURL(squirrelUrl);
 //   autoUpdater.checkForUpdates();
 // };
-
-// const handleSquirrelEvent = () => {
-//   if (process.argv.length === 1) {
-//     return false;
-//   }
-
-//   const squirrelEvent = process.argv[1];
-//   switch (squirrelEvent) {
-//     case '--squirrel-install':
-//     case '--squirrel-updated':
-//     case '--squirrel-uninstall':
-//       setTimeout(app.quit, 1000);
-//       return true;
-
-//     case '--squirrel-obsolete':
-//       app.quit();
-//       return true;
-//   }
-// }
-
-// if (handleSquirrelEvent()) {
-//   // squirrel event handled and app will exit in 1000ms, so don't do anything else
-//   return;
-// }
 
 
 

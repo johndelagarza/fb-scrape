@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
-import { Container, Image, Divider, List } from 'semantic-ui-react';
+import { Container, Image, Divider, List, Icon } from 'semantic-ui-react';
 import { Header } from '../components/styled/elements';
 
 const moment = require('moment');
@@ -43,6 +43,7 @@ function Home(props) {
                     })
                 }
             </List>
+            
         </Container>
     )
 };

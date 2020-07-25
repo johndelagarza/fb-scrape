@@ -37,26 +37,24 @@ async function getListings(path, url, randomUserAgent, proxy, keyword, log) {
         executablePath: path,
         args: (proxy ? [proxy] : ['--no-proxy-server'])
     });
-    const context = await browser.createIncognitoBrowserContext(); // Launch incognito browser
-    const page = await context.newPage();
-    await page.setExtraHTTPHeaders({'Accept-Language': 'en'}); // Make sure webpage displays english.
-    await page.setViewport({width: 1920, height: 1080}); // Set screen size to insure it loads everything.
-    await page.setUserAgent(randomUserAgent); // Set user-agent to insure we don't receive mobile version.
-    await page.setRequestInterception(true);
-    
-    page.on('request', (req) => {
-        if(req.resourceType() == 'font' || req.resourceType() == 'image'){
-            req.abort();
-        }
-        else {
-            req.continue();
-        }
-    });
-    
-    log({keyword: keyword, message: 'Opening Facebook Marketplace', time: Math.floor(Date.now() / 1000)});
-    
-
     try {
+        const context = await browser.createIncognitoBrowserContext(); // Launch incognito browser
+        const page = await context.newPage();
+        await page.setExtraHTTPHeaders({'Accept-Language': 'en'}); // Make sure webpage displays english.
+        await page.setViewport({width: 1920, height: 1080}); // Set screen size to insure it loads everything.
+        await page.setUserAgent(randomUserAgent); // Set user-agent to insure we don't receive mobile version.
+        await page.setRequestInterception(true);
+        
+        page.on('request', (req) => {
+            if(req.resourceType() == 'font' || req.resourceType() == 'image'){
+                req.abort();
+            }
+            else {
+                req.continue();
+            }
+        });
+        
+        log({keyword: keyword, message: 'Opening Facebook Marketplace', time: Math.floor(Date.now() / 1000)});
         await page.goto(url, {timeout: 10000});
         await timeout(3000);
         const listings = await page.waitForSelector('a[tabindex="0"]', {timeout: 10000})

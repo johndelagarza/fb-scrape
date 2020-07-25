@@ -131,12 +131,12 @@ export const sendDiscordNotification = async (discordWebhook, listing) => {
     return hook.send(embed);
 };
 
-module.exports = {
-    getKeywords: getKeywords,
-    getSettings: getSettings,
-    scrape: scrape,
-    startScrape: startScrape,
-    stopScrape: stopScrape,
-    findNewListings: findNewListings,
-    sendDiscordNotification: sendDiscordNotification
-};
+// module.exports = {
+//     getKeywords: getKeywords,
+//     getSettings: getSettings,
+//     scrape: scrape,
+//     startScrape: startScrape,
+//     stopScrape: stopScrape,
+//     findNewListings: findNewListings,
+//     sendDiscordNotification: sendDiscordNotification
+// };
