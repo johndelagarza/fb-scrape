@@ -14,7 +14,7 @@ function Logs(props) {
     useEffect(()=> {
         return setLogs(props.status.logs);
     }, [props.status.logs]);
-    console.log(props.status)
+    
     return (
         <Container>
             <Header margin={"20px"}>Scrape Logs</Header>

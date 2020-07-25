@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { HashRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import ReactNotification from 'react-notifications-component';
 import 'react-notifications-component/dist/theme.css';
-import { Container, Image, Divider, List, Header, Icon } from 'semantic-ui-react';
+import { Container, Icon } from 'semantic-ui-react';
 
 import NavigationHeader from './components/NavigationHeader';
 import Home from './pages/Home';
@@ -10,8 +10,6 @@ import Keywords from './pages/Keywords';
 import Settings from './pages/Settings';
 import Logs from './pages/Logs';
 const ipcRenderer = window.require('electron').ipcRenderer;
-
-
 
 function App(props) {
   const [appVersion, setAppVersion] = useState('');

@@ -26,8 +26,7 @@ export default (state = INITIAL_STATE, action) => {
         case actionTypes.START_KEYWORD: {
             console.log('spawning scrape')
             let intervalPid = startScrape(action);
-            //scrape(action.keyword, action.path, action.settings, action.saveKeywords);
-            
+
             let updatedKeywords = state.keywords.map(keyword => keyword.keyword === action.keyword.keyword ? { ...keyword, online: true, pid: intervalPid } : keyword);
             localStorage.setItem('keywords', JSON.stringify(updatedKeywords));
             return { ...state, keywords: updatedKeywords };

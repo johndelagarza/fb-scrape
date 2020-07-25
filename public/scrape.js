@@ -1,7 +1,6 @@
 const puppeteer = require('puppeteer-core');
 const queryString = require('query-string');
 const moment = require('moment');
-//const log = require('electron-log');
 
 async function scrape(config, log) {
     console.log(log)

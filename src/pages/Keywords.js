@@ -19,7 +19,6 @@ function Keywords(props) {
         return setKeywords(keywords);
     }, []);
     
-    //console.log(props.status)
     return (
         <Container>
             <h1>{}</h1>
@@ -76,13 +75,3 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Keywords);
-
-const getKeywords = async () => {
-    let keywords = localStorage.getItem('keywords');
-
-    if (!keywords) {
-        return [];
-    } else if (keywords.length > 0) {
-        return JSON.parse(keywords);
-    };
-};

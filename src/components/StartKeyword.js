@@ -6,13 +6,9 @@ import 'react-notifications-component/dist/theme.css'
 import fbLogo from './icon.png';
 import { updateKeywords, startKeyword } from "../store/actions/action";
 
-// const Discord = require('discord.js');
-// const { ipcRenderer, remote, Notification } = window.require('electron');
-// const path = require('path');
-
 function StartKeyword(props) {
     const [showConfirm, setConfirm] = useState(false);
-    //console.log(props.keyword)
+    
     return (
         <Icon size="large" style={{margin:"10px"}} color="green" name='play' link onClick={()=> {
             if (props.keyword.hasOwnProperty('pid')) {
@@ -40,18 +36,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(StartKeyword);
 
 const startScrape = async (start, settings, keyword, saveKeywords) => {
     if (!settings || !settings.hasOwnProperty('chromePath')) return alert('Error: Please set your path to Google Chrome in Settings.');
-    //if (!settings.hasOwnProperty('discordWebhook')) return alert('Error: Please set your Discord Webhook in Settings.');
+    if (!settings.hasOwnProperty('discordWebhook')) return alert('Error: Please set your Discord Webhook in Settings.');
     if (!settings.hasOwnProperty('interval')) return alert('Error: Please set an interval in Settings.');
-    // let keywords = await JSON.parse(localStorage.getItem('keywords'));
 
-    // const elementIdex = await keywords.findIndex(e => {
-    //     return e.keyword === keyword.keyword;
-    // });
-    // let updatedKeyword = keywords[elementIdex] = {...keywords[elementIdex], online: true};
-    // let newKeywords = await keywords.map(e => e.keyword === keyword.keyword ? updatedKeyword : e);
-    // localStorage.setItem('keywords', JSON.stringify(newKeywords));
-    // console.log(newKeywords)
-    // saveKeywords(newKeywords);
     let path = await settings.chromePath.replace(/(.exe)/g, '');
     
     return start(keyword, path, settings, saveKeywords);
