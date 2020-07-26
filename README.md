@@ -10,13 +10,13 @@ Windows Download: [Latest Release](https://github.com/johndelagarza/fb-scrape/re
 
 ### Screenshots
 
-![webapp](https://imgur.com/hbQB0NJ.png)
+![webapp](https://imgur.com/AnPFTUz.png)
 
-![1](https://imgur.com/0P7azGG.png)
+![1](https://imgur.com/Vj7RNqR.png)
 
-![2](https://imgur.com/y48unR9.png)
+![2](https://imgur.com/gGFtuU0.png)
 
-![3](https://imgur.com/JHgJanc.png)
+![3](https://imgur.com/ecVkRIv.png)
 
 ## Todo List
 - [ ] More customization on URL params.
