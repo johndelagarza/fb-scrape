@@ -5,10 +5,10 @@ Scraper / Monitor for Facebook Marketplace
 
 [Windows Installation Video Guide](https://google.com)
 
-### Screenshots
-
 FB Scrape currently only supports Windows OS.
 Windows Download: [Latest Release](https://github.com/johndelagarza/fb-scrape/releases/latest)
+
+### Screenshots
 
 ![webapp](https://imgur.com/hbQB0NJ.png)
 
