@@ -3,7 +3,7 @@ Scraper / Monitor for Facebook Marketplace
 
 [Community Discord Server](https://discord.gg/myv2be)
 
-[Windows Installation Video Guide](https://google.com)
+[Windows Installation Video Guide](https://youtu.be/_8m8pv-_etw)
 
 FB Scrape currently only supports Windows OS.
 Windows Download: [Latest Release](https://github.com/johndelagarza/fb-scrape/releases/latest)
