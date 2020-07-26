@@ -14,7 +14,7 @@ Windows Download: [Latest Release](https://github.com/johndelagarza/fb-scrape/re
 
 ![1](https://imgur.com/0P7azGG.png)
 
-![2](https://imgur.com/e0MjP1Q.png)
+![2](https://imgur.com/y48unR9.png)
 
 ![3](https://imgur.com/JHgJanc.png)
 
