@@ -29,7 +29,8 @@ export const getKeywords = () => {
 };
 
 export const startScrape = (action) => {
-    const intervalPid = setInterval(()=> scrape(action.keyword, action.path, action.settings, action.saveKeywords), parseInt(action.settings.interval));
+    scrape(action.platform, action.keyword, action.path, action.settings, action.saveKeywords)
+    const intervalPid = setInterval(()=> scrape(action.platform, action.keyword, action.path, action.settings, action.saveKeywords), parseInt(action.settings.interval));
     return intervalPid;
 };
 
@@ -45,9 +46,9 @@ export const stopScrape = (action, keywords) => {
     return updatedKeywords
 };
 
-export const scrape = async (keyword, path, settings, saveKeywords) => {
+export const scrape = async (platform, keyword, path, settings, saveKeywords) => {
     let keywords = await JSON.parse(localStorage.getItem('keywords'));
-
+    
     const elementIdex = await keywords.findIndex(e => {
         return e.keyword === keyword.keyword;
     });
@@ -56,12 +57,14 @@ export const scrape = async (keyword, path, settings, saveKeywords) => {
 
     try {
         const listings = await ipcRenderer.invoke('startScrape', {
+            platform: platform,
+            keyword: keyword.keyword,
             path: path, 
             url: keyword.url, 
             proxies: settings.hasOwnProperty('proxies') ? settings.proxies : null, 
             discordWebhook: settings.discordWebhook
         });
-        console.log(listings)
+        //console.log(listings)
         if (!listings) return;
         const newListings = await findNewListings(keywords[elementIdex], listings);
         
@@ -78,7 +81,7 @@ export const scrape = async (keyword, path, settings, saveKeywords) => {
 };
 
 export const findNewListings = async (keyword, listings) => {
-    console.log(keyword)
+    
     if (keyword.hasOwnProperty('currentListings') && typeof Array) {
         let currentListings = keyword.currentListings;
         let currentListingsUrls = await currentListings.map(listing => listing.url);
@@ -87,9 +90,6 @@ export const findNewListings = async (keyword, listings) => {
         let newListings = await listings.map((listing)=> {   
             if (!currentListingsUrls.includes(listing.url)) {
                 console.log('New listing found!');
-                //const notification = new window.Notification(`New Listing Found: ${keyword.keyword}`, {body: `${listing.title} - ${listing.price}`, icon: listing});
-                //notification.addEventListener('click', ()=> ipcRenderer.invoke('open-listing', listing.url))
-                
                 return listing;
             } else {
                 console.log('Listing already exists.');
@@ -100,15 +100,18 @@ export const findNewListings = async (keyword, listings) => {
         newListings = await newListings.filter(listing => listing !== null);
         if (newListings.length < 5) newListings.forEach(listing => sendDiscordNotification(settings.discordWebhook, listing));
         
-        let newCurrentListings = newListings.concat(currentListings);
-        
+        let newCurrentListings = await newListings.concat(currentListings);
+        console.log('NEW LISTINGS AFTER CONCATTING')
+        console.log(newCurrentListings)
         if (newCurrentListings.length > 21) {
             newCurrentListings.length = 21;
             return newCurrentListings;
-        };
+        } else {
+            return newCurrentListings;
+        }
     
-        return newCurrentListings;
     } else {
+        console.log('NO CURRENT LISTINGS - NOTHING TO CHECK AGAINST')
         return listings;
     };
 };

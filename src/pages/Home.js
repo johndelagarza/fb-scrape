@@ -13,7 +13,7 @@ function Home(props) {
         getAllListings(props.status.keywords)
             .then(data => setListings(data));
     }, [props.status.keywords]);
-    console.log(props.status)
+    //console.log(props.status)
     return (
         <Container>
             <Header margin={"20px"}>Newly Added Items</Header>
@@ -32,11 +32,13 @@ function Home(props) {
                                     onClick={()=> ipcRenderer.invoke('open-listing', listing.url)} 
                                 />
                                 <List.Content>
-                                    <List.Header>{`${listing.title} - ${listing.price.replace(/[a-zA-Z](.*)/, '')}`}</List.Header>
+                                    <List.Header>{listing.title}</List.Header>
                                     <List.Description>
-                                        {listing.location}
+                                        {listing.price}
+                                        {listing.location ? listing.location : null}
                                     </List.Description>
                                     {listing.time ? moment.unix(listing.time).format('MMMM Do YYYY, h:mm:ss a').toString() : null}
+                                    {listing.date ? listing.date : null}
                                 </List.Content>
                             </List.Item>
                         )
@@ -54,12 +56,12 @@ const getAllListings = async (keywords) => {
     if (!keywords) return;
 
     await keywords.forEach(keyword => {
-        console.log(keyword.currentListings)
+        //console.log(keyword.currentListings)
         return listings = listings.concat(keyword.currentListings)
     });
-    console.log(listings)
-    let newestFirst = listings.sort((a, b) => b.time - a.time);
-    console.log(newestFirst);
+    
+    let newestFirst = listings.sort((a, b) => new Date(b.date) - new Date(a.date));
+    
     return newestFirst;
 };
 

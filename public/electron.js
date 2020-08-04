@@ -4,10 +4,9 @@ const ipcMain = require('electron').ipcMain;
 const path = require('path');
 const isDev = require('electron-is-dev');
 const url = require('url');
-const scrape = require('./scrape');
-const fs = require('fs'); 
+const fbScrape = require('./fbScrape').scrape;
+const ebayScrape = require('./ebayScrape').scrape;
 var shell = require('electron').shell;
-const queryString = require('query-string');
 
 let mainWindow;
 
@@ -18,7 +17,7 @@ function createWindow() {
           frame: true,
           // resizable: false,
           webPreferences: { nodeIntegration: true },
-          title: "FB Scrape",
+          title: "Thrifter",
           icon: path.join(__dirname, './icon.png'),
           name: ''
       });
@@ -59,24 +58,19 @@ ipcMain.handle('setChromePath', async () => {
 });
 
 ipcMain.handle('startScrape', async (event, config) => {
-  const urlParsed = queryString.parse(url);
-  const keyword = urlParsed.query;
-  function log(msg) {
-    console.log(msg)
-    return mainWindow.webContents.send(msg.keyword, msg);
-  }
   console.log(config)
-  const newListings = await scrape.scrape(config, log);
-  return newListings;
-});
+  let newListings;
 
-ipcMain.handle('get-logs', async (event, config) => {
-  let logs = fs.readFileSync('./scrapes.log','utf8', (err, data) => {
-    if (err) throw err;
-    console.log(data);
-    return data;
-  });
-  return logs;
+  switch (config.platform) {
+    case 'facebook':
+      return newListings = await fbScrape(config, log);
+    case 'ebay':
+      return newListings = await ebayScrape(config, log);
+    default:
+      break;
+  };
+  
+  return newListings;
 });
 
 ipcMain.handle('open-listing', async (event, url) => {
@@ -102,5 +96,9 @@ ipcMain.on('restart_app', () => {
   autoUpdater.quitAndInstall();
 });
 
+function log(msg) {
+  console.log(msg)
+  return mainWindow.webContents.send(msg.keyword, msg);
+};
 
 

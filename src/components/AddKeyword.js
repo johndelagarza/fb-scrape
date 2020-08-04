@@ -8,23 +8,36 @@ function AddKeyword(props) {
     const [url, setUrl] = useState(null);
     
     const addUrl = async (url) => {
-        const parsed = queryString.parse(url);
-        console.log(parsed)
-        if (!parsed.maxPrice) return alert('Error: URL must include max price filter.');
-        if (!parsed.query) return alert('Error: URL is missing a keyword.');
-        //if (parsed.sortBy !== 'creation_time_descend') return alert('Error: URL must include creation_time_descend filter.');
-        let currentUrls = localStorage.getItem('keywords');
+        let config = { platform: '', keyword: '' };
+        const parsed = await queryString.parse(url);
+    
+        url.includes('facebook.com') ? config = { keyword: parsed.query, platform: 'facebook' }  : 
+        url.includes('ebay.com') ? config = { keyword: parsed._nkw, platform: 'ebay' } : alert('Error: Keyword not supported.')
+        
+        switch (config.keyword) {
+            case 'facebook':
+                if (!parsed.query) return alert('Error: URL is missing a keyword.');
+                if (!parsed.maxPrice) return alert('Error: URL must include max price filter.');
+                
+                break;
+            case 'ebay':
+                if (!parsed._nkw) return alert('Error: URL is missing a keyword.');
+            default:
+                break;
+        };
+        
+        let keywords = localStorage.getItem('keywords');
        
-        if (!currentUrls) {
-            let newKeywords = [{keyword: parsed.query, url: url, online: false}];
+        if (!keywords) {
+            let newKeywords = [{platform: config.platform, keyword: config.keyword, url: url, online: false}];
             localStorage.setItem('keywords', JSON.stringify(newKeywords));
             return props.saveKeywords(newKeywords);
-        } else if (currentUrls.length > 0) {
-            currentUrls = JSON.parse(currentUrls);
-            console.log(currentUrls);
-            let doesKeywordAlreadyExist = currentUrls.filter(url => url.keyword === parsed.query);
+        } else if (keywords.length > 0) {
+            keywords = JSON.parse(keywords);
+            console.log(keywords);
+            let doesKeywordAlreadyExist = keywords.filter(url => url.keyword === config.keyword);
             if (doesKeywordAlreadyExist.length > 0) return alert('Keyword already saved.')
-            let newKeywords = [...currentUrls, {keyword: parsed.query, url: url, online: false}];
+            let newKeywords = [...keywords, {platform: config.platform, keyword: config.keyword, url: url, online: false}];
             localStorage.setItem('keywords', JSON.stringify(newKeywords));
             return props.saveKeywords(newKeywords);
         }

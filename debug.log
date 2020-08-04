@@ -1,3 +1,45 @@
 [0713/195619.880:ERROR:process_info.cc(329)] VirtualQueryEx: Access is denied. (0x5)
 [0713/195619.881:ERROR:process_info.cc(556)] ReadMemoryInfo failed
 [0713/195619.881:ERROR:scoped_process_suspend.cc(40)] NtResumeProcess: An attempt was made to access an exiting process. (0xc000010a)
+[0801/114922.997:ERROR:file_io_win.cc(161)] CreateFile C:\Users\JOHNDE~1\AppData\Local\Temp\puppeteer_dev_chrome_profile-jMSD0L\Crashpad\settings.dat: The system cannot find the path specified. (0x3)
+[0801/114922.998:ERROR:file_io_win.cc(170)] CreateFile C:\Users\JOHNDE~1\AppData\Local\Temp\puppeteer_dev_chrome_profile-jMSD0L\Crashpad\reports\0774e2ed-8921-41ad-9b9c-4ab9801eb7dd.dmp: The system cannot find the path specified. (0x3)
+[0801/114922.998:ERROR:crash_report_exception_handler.cc(97)] PrepareNewCrashReport failed
+[0801/115605.403:ERROR:file_io_win.cc(161)] CreateFile C:\Users\JOHNDE~1\AppData\Local\Temp\puppeteer_dev_chrome_profile-yeUIoa\Crashpad\settings.dat: The system cannot find the path specified. (0x3)
+[0801/115605.404:ERROR:file_io_win.cc(170)] CreateFile C:\Users\JOHNDE~1\AppData\Local\Temp\puppeteer_dev_chrome_profile-yeUIoa\Crashpad\reports\89e58990-9a67-4ad2-ad2d-072e0608d68b.dmp: The system cannot find the path specified. (0x3)
+[0801/115605.404:ERROR:crash_report_exception_handler.cc(97)] PrepareNewCrashReport failed
+[0801/115620.471:ERROR:file_io_win.cc(161)] CreateFile C:\Users\JOHNDE~1\AppData\Local\Temp\puppeteer_dev_chrome_profile-C4zBFi\Crashpad\settings.dat: The system cannot find the path specified. (0x3)
+[0801/115620.471:ERROR:file_io_win.cc(170)] CreateFile C:\Users\JOHNDE~1\AppData\Local\Temp\puppeteer_dev_chrome_profile-C4zBFi\Crashpad\reports\2e4ed046-0d61-4016-93b4-1303f6403d33.dmp: The system cannot find the path specified. (0x3)
+[0801/115620.471:ERROR:crash_report_exception_handler.cc(97)] PrepareNewCrashReport failed
+[0801/115635.270:ERROR:file_io_win.cc(161)] CreateFile C:\Users\JOHNDE~1\AppData\Local\Temp\puppeteer_dev_chrome_profile-FY0Yt6\Crashpad\settings.dat: The system cannot find the path specified. (0x3)
+[0801/115635.270:ERROR:file_io_win.cc(170)] CreateFile C:\Users\JOHNDE~1\AppData\Local\Temp\puppeteer_dev_chrome_profile-FY0Yt6\Crashpad\reports\2eb727b5-5cd4-4597-ac36-8cd9d8ead64f.dmp: The system cannot find the path specified. (0x3)
+[0801/115635.270:ERROR:crash_report_exception_handler.cc(97)] PrepareNewCrashReport failed
+[0801/115650.882:ERROR:file_io_win.cc(161)] CreateFile C:\Users\JOHNDE~1\AppData\Local\Temp\puppeteer_dev_chrome_profile-WyW0uZ\Crashpad\settings.dat: The system cannot find the path specified. (0x3)
+[0801/115650.883:ERROR:file_io_win.cc(170)] CreateFile C:\Users\JOHNDE~1\AppData\Local\Temp\puppeteer_dev_chrome_profile-WyW0uZ\Crashpad\reports\a1985259-0e7d-4498-88f0-c45af1db7182.dmp: The system cannot find the path specified. (0x3)
+[0801/115650.883:ERROR:crash_report_exception_handler.cc(97)] PrepareNewCrashReport failed
+[0801/115720.334:ERROR:file_io_win.cc(161)] CreateFile C:\Users\JOHNDE~1\AppData\Local\Temp\puppeteer_dev_chrome_profile-pNVbNj\Crashpad\settings.dat: The system cannot find the path specified. (0x3)
+[0801/115720.335:ERROR:file_io_win.cc(170)] CreateFile C:\Users\JOHNDE~1\AppData\Local\Temp\puppeteer_dev_chrome_profile-pNVbNj\Crashpad\reports\60d9e6ba-1a78-458f-a6ec-e9a849fc51d1.dmp: The system cannot find the path specified. (0x3)
+[0801/115720.335:ERROR:crash_report_exception_handler.cc(97)] PrepareNewCrashReport failed
+[0801/115820.212:ERROR:file_io_win.cc(161)] CreateFile C:\Users\JOHNDE~1\AppData\Local\Temp\puppeteer_dev_chrome_profile-TXaC5o\Crashpad\settings.dat: The system cannot find the path specified. (0x3)
+[0801/115820.213:ERROR:file_io_win.cc(170)] CreateFile C:\Users\JOHNDE~1\AppData\Local\Temp\puppeteer_dev_chrome_profile-TXaC5o\Crashpad\reports\382e81c1-64c7-47bd-a6df-e8a1669be459.dmp: The system cannot find the path specified. (0x3)
+[0801/115820.213:ERROR:crash_report_exception_handler.cc(97)] PrepareNewCrashReport failed
+[0801/115950.347:ERROR:file_io_win.cc(161)] CreateFile C:\Users\JOHNDE~1\AppData\Local\Temp\puppeteer_dev_chrome_profile-7o5wdO\Crashpad\settings.dat: The system cannot find the path specified. (0x3)
+[0801/115950.348:ERROR:file_io_win.cc(170)] CreateFile C:\Users\JOHNDE~1\AppData\Local\Temp\puppeteer_dev_chrome_profile-7o5wdO\Crashpad\reports\f5068472-3ca0-4776-a201-54c8f193c92d.dmp: The system cannot find the path specified. (0x3)
+[0801/115950.348:ERROR:crash_report_exception_handler.cc(97)] PrepareNewCrashReport failed
+[0801/120005.330:ERROR:file_io_win.cc(161)] CreateFile C:\Users\JOHNDE~1\AppData\Local\Temp\puppeteer_dev_chrome_profile-ZIzR59\Crashpad\settings.dat: The system cannot find the path specified. (0x3)
+[0801/120005.331:ERROR:file_io_win.cc(170)] CreateFile C:\Users\JOHNDE~1\AppData\Local\Temp\puppeteer_dev_chrome_profile-ZIzR59\Crashpad\reports\8be106bb-a187-48c4-a58f-292bfd07ca78.dmp: The system cannot find the path specified. (0x3)
+[0801/120005.331:ERROR:crash_report_exception_handler.cc(97)] PrepareNewCrashReport failed
+[0801/120035.411:ERROR:file_io_win.cc(161)] CreateFile C:\Users\JOHNDE~1\AppData\Local\Temp\puppeteer_dev_chrome_profile-4pb6H0\Crashpad\settings.dat: The system cannot find the path specified. (0x3)
+[0801/120035.412:ERROR:file_io_win.cc(170)] CreateFile C:\Users\JOHNDE~1\AppData\Local\Temp\puppeteer_dev_chrome_profile-4pb6H0\Crashpad\reports\984d8889-5465-4194-988b-a50379b9ef08.dmp: The system cannot find the path specified. (0x3)
+[0801/120035.412:ERROR:crash_report_exception_handler.cc(97)] PrepareNewCrashReport failed
+[0801/120050.573:ERROR:file_io_win.cc(161)] CreateFile C:\Users\JOHNDE~1\AppData\Local\Temp\puppeteer_dev_chrome_profile-1nV4xi\Crashpad\settings.dat: The system cannot find the path specified. (0x3)
+[0801/120050.573:ERROR:file_io_win.cc(170)] CreateFile C:\Users\JOHNDE~1\AppData\Local\Temp\puppeteer_dev_chrome_profile-1nV4xi\Crashpad\reports\659339f7-1793-4271-b1c9-d795df94f1e1.dmp: The system cannot find the path specified. (0x3)
+[0801/120050.574:ERROR:crash_report_exception_handler.cc(97)] PrepareNewCrashReport failed
+[0801/120235.369:ERROR:file_io_win.cc(161)] CreateFile C:\Users\JOHNDE~1\AppData\Local\Temp\puppeteer_dev_chrome_profile-tJvOH8\Crashpad\settings.dat: The system cannot find the path specified. (0x3)
+[0801/120235.370:ERROR:file_io_win.cc(170)] CreateFile C:\Users\JOHNDE~1\AppData\Local\Temp\puppeteer_dev_chrome_profile-tJvOH8\Crashpad\reports\0ea8f164-d205-4736-a5ab-563dc7d104ed.dmp: The system cannot find the path specified. (0x3)
+[0801/120235.370:ERROR:crash_report_exception_handler.cc(97)] PrepareNewCrashReport failed
+[0801/120305.564:ERROR:file_io_win.cc(161)] CreateFile C:\Users\JOHNDE~1\AppData\Local\Temp\puppeteer_dev_chrome_profile-QD67Mm\Crashpad\settings.dat: The system cannot find the path specified. (0x3)
+[0801/120305.565:ERROR:file_io_win.cc(170)] CreateFile C:\Users\JOHNDE~1\AppData\Local\Temp\puppeteer_dev_chrome_profile-QD67Mm\Crashpad\reports\57899849-c712-41e6-a0c7-a5a96735ce9d.dmp: The system cannot find the path specified. (0x3)
+[0801/120305.565:ERROR:crash_report_exception_handler.cc(97)] PrepareNewCrashReport failed
+[0801/213307.704:ERROR:process_info.cc(329)] VirtualQueryEx: Access is denied. (0x5)
+[0801/213307.706:ERROR:process_info.cc(556)] ReadMemoryInfo failed
+[0801/213307.706:ERROR:scoped_process_suspend.cc(40)] NtResumeProcess: An attempt was made to access an exiting process. (0xc000010a)

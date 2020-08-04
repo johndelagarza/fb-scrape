@@ -1,47 +1,36 @@
 const puppeteer = require('puppeteer-core');
 const queryString = require('query-string');
-const moment = require('moment');
 
 async function scrape(config, log) {
-    console.log(log)
-    console.log(typeof log)
     const { path, url, proxies } = config;
-    const urlParsed = queryString.parse(url);
-    const keyword = urlParsed.query;
+    const keyword = queryString.parse(url)._nkw;
+    
     log({keyword: keyword, message: 'Initializing scrape...', time: Math.floor(Date.now() / 1000) });
-
     let proxy;
     if (proxies) proxy = '--proxy-server=' + proxies[randomProxy(proxies)];
     console.log(proxy)
     let randomUserAgent = userAgents[randomProxy(userAgents)];
-    //proxies !== null ? proxy == '--proxy-server=' + proxies[randomProxy(proxies)] : null;
-    
-    log({keyword: keyword, message: `${proxies ? proxy : 'No proxy'}`, time: Math.floor(Date.now() / 1000)});
-    log({keyword: keyword, message: randomUserAgent, time: Math.floor(Date.now() / 1000) });
-    let maxPrice = parseInt(urlParsed.maxPrice) + (Math.floor(Math.random() * 25) + 1);
-    
-    let newUrl = url + `&maxPrice=${maxPrice}&daysSinceListed=1&sortBy=creation_time_descend`;
-    console.log(newUrl)
-    log({keyword: keyword, message: newUrl, time: Math.floor(Date.now() / 1000)});
-    //log({keyword: keyword, message: 'Pulling Listings', time: Math.floor(Date.now() / 1000)});
-    const products = await getListings(path, newUrl, randomUserAgent, proxy, keyword, log);
-    log({keyword: keyword, message: 'Returning listings.', time: Math.floor(Date.now() / 1000)});
-    return products;
+   
+    const listings = await getListings(url, path, randomUserAgent, proxy);
+
+    return listings;
 };
 
-async function getListings(path, url, randomUserAgent, proxy, keyword, log) {
-    console.log(proxy)
+async function getListings(url, path, randomUserAgent, proxy) {
+    
     const browser = await puppeteer.launch({
-        headless: true,
+        headless: false,
         executablePath: path,
-        args: (proxy ? [proxy] : ['--no-proxy-server'])
+        args: [proxy]
     });
+
+    console.log(browser.process().pid)
     try {
-        const context = await browser.createIncognitoBrowserContext(); // Launch incognito browser
-        const page = await context.newPage();
-        await page.setExtraHTTPHeaders({'Accept-Language': 'en'}); // Make sure webpage displays english.
-        await page.setViewport({width: 1920, height: 1080}); // Set screen size to insure it loads everything.
-        await page.setUserAgent(randomUserAgent); // Set user-agent to insure we don't receive mobile version.
+        //const context = await browser.createIncognitoBrowserContext(); 
+        const page = await browser.newPage();
+        await page.setExtraHTTPHeaders({'Accept-Language': 'en'}); 
+        await page.setViewport({width: 1920, height: 1080}); 
+        await page.setUserAgent(randomUserAgent); 
         await page.setRequestInterception(true);
         
         page.on('request', (req) => {
@@ -53,55 +42,46 @@ async function getListings(path, url, randomUserAgent, proxy, keyword, log) {
             }
         });
         
-        log({keyword: keyword, message: 'Opening Facebook Marketplace', time: Math.floor(Date.now() / 1000)});
         await page.goto(url, {timeout: 10000});
-        await timeout(3000);
-        const listings = await page.waitForSelector('a[tabindex="0"]', {timeout: 10000})
+        //await timeout(3000);
+        const listings = await page.waitForSelector('div[id="srp-river-results"]', {timeout: 10000})
         .then(async ()=> {
-            const products = await page.evaluate(() => {
-                let pageItems = Array.from(document.querySelectorAll('div[style="max-width: 390px; min-width: 190px;"]')); 
-                pageItems.length = 7;  
-                //log({[keyword]: 'Listings found: ' + pageItems.length});   
+            const listings = await page.evaluate(() => {
+                let pageItems = Array.from(document.querySelectorAll('li[class="s-item    s-item--watch-at-corner"]')); 
+                pageItems.length = 10;  
+ 
                 return pageItems.map((listing)=> {
-                        const title = listing.querySelector('div:nth-child(2) > div:nth-child(2)') 
-                            ? listing.querySelector('div:nth-child(2) > div:nth-child(2)').textContent : null;
-                        const price = listing.querySelector('[dir]')
-                            ? listing.querySelector('[dir]').textContent : null;
-                        const location = listing.querySelector('div:nth-child(2) > div:nth-child(3)') 
-                            ? listing.querySelector('div:nth-child(2) > div:nth-child(3)').textContent : null;
-                        const url = listing.querySelector('[href]')
-                            ? 'https://www.facebook.com' + listing.querySelector('[href]').getAttribute('href') : null;
-                        const image = listing.querySelector('img') 
-                            ? listing.querySelector('img').getAttribute('src') : null;
+                    const url = listing.querySelector('[href]')
+                        ? listing.querySelector('[href]').getAttribute('href') : null;
+                    const title = listing.querySelector('h3[class="s-item__title"]') 
+                        ? listing.querySelector('h3[class="s-item__title"]').textContent.replace('New Listing', '') : null;
+                    const price = listing.querySelector('span[class="s-item__price"]')
+                        ? listing.querySelector('span[class="s-item__price"]').textContent : null;
+                    const date = listing.querySelector('span[class="s-item__dynamic s-item__listingDate"]')
+                        ? listing.querySelector('span[class="s-item__dynamic s-item__listingDate"]').textContent : null; 
+                    const image = listing.querySelector('img') 
+                        ? listing.querySelector('img').getAttribute('src') : null;
                         
-                        return { title: title, price: price, location: location, url: url, image: image, time: Math.floor(Date.now() / 1000)};
+                        return { title: title, price: price, url: url, image: image, date: date  };
                     });
                 });
-                let finalProducts = products.filter(product => product.url !== null);
-                return finalProducts;
+                let finalListings = listings.filter(listing => {
+                        let listingContainsNullValues = Object.keys(listing).filter(key => listing[key] === null);
+                        if (listingContainsNullValues.length > 0) return;
+                        return listing;
+                });
+                console.log(finalListings)
+                return finalListings;
         });
+
         browser.close();
-        log({keyword: keyword, message: 'Listings found: ' + listings.length, time: Math.floor(Date.now() / 1000)});
         return listings;
     } catch (error) {
         console.log(error.message);
-        log({keyword: keyword, message: error.message, time: Math.floor(Date.now() / 1000)});
         browser.close();
         return null;
     };
 };
-
-// const previousListings = async (username, url) => {
-//     let urlBeingScraped = await User.findOne({ username: username })
-//         .then((user)=> {
-//             let currentScrapes = user.currentScrapes;
-//             let currentUrl = currentScrapes.find((item)=> item.url === url);
-//             return currentUrl.currentItems;
-//         });
-//     console.log(`Checking ${urlBeingScraped.length} last scraped items for any new items.`)
-
-//     return urlBeingScraped
-// };
 
 function generateRandomNumber() {
     var min = 0.00001,
@@ -155,3 +135,5 @@ let userAgents = [
 ];
 
 module.exports = { scrape: scrape };
+
+//scrape('https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2334524.m570.l1313.TR11.TRC2.A0.H1.Xpokemon+cards.TRS1&_nkw=pokemon+cards&_sacat=0&LH_TitleDesc=0&_sop=10&_osacat=0&_odkw=dark+charizard&LH_BIN=1', '194.5.154.73:30323', 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome')

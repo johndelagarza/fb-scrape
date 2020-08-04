@@ -27,9 +27,10 @@ export const updateKeywords = (keywords) => {
   };
 };
 
-export const startKeyword = (keyword, path, settings, saveKeywords) => {
+export const startKeyword = (platform, keyword, path, settings, saveKeywords) => {
   return {
     type: actionTypes.START_KEYWORD,
+    platform: platform,
     keyword: keyword,
     path: path,
     settings: settings,

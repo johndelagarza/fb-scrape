@@ -28,6 +28,7 @@ function Keywords(props) {
             <Table fixed basic='very'>
                 <Table.Header>
                     <Table.Row>
+                        <Table.HeaderCell>Platform</Table.HeaderCell>
                         <Table.HeaderCell>Keyword</Table.HeaderCell>
                         <Table.HeaderCell>Log</Table.HeaderCell>
                         <Table.HeaderCell textAlign='right' style={{paddingRight: "60px"}}>Actions</Table.HeaderCell>
@@ -37,13 +38,13 @@ function Keywords(props) {
                     {props.status.keywords.length === 0 ? null : props.status.keywords.map((keyword)=> { 
                         return (
                             <Table.Row>                                       
+                                <Table.Cell>{keyword.platform.toUpperCase()}</Table.Cell>
                                 <Table.Cell>{keyword.keyword.toUpperCase()}</Table.Cell>
                                 <KeywordLogCell keyword={keyword.keyword} active={keyword.online} />
                                 
                                 <Table.Cell textAlign='right'>
                                     <StartKeyword 
-                                        keyword={keyword} 
-                                        
+                                        keyword={keyword}
                                     />
                                     <StopKeyword 
                                         keyword={keyword} 

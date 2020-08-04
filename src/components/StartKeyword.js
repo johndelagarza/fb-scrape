@@ -14,8 +14,8 @@ function StartKeyword(props) {
             if (props.keyword.hasOwnProperty('pid')) {
                 return alert('Please stop task first.');
             }
-            const notification = new window.Notification(`Task started: ${props.keyword.keyword}`, {body: `Scraping for new listings...`, icon: fbLogo});
-            return startScrape(props.startKeyword, props.status.settings, props.keyword, props.updateKeywords);
+            
+            return startScrape(props.startKeyword, props.status.settings, props.keyword.platform, props.keyword, props.updateKeywords);
         }}>
         </Icon>
     );
@@ -28,18 +28,18 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         updateKeywords: (keywords) => dispatch(updateKeywords(keywords)),
-        startKeyword: (keyword, path, settings, save) => dispatch(startKeyword(keyword, path, settings, save))
+        startKeyword: (platform, keyword, path, settings, save) => dispatch(startKeyword(platform, keyword, path, settings, save))
     };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(StartKeyword);
 
-const startScrape = async (start, settings, keyword, saveKeywords) => {
+const startScrape = async (start, settings, platform, keyword, saveKeywords) => {
     if (!settings || !settings.hasOwnProperty('chromePath')) return alert('Error: Please set your path to Google Chrome in Settings.');
     if (!settings.hasOwnProperty('discordWebhook')) return alert('Error: Please set your Discord Webhook in Settings.');
     if (!settings.hasOwnProperty('interval')) return alert('Error: Please set an interval in Settings.');
-
+    new window.Notification(`Task started: ${keyword.keyword}`, {body: `Scraping for new listings...`, icon: fbLogo});
     let path = await settings.chromePath.replace(/(.exe)/g, '');
-    
-    return start(keyword, path, settings, saveKeywords);
+    console.log(platform)
+    return start(platform, keyword, path, settings, saveKeywords);
 };
