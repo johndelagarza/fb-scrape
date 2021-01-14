@@ -19,8 +19,12 @@ Windows Download: [Latest Release](https://github.com/johndelagarza/fb-scrape/re
 ![3](https://imgur.com/ecVkRIv.png)
 
 ## Todo List
-- [ ] More customization on URL params.
-
+- [ ] Add global theme ability.
+- [ ] Customize electron's title bar.
+- [ ] Clean up Settings Page to not look disgusting.
+- [ ] Add Slack webhook capability.
+- [ ] Customize table element to not be ugly bootstrap. 
+ 
 ## License
 
 ```
