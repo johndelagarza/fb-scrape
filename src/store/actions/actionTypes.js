@@ -1,0 +1,7 @@
+export const ADD_LOG = 'ADD_LOG';
+export const CLEAR_LOGS = 'CLEAR_LOGS';
+export const UPDATE_SETTINGS = 'UPDATE_SETTINGS';
+export const UPDATE_KEYWORDS = 'UPDATE_KEYWORDS';
+export const START_KEYWORD = 'START_KEYWORD';
+export const STOP_KEYWORD = 'STOP_KEYWORD';
+export const DELETE_KEYWORD = 'DELETE_KEYWORD';
