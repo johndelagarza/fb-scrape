@@ -21,6 +21,7 @@ Windows Download: [Latest Release](https://github.com/johndelagarza/fb-scrape/re
 ## Todo List
 - [✅] Add global theme ability.
 - [✅] Customize electron's title bar.
+- [ ] Change keyword tracking to IDs, not by name.
 - [ ] Clean up AutoUpdater prompt / process. 
 - [ ] Clean up Settings Page to not look disgusting.
 - [ ] Add Slack webhook capability.
