@@ -58,7 +58,7 @@ export const scrape = async (keyword, path, settings, saveKeywords) => {
         const listings = await ipcRenderer.invoke('startScrape', {
             path: path, 
             url: keyword.url, 
-            proxies: settings.hasOwnProperty('proxies') ? settings.proxies : null, 
+            proxies: settings.hasOwnProperty('proxies') && settings.proxies.length > 0 ? settings.proxies : null, 
             discordWebhook: settings.discordWebhook
         });
         console.log(listings)

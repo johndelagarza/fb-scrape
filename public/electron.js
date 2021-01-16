@@ -12,31 +12,27 @@ const queryString = require('query-string');
 let mainWindow;
 
 function createWindow() {
+ 
     mainWindow = new BrowserWindow({
           // minWidth: 790, 
           // minHeight: 890,
-          frame: true,
+          frame: false,
           // resizable: false,
+          titleBarStyle: "hidden",
+          title: '',
           webPreferences: { nodeIntegration: true },
-          title: "FB Scrape",
-          icon: path.join(__dirname, './icon.png'),
+          icon: path.join(__dirname, './icon2.png'),
           name: ''
       });
   mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
   
   mainWindow.setMenu(null);
-  
+
   if (isDev) {
     mainWindow.webContents.openDevTools();
   }
-  mainWindow.once('ready-to-show', () => {
-    console.log('checking for updates')
-    if (!isDev) autoUpdater.checkForUpdatesAndNotify();
-  });
   mainWindow.on('closed', () => mainWindow = null);
 };
-
-
 
 app.on('ready', createWindow);
 
@@ -84,18 +80,19 @@ ipcMain.handle('open-listing', async (event, url) => {
 });
 
 ipcMain.on('app_version', (event) => {
-  console.log('checking for updates')
-  if (!isDev) autoUpdater.checkForUpdates();
+  //if (!isDev) autoUpdater.checkForUpdates();
+  autoUpdater.checkForUpdates();
+  console.log('CURRENT VERSION: ' + app.getVersion())
   event.sender.send('app_version', { version: app.getVersion() });
 });
 
-autoUpdater.on('update-available', () => {
+autoUpdater.on('update-available', (data) => {
   console.log('update available')
-  mainWindow.webContents.send('update_available');
+  mainWindow.webContents.send('update_available', data);
 });
 
-autoUpdater.on('update-downloaded', () => {
-  mainWindow.webContents.send('update_downloaded');
+autoUpdater.on('update-downloaded', (data) => {
+  mainWindow.webContents.send('update_downloaded', data);
 });
 
 ipcMain.on('restart_app', () => {

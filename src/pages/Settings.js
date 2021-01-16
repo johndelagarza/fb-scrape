@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
-import { Container, Button, Divider, Input, TextArea, Segment } from 'semantic-ui-react';
-import { Header } from '../components/styled/elements';
+import { Container, Button, Divider, Input, TextArea, Segment, Header } from 'semantic-ui-react';
 import { updateSettings } from "../store/actions/action";
 
 const ipcRenderer = window.require('electron').ipcRenderer;
@@ -14,15 +13,16 @@ function Settings(props) {
         localStorage.setItem('settings', JSON.stringify(settings));
         return props.updateSettings(settings);
     };
-    
+    console.log(settings)
     return (
         <Container>
-            <Header margin={"20px"}>Settings</Header>
+            <h2 className="page-header" margin={"20px"}>Settings</h2>
             <Divider />
+            
             <Container>
-                <Header margin={"20px"}>Chrome File Path
+                <h2 className="secondary-header" margin={"20px"}>Chrome File Path
                     <p style={{display: "inline", fontSize:"13px", margin: "5px", fontWeight: "lighter"}}>(required)</p>
-                </Header>
+                </h2>
                     <Button onClick={()=> {
                         changeChromePath().then(newPath => {
                             if (newPath === undefined) return;
@@ -30,25 +30,25 @@ function Settings(props) {
                         })
                     }}>Select File Path</Button>
                     <Segment>{settings ? settings.chromePath : null}</Segment>
-                <Header>Discord Webhook
+                <h2 className="secondary-header">Discord Webhook
                     <p style={{display: "inline", fontSize:"13px", margin: "5px", fontWeight: "lighter"}}>(required)</p>
-                </Header>
+                </h2>
                 <Button style={{marginBottom: "20px"}} onClick={()=> {
                         if (!settings || !settings.hasOwnProperty('discordWebhook')) return alert('Error: No Discord Webhook inserted.')
                         return testWebhook(settings.discordWebhook)
                     }}>Test Webhook</Button>
                 <Input 
-                    value={settings ? settings.discordWebhook : null}
+                    value={settings ? settings.discordWebhook : ''}
                     fluid 
                     placeholder="Webhook URL" 
                     onChange={(e)=> setSettings({...settings, discordWebhook: e.target.value.replace(/\s+/g, '')})}
                 />
-                <Header>Proxies 
+                <h2 className="secondary-header">Proxies 
                     <p style={{display: "inline", fontSize:"13px", margin: "5px", fontWeight: "lighter"}}>(optional - will use local connection to scrape if no proxies are inserted)</p>
-                </Header>
+                </h2>
                 <TextArea value={settings && settings.hasOwnProperty('proxies') ? 
                         (settings.proxies.map(proxy => proxy + '\n')).toString().replace(/,/g, '')
-                    : null
+                    : ''
                     } 
                     style={{height: "150px", width: "250px"}} 
                     placeholder={`IP:PORT:USERNAME:PASSWORD 
@@ -60,20 +60,25 @@ IP:PORT:USERNAME:PASSWORD`}
                         return setSettings({...settings, proxies: proxyList})
                     }} 
                 />
-                <Header>Interval
+                <h2 className="secondary-header">Interval
                     <p style={{display: "inline", fontSize:"13px", margin: "5px", fontWeight: "lighter"}}>(required)</p>
-                </Header>
+                </h2>
                 <Input
-                    value={settings ? settings.interval : null}
+                    value={settings ? settings.interval : ''}
                     fluid 
                     placeholder="Time between each scrape in milliseconds. ex: 60000" 
                     onChange={(e)=> {
                         return setSettings({...settings, interval: e.target.value.replace(/\s+/g, '')})
                     }}
                 />
+                <h2 className="secondary-header">Theme
+                    <p style={{display: "inline", fontSize:"13px", margin: "5px", fontWeight: "lighter"}}>(Default: Light)</p>
+                </h2>
+                <Button onClick={()=> props.changeTheme()}>{props.theme === 'light' ? 'Dark Mode' : 'Light Mode'}</Button>
             </Container>
+            
             <Button fluid style={{marginTop:"20px", marginBottom: "50px"}} onClick={()=> {
-                    if (!settings) return alert('Error: No settings to save.')
+                    if (!settings) return;// alert('Error: No settings to save.')
                     if (settings.interval < 120000 && !settings.hasOwnProperty('proxies')) return alert('Error: You cannot set an interval lower than 2 minutes (120000ms) without proxies.');
                     return saveSettings(settings)
                 }}>

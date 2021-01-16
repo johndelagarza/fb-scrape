@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter, Redirect } from 'react-router-dom';
-import { Container, Image, Menu, Dropdown, Button, Divider, Table } from 'semantic-ui-react';
-import { Header } from '../components/styled/elements';
+import { Container, Image, Menu, Dropdown, Button, Divider, Table, Header } from 'semantic-ui-react';
 import { clearLogs } from "../store/actions/action";
 
 const moment = require('moment');
@@ -17,7 +16,7 @@ function Logs(props) {
     
     return (
         <Container>
-            <Header margin={"20px"}>Scrape Logs</Header>
+            <h2 className="page-header" margin={"20px"}>Scrape Logs</h2>
             <Divider />
             <Button onClick={()=> props.clearLogs()}>Clear Logs</Button>
             <Table fixed unstackable size="small"> 

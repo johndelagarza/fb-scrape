@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
-import { Container, Image, Divider, List, Icon, Card, Loader, Button } from 'semantic-ui-react';
-import { Header } from '../components/styled/elements';
+import { Container, Image, Divider, List, Icon, Card, Loader, Button, Header } from 'semantic-ui-react';
 import './Items.css';
 
 const moment = require('moment');
@@ -24,10 +23,10 @@ function Home(props) {
     const currentItems = listings.slice(indexOfFirstItem, indexOfLastItem);
 
     if (loading) return <Loader active={loading} />
-
+    
     return (
         <Container>
-            <Header margin={"20px"}>Newly Added Items</Header>
+            <h2 className="page-header" margin={"20px"}>Newly Added Items</h2>
             <Divider />
             <Card.Group>
                 {

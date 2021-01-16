@@ -1,6 +1,6 @@
 {
   "name": "fb-scrape",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^7.1.2",
     "concurrently": "^5.2.0",
     "cross-env": "^7.0.2",
+    "custom-electron-titlebar": "^3.2.6",
     "discord.js": "^12.2.0",
     "electron-is-dev": "^1.2.0",
     "electron-redux": "^1.5.3",
@@ -24,7 +25,7 @@
     "redux": "^4.0.5",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.88.2",
-    "styled-components": "^5.1.1",
+    "styled-components": "^5.2.1",
     "wait-on": "^5.0.1"
   },
   "main": "public/electron.js",

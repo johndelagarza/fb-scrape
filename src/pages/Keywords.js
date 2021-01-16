@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 
-import { Container, Table, Divider} from 'semantic-ui-react';
-import { Header } from '../components/styled/elements';
+import { Container, Table, Divider, Header } from 'semantic-ui-react';
 import AddKeyword from '../components/AddKeyword';
 import DeleteKeyword from '../components/DeleteKeyword';
 import StartKeyword from '../components/StartKeyword';
 import StopKeyword from '../components/StopKeyword';
 import KeywordLogCell from '../components/KeywordLogCell';
-
 import { updateKeywords } from "../store/actions/action";
+
 const { ipcRenderer } = window.require('electron');
 
 function Keywords(props) {
@@ -21,8 +20,7 @@ function Keywords(props) {
     
     return (
         <Container>
-            <h1>{}</h1>
-            <Header margin={"20px"}>Current Keywords</Header>
+            <h2 className="page-header" margin={"20px"}>Current Keywords</h2>
             <Divider />
             <AddKeyword saveKeywords={props.updateKeywords}/>
             <Table fixed unstackable size="small">
