@@ -1,7 +1,7 @@
 # FB Scrape v1
 Scraper / Monitor for Facebook Marketplace
 
-[Community Discord Server](https://discord.gg/myv2be)
+[Community Discord Server](https://discord.gg/Zv4J9vAuMK)
 
 [Windows Installation Video Guide](https://youtu.be/_8m8pv-_etw)
 
