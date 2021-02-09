@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const { ipcRenderer, remote, Notification } = window.require('electron');
+const { notify } = require('./utils/notification');
 
 export const getSettings = () => {
     let settings = localStorage.getItem('settings');
@@ -29,6 +30,7 @@ export const getKeywords = () => {
 };
 
 export const startScrape = (action) => {
+    //scrape(action.keyword, action.path, action.settings, action.saveKeywords);
     const intervalPid = setInterval(()=> scrape(action.keyword, action.path, action.settings, action.saveKeywords), parseInt(action.settings.interval));
     return intervalPid;
 };
@@ -127,6 +129,10 @@ export const sendDiscordNotification = async (discordWebhook, listing) => {
         .addField('Location', listing.location)
         .setImage(listing.image)
         .setTimestamp();
-
-    return hook.send(embed);
+//return notify('Bad Discord Webhook', `Correct format: https://discord.com/api/webhooks/736765543024188/ZtKRS489WyPSb3oKDilFgh8h7xyts14Y3JJTxOOR-kggZgAu_5Gd54uJ966aloItd`, 'danger');
+    try {
+        await hook.send(embed);
+    } catch (error) {
+        notify('Error', `${error.message}`, 'danger');
+    }
 };

@@ -3,8 +3,6 @@ const queryString = require('query-string');
 const moment = require('moment');
 
 async function scrape(config, log) {
-    console.log(log)
-    console.log(typeof log)
     const { path, url, proxies } = config;
     const urlParsed = queryString.parse(url);
     const keyword = urlParsed.query;
@@ -31,7 +29,6 @@ async function scrape(config, log) {
 };
 
 async function getListings(path, url, randomUserAgent, proxy, keyword, log) {
-    console.log(proxy)
     const browser = await puppeteer.launch({
         headless: true,
         executablePath: path,
