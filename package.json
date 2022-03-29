@@ -1,0 +1,89 @@
+{
+  "name": "fb-scrape",
+  "version": "1.0.6",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "concurrently": "^5.2.0",
+    "cross-env": "^7.0.2",
+    "custom-electron-titlebar": "^3.2.6",
+    "discord.js": "^12.2.0",
+    "electron-is-dev": "^1.2.0",
+    "electron-redux": "^1.5.3",
+    "electron-updater": "^4.3.1",
+    "moment": "^2.27.0",
+    "puppeteer": "^5.0.0",
+    "puppeteer-core": "^5.0.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-notifications-component": "^2.4.0",
+    "react-redux": "^7.2.0",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.1",
+    "redux": "^4.0.5",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.88.2",
+    "styled-components": "^5.2.1",
+    "wait-on": "^5.0.1"
+  },
+  "main": "public/electron.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/johndelagarza/fb-scrape.git"
+  },
+  "homepage": "./",
+  "scripts": {
+    "react-start": "react-scripts start",
+    "react-build": "react-scripts build",
+    "electron-build": "electron-builder",
+    "build": "yarn react-build && yarn electron-build build --win",
+    "deploy": "yarn react-build && yarn electron-build build --win --publish always",
+    "start": "concurrently \"cross-env BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && electron .\""
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "author": {
+    "name": "John DeLaGarza",
+    "email": "johndelagarza@mail.com",
+    "url": "https://github.com/johndelagarza"
+  },
+  "build": {
+    "appId": "com.johndelagarza.fb-scrape",
+    "win": {
+      "icon": "build/icon.png"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "johndelagarza",
+        "repo": "fb-scrape"
+      }
+    ],
+    "productName": "FB-Scrape",
+    "copyright": "Copyright © 2020 John DeLaGarza",
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ]
+  },
+  "devDependencies": {
+    "electron": "^9.0.5",
+    "electron-builder": "^22.7.0",
+    "electron-winstaller": "^4.0.1"
+  }
+}
