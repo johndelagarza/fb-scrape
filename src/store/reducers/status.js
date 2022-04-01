@@ -1,6 +1,6 @@
 import * as actionTypes from "../actions/actionTypes";
 import { getKeywords, getSettings, scrape, startScrape, stopScrape } from '../../functions';
-
+const { ipcRenderer } = window.require('electron');
 
 const INITIAL_STATE = {
     keywords: getKeywords(),
@@ -9,9 +9,11 @@ const INITIAL_STATE = {
 };
 
 export default (state = INITIAL_STATE, action) => {
+
     switch (action.type) {
         case actionTypes.ADD_LOG: {
-            return { ...state, logs: [...state.logs, action.log] };
+            
+            return { ...state, logs: [...state.logs, action.log ]};
         }
         case actionTypes.CLEAR_LOGS: {
             return { ...state, logs: [] };
@@ -48,6 +50,6 @@ export default (state = INITIAL_STATE, action) => {
         }
         default:
             return state;
-    }
+    };
 };
 

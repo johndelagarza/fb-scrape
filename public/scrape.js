@@ -5,7 +5,7 @@ const moment = require('moment');
 async function scrape(config, log) {
     const { path, url, proxies } = config;
     const urlParsed = queryString.parse(url);
-    console.log(urlParsed)
+    //console.log(urlParsed)
     const keyword = config.keyword;
     //log({keyword: keyword, message: 'Initializing scrape...', time: Math.floor(Date.now() / 1000) });
 
@@ -16,13 +16,13 @@ async function scrape(config, log) {
     let randomUserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36';
     //proxies !== null ? proxy == '--proxy-server=' + proxies[randomProxy(proxies)] : null;
     
-    //log({keyword: keyword, message: `${proxies ? proxy : 'No proxy'}`, time: Math.floor(Date.now() / 1000)});
+    log({keyword: keyword, message: `${proxies ? proxy : 'No proxy'}`, time: Math.floor(Date.now() / 1000)});
     //log({keyword: keyword, message: randomUserAgent, time: Math.floor(Date.now() / 1000) });
     let maxPrice = parseInt(100000) + (Math.floor(Math.random() * 25) + 1);
     //let urlBase = url.match(/(.*)[?]/);
     //urlBase = urlBase[1];
     let newUrl = url + `&maxPrice=${maxPrice}`;
-    console.log(newUrl)
+    //console.log(newUrl)
     //log({keyword: keyword, message: newUrl, time: Math.floor(Date.now() / 1000)});
     //log({keyword: keyword, message: 'Pulling Listings', time: Math.floor(Date.now() / 1000)});
     const products = await getListings(path, url, randomUserAgent, proxy, keyword, log);
@@ -31,6 +31,7 @@ async function scrape(config, log) {
 };
 
 async function getListings(path, url, randomUserAgent, proxy, keyword, log) {
+    
     const browser = await puppeteer.launch({
         headless: true,
         executablePath: path,
@@ -58,10 +59,13 @@ async function getListings(path, url, randomUserAgent, proxy, keyword, log) {
         await page.goto(url, {timeout: 10000});
         
         await timeout(3000);
-        const listings = await page.waitForSelector('div[style="max-width:1872px"]', {timeout: 30000})
+        
+        const listings = await page.waitForSelector('div[aria-label="Collection of Marketplace items"]', {timeout: 10000})
+        //const listings = await page.waitForSelector('div[style="max-width:1872px"]', {timeout: 10000})
         //const listings = await page.waitForSelector('*[style="max-width: 1872px"]', {timeout: 30000})
             .then(async ()=> {
                 const products = await page.evaluate(() => {
+
                     let pageItems = Array.from(document.querySelectorAll('div[style="max-width:1872px"] > div > div')); 
                     pageItems.length = 7;  
                     console.log('Listings found: ' + pageItems.length);   

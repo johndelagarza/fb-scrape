@@ -56,7 +56,7 @@ ipcMain.handle('setChromePath', async () => {
 
 ipcMain.handle('startScrape', async (event, config) => {
 
-  console.log(config)
+  //console.log(config)
   const newListings = await scrape.scrape(config, log);
   return newListings;
 });

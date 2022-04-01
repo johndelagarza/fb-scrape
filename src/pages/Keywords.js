@@ -7,7 +7,7 @@ import DeleteKeyword from '../components/DeleteKeyword';
 import StartKeyword from '../components/StartKeyword';
 import StopKeyword from '../components/StopKeyword';
 import KeywordLogCell from '../components/KeywordLogCell';
-import { updateKeywords } from "../store/actions/action";
+import { updateKeywords, addLog } from "../store/actions/action";
 
 const { ipcRenderer } = window.require('electron');
 
@@ -68,7 +68,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        updateKeywords: (keywords) => dispatch(updateKeywords(keywords))
+        updateKeywords: (keywords) => dispatch(updateKeywords(keywords)),
+        addLog: (log) => dispatch(addLog(log))
     };
 };
 

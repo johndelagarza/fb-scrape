@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter, Redirect } from 'react-router-dom';
 import { Container, Image, Menu, Dropdown, Button, Divider, Table, Header } from 'semantic-ui-react';
-import { clearLogs } from "../store/actions/action";
+import { clearLogs, addLog } from "../store/actions/action";
 
 const moment = require('moment');
 const ipcRenderer = window.require('electron').ipcRenderer;
@@ -11,6 +11,21 @@ function Logs(props) {
     const [logs, setLogs] = useState([]);
 
     useEffect(()=> {
+
+        for (const { keyword } of props.status.keywords) {
+
+            ipcRenderer.on(keyword, (event, msg)=> {
+                console.log(msg)
+                props.addLog(msg)
+                //return //setLog(msg.message);
+            });
+        };
+        return function cleanup() {
+            for (const { keyword } of props.status.keywords) {
+                ipcRenderer.removeAllListeners(keyword)
+            }
+        }
+
         return setLogs(props.status.logs);
     }, [props.status.logs]);
     
@@ -28,7 +43,7 @@ function Logs(props) {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {props.status.logs.length === 0 ? null : props.status.logs.reverse().map((log)=> { 
+                    {props.status.logs.length === 0 ? null : props.status.logs.sort((x, y) => y.time - x.time).map((log)=> { 
                         return (
                             <Table.Row key={(log.keyword + log.time + log.message).toString()}>                                       
                                 <Table.Cell>{log.keyword}</Table.Cell>
@@ -50,7 +65,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        clearLogs: () => dispatch(clearLogs())
+        clearLogs: () => dispatch(clearLogs()),
+        addLog: (log) => dispatch(addLog(log))
     };
 };
 

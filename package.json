@@ -13,6 +13,7 @@
     "electron-is-dev": "^1.2.0",
     "electron-redux": "^1.5.3",
     "electron-updater": "^4.3.1",
+    "lowdb": "^3.0.0",
     "moment": "^2.27.0",
     "puppeteer": "^5.0.0",
     "puppeteer-core": "^5.0.0",
@@ -63,7 +64,7 @@
     "url": "https://github.com/johndelagarza"
   },
   "build": {
-    "appId": "com.johndelagarza.fb-scrape",
+    "appId": "com.fb-scrape.app",
     "win": {
       "icon": "build/icon.png"
     },
@@ -75,7 +76,7 @@
       }
     ],
     "productName": "FB-Scrape",
-    "copyright": "Copyright © 2020 John DeLaGarza",
+    "copyright": "Copyright © 2022 John DeLaGarza",
     "files": [
       "build/**/*",
       "node_modules/**/*"

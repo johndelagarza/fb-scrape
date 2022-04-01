@@ -12,6 +12,8 @@ import Keywords from './pages/Keywords';
 import Settings from './pages/Settings';
 import Logs from './pages/Logs';
 import icon from './assets/icon2.png';
+import { connect } from 'react-redux';
+import { addLog } from "./store/actions/action";
 
 const ipcRenderer = window.require('electron').ipcRenderer;
 const customTitlebar = window.require('custom-electron-titlebar');
@@ -22,6 +24,7 @@ function App(props) {
   const [theme, setTheme] = useState('light');
 
   useEffect(()=> {
+    console.log(props.status)
     let titleBar = new customTitlebar.Titlebar({
       backgroundColor: customTitlebar.Color.fromHex(lightTheme.colors.body),
       icon: icon,
@@ -57,10 +60,11 @@ function App(props) {
       // restartButton.classList.remove('hidden');
       // notification.classList.remove('hidden');
     });
-    
+
     let theme = localStorage.getItem('theme');
 
     if (!theme) localStorage.setItem('theme', 'light');
+
     return setTheme(theme);
   }, []);
 
@@ -98,4 +102,14 @@ return (
   )
 };
 
-export default App;
+const mapStateToProps = state => {
+  return { status: state.status }
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+      addLog: (log) => dispatch(addLog(log))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)

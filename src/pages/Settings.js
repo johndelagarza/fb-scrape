@@ -79,7 +79,7 @@ IP:PORT:USERNAME:PASSWORD`}
             
             <Button fluid style={{marginTop:"20px", marginBottom: "50px"}} onClick={()=> {
                     if (!settings) return;// alert('Error: No settings to save.')
-                    if (settings.interval < 120000 && !settings.hasOwnProperty('proxies')) return alert('Error: You cannot set an interval lower than 2 minutes (120000ms) without proxies.');
+                    //if (settings.interval < 120000 && !settings.hasOwnProperty('proxies')) return alert('Error: You cannot set an interval lower than 2 minutes (120000ms) without proxies.');
                     return saveSettings(settings)
                 }}>
                 Save Changes

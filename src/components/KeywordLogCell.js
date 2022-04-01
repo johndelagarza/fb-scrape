@@ -11,7 +11,6 @@ function KeywordLogCell(props) {
     useEffect(()=> {
         ipcRenderer.removeAllListeners(props.keyword)
         ipcRenderer.on(props.keyword, (event, msg)=> {
-            console.log('received');
             props.addLog(msg)
             return setLog(msg.message);
         });
