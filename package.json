@@ -14,7 +14,7 @@
     "electron-redux": "^1.5.3",
     "electron-updater": "^4.3.1",
     "lowdb": "^3.0.0",
-    "moment": "^2.27.0",
+    "moment": "^2.29.2",
     "puppeteer": "^5.0.0",
     "puppeteer-core": "^5.0.0",
     "react": "^16.13.1",
