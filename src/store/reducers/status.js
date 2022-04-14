@@ -43,9 +43,9 @@ export default (state = INITIAL_STATE, action) => {
         }
         case actionTypes.DELETE_KEYWORD: {
             if (action.keyword.hasOwnProperty('pid')) clearInterval(action.keyword.pid);
-            const newKeywords = state.keywords.filter(keyword => keyword.keyword !== action.keyword.keyword);
+            const newKeywords = state.keywords.filter(keyword => keyword.keyword !== action.keyword);
             localStorage.setItem('keywords', JSON.stringify(newKeywords));
-
+            console.log(newKeywords)
             return { ...state, keywords: newKeywords};
         }
         default:

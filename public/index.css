@@ -1,0 +1,51 @@
+.react-notification-root {
+    /* position: absolute !important; */
+    z-index: 2000 !important;
+}
+/* SUCCESS */
+.notification-success {
+    background-color: var(--color-on-primary-bg-soft) !important;
+    border-left: 8px solid #57FE76 !important;
+}
+
+.notification-success .timer {
+    background-color: #57FE76 !important;
+}
+
+.notification-item .notification-message {
+    color: var(--color-on-primary-bg-softer) !important;
+}
+
+.notification-item .notification-title {
+    color: var(--color-on-primary-bg-softer) !important;
+}
+/* INFO */
+.notification-info {
+    background-color: var(--color-on-primary-bg-soft) !important;
+    border-left: 8px solid #1EBAC4!important;
+}
+
+.notification-info .timer {
+    background-color: #1EBAC4 !important;
+}
+
+.notification-item .notification-message {
+    color: var(--color-on-primary-bg-softer) !important;
+}
+
+.notification-item .notification-title {
+    color: var(--color-on-primary-bg-softer) !important;
+}
+
+.notification-danger {
+    background-color: var(--color-on-primary-bg-soft) !important;
+    border-left: 8px solid #EF5350!important;
+}
+
+.notification-danger .timer {
+    background-color: #EF5350 !important;
+}
+
+.ui.modal, .ui.dimmer {
+    z-index: 999 !important;
+}

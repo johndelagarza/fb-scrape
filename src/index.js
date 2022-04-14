@@ -4,8 +4,9 @@ import { Provider } from 'react-redux';
 import { createStore, combineReducers } from 'redux';
 
 import status from './store/reducers/status';
-import 'semantic-ui-css/semantic.min.css'
 import App from './App';
+import 'flowbite';
+import './index.css';
 
 const rootReducer = combineReducers({
   status

@@ -1,21 +1,109 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Container, Button, Divider, Input, TextArea, Segment, Header } from 'semantic-ui-react';
 import { updateSettings } from "../store/actions/action";
+import SettingsSidebar from '../components/SettingsSidebar';
+import ScrapeSettings from './SettingTypes/ScrapeSettings';
+import ProxiesSettings from './SettingTypes/ProxiesSettings';
+import NotificationSettings from './SettingTypes/NotificationSettings';
+import ThemeSettings from './SettingTypes/ThemeSettings';
 
 const ipcRenderer = window.require('electron').ipcRenderer;
-const Discord = require('discord.js');
+//const Discord = require('discord.js');
 
 function Settings(props) {
     const [settings, setSettings] = useState(props.status.settings ? props.status.settings : null);
 
+    useMemo(() => {
+        setSettings(props.status.settings ? props.status.settings : null)
+    }, [props.status.settings]);
+
+
+    function useQuery() {
+        return new URLSearchParams(useLocation().search);
+    };
+
+    let query = useQuery();
+    
     const saveSettings = async (settings) => {
+        console.log(settings)
         localStorage.setItem('settings', JSON.stringify(settings));
         return props.updateSettings(settings);
     };
-    console.log(settings)
+    
+    
     return (
-        <Container>
+        <div id="Settings" className='w-full'>
+            <SettingsSidebar />
+            <div style={{paddingLeft: "208px"}}>
+                {
+                    query.get("type") === "scrape" ? (
+                        <ScrapeSettings settings={settings} setSettings={setSettings} saveSettings={saveSettings} />
+                    ) : query.get("type") === "proxies" ? (
+                        <ProxiesSettings settings={settings} setSettings={setSettings} saveSettings={saveSettings} />
+                    ) : query.get("type") === "notifications" ? (
+                        <NotificationSettings settings={settings} setSettings={setSettings} saveSettings={saveSettings} />
+                    ) : query.get("type") === "themes" ? (
+                        <ThemeSettings settings={settings} setSettings={setSettings} saveSettings={saveSettings} />
+                    ) : 
+                    
+                    <></>
+                }
+            </div>
+            <button onClick={()=> props.changeTheme()}>{props.theme === 'light' ? 'Dark Mode' : 'Light Mode'}</button>
+        </div>
+    )
+};
+
+
+const mapDispatchToProps = dispatch => {
+    return {
+        updateSettings: (settings) => dispatch(updateSettings(settings))
+    };
+};
+
+const mapStateToProps = state => {
+    return { status: state.status }
+  };
+
+export default connect(mapStateToProps, mapDispatchToProps)(Settings);
+
+const changeChromePath = async () => {
+    const newPath = await ipcRenderer.invoke('setChromePath');
+    console.log(newPath);
+    return newPath;
+};
+
+// const testWebhook = async (discordWebhook) => {
+//     discordWebhook = discordWebhook.split('/webhooks/').pop();
+//     let id = await discordWebhook.match(/[^/]+/);
+//     let token = await discordWebhook.match(/[^/]+$/);
+//     console.log(token);
+//     console.log(id)
+    
+//     const hook = new Discord.WebhookClient(id, token);
+//     const embed = new Discord.MessageEmbed()
+//         .setColor('#0099ff')
+//         .setTitle('Connected with FB Scrape 🟢')
+//         .setDescription('All new listings that match your filters will appear here.')
+    
+//     return hook.send(embed);
+// };
+
+// async function testWebhook(discordWebhook) {
+//     discordWebhook = discordWebhook.split('https://discordapp.com/api/webhooks/').pop();
+//     let id = await discordWebhook.match(/[^/]+/);
+//     let token = await discordWebhook.match(/[^/]+$/);
+
+//     const webhookClient = new Discord.WebhookClient(id, token);
+
+//     await webhookClient.send('Connected with FB Scrape 🟢');
+
+//     return webhookClient.destroy();
+// };
+
+
+{/* <Container>
             <h2 className="page-header" margin={"20px"}>Settings</h2>
             <Divider />
             
@@ -84,53 +172,4 @@ IP:PORT:USERNAME:PASSWORD`}
                 }}>
                 Save Changes
             </Button>
-        </Container>
-    )
-};
-
-
-const mapDispatchToProps = dispatch => {
-    return {
-        updateSettings: (settings) => dispatch(updateSettings(settings))
-    };
-};
-
-const mapStateToProps = state => {
-    return { status: state.status }
-  };
-
-export default connect(mapStateToProps, mapDispatchToProps)(Settings);
-
-const changeChromePath = async () => {
-    const newPath = await ipcRenderer.invoke('setChromePath');
-    console.log(newPath);
-    return newPath;
-};
-
-const testWebhook = async (discordWebhook) => {
-    discordWebhook = discordWebhook.split('/webhooks/').pop();
-    let id = await discordWebhook.match(/[^/]+/);
-    let token = await discordWebhook.match(/[^/]+$/);
-    console.log(token);
-    console.log(id)
-    
-    const hook = new Discord.WebhookClient(id, token);
-    const embed = new Discord.MessageEmbed()
-        .setColor('#0099ff')
-        .setTitle('Connected with FB Scrape 🟢')
-        .setDescription('All new listings that match your filters will appear here.')
-    
-    return hook.send(embed);
-};
-
-// async function testWebhook(discordWebhook) {
-//     discordWebhook = discordWebhook.split('https://discordapp.com/api/webhooks/').pop();
-//     let id = await discordWebhook.match(/[^/]+/);
-//     let token = await discordWebhook.match(/[^/]+$/);
-
-//     const webhookClient = new Discord.WebhookClient(id, token);
-
-//     await webhookClient.send('Connected with FB Scrape 🟢');
-
-//     return webhookClient.destroy();
-// };
+        </Container> */}

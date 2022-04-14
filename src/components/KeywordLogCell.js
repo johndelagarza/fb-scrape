@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Table} from 'semantic-ui-react';
 import { addLog } from "../store/actions/action";
 
 const { ipcRenderer } = window.require('electron');
@@ -20,12 +19,15 @@ function KeywordLogCell(props) {
     }, []);
     
     return (
-        <Table.Cell >
-        {!props.active ? 'Stopped' 
-            : log ? log
-            : 'Waiting...'
-        }
-        </Table.Cell>                
+        <span class="flex justify-left pointer-events-none text-xs whitespace-nowrap text-ellipsis overflow-hidden">
+            {
+                !props.active ? 
+                    'Stopped' 
+                : log ? 
+                    log
+                : 'Waiting...'
+            }
+        </span>           
     )
 };
 

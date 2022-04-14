@@ -1,50 +1,62 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
-import { Container, Image, Divider, List, Icon } from 'semantic-ui-react';
-import { Header } from '../components/styled/elements';
+import { Loader, Card } from '../components/elements/index.js';
+import './Items.css';
 
 const moment = require('moment');
-const ipcRenderer = window.require('electron').ipcRenderer;
 
 function Home(props) {
-    const [listings, setListings] = useState(null);
+    const [listings, setListings] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(6);
 
     useEffect(()=> {
+        setLoading(true);
         getAllListings(props.status.keywords)
-            .then(data => setListings(data));
+            .then(data => setListings(data), setLoading(false));
     }, [props.status.keywords]);
-    console.log(props.status)
+    
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = listings.slice(indexOfFirstItem, indexOfLastItem);
+
+    if (loading) return <Loader active={loading} />
+    
     return (
-        <Container>
-            <Header margin={"20px"}>Newly Added Items</Header>
-            <Divider />
-            <List divided relaxed size="large">
+        <div className="container mx-[28px] mt-5 lg:mt-0 px-5">
+            <div className="flex text-primaryText font-sans font-medium h-[36.67px]">
+                <div className="self-center">
+                    <span>New Listings</span>
+                </div>
+            </div>
+            <div class="divide-solid bg-primaryText h-[.7px] mt-3"></div>
+            <div className='p-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-5'>
                 {
-                    !listings ? null
-                    : listings.map(listing => {
+                    currentItems.length === 0 ? null
+                    : currentItems.map(listing => {
                         if (!listing) return null;
+                        let time = moment.unix(listing.time).format('MMMM Do YYYY, h:mm:ss a').toString();
+                        
                         return (
-                            <List.Item>
-                                <Image 
-                                    style={{cursor:'pointer'}} 
-                                    size="small" 
-                                    src={listing.image} 
-                                    onClick={()=> ipcRenderer.invoke('open-listing', listing.url)} 
-                                />
-                                <List.Content>
-                                    <List.Header>{`${listing.title} - ${listing.price.replace(/[a-zA-Z](.*)/, '')}`}</List.Header>
-                                    <List.Description>
-                                        {listing.location}
-                                    </List.Description>
-                                    {listing.time ? moment.unix(listing.time).format('MMMM Do YYYY, h:mm:ss a').toString() : null}
-                                </List.Content>
-                            </List.Item>
+                            <Card id={listing.id} image={listing.image} title={listing.title} price={listing.price} location={listing.location} time={time} url={listing.url} />
                         )
                     })
                 }
-            </List>
-            
-        </Container>
+                
+            </div>
+            <div className='mb-[2.5rem] flex'>
+                {
+                    itemsPerPage >= listings.length ? null :
+                    // <button className="pagination" onClick={()=> setItemsPerPage(itemsPerPage + itemsPerPage)}>
+                    //     Load More
+                    // </button>
+                    <button onClick={()=> setItemsPerPage(itemsPerPage + itemsPerPage)} className="mx-auto p-2 bg-onPrimaryBgSofter shadow-md rounded-md text-sm focus:outline-none outline-none hover:opacity-70 transition duration-200">
+                        Load More
+                    </button>
+                }
+            </div>
+        </div>
     )
 };
 
@@ -54,12 +66,12 @@ const getAllListings = async (keywords) => {
     if (!keywords) return;
 
     await keywords.forEach(keyword => {
-        console.log(keyword.currentListings)
+        
         return listings = listings.concat(keyword.currentListings)
     });
-    console.log(listings)
+    
     let newestFirst = listings.sort((a, b) => b.time - a.time);
-    console.log(newestFirst);
+    
     return newestFirst;
 };
 

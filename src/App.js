@@ -2,12 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { HashRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import ReactNotification from 'react-notifications-component';
 import 'react-notifications-component/dist/theme.css';
-import { ThemeProvider } from 'styled-components'
-import GlobalStyle from './theme/globalStyles';
-import { lightTheme, darkTheme } from './theme/theme';
 
+import Dropdown from './components/Dropdown';
 import NavigationHeader from './components/NavigationHeader';
-import Items from './pages/Items';
+import Items from './pages/Home';
 import Keywords from './pages/Keywords';
 import Settings from './pages/Settings';
 import Logs from './pages/Logs';
@@ -20,24 +18,25 @@ const customTitlebar = window.require('custom-electron-titlebar');
 const { notify } = require('./utils/notification');
 
 function App(props) {
+  const [ dropdownOpen, setDropdownOpen ] = useState(false);
   const [appVersion, setAppVersion] = useState('');
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState('dark');
 
   useEffect(()=> {
     console.log(props.status)
     let titleBar = new customTitlebar.Titlebar({
-      backgroundColor: customTitlebar.Color.fromHex(lightTheme.colors.body),
+      backgroundColor: customTitlebar.Color.fromHex("#13131C"),
+      titleHorizontalAlignment: 'left',
       icon: icon,
       menu: null
     });
-    
-    titleBar.updateTitle(' ');
 
     ipcRenderer.send('app_version');
 
     ipcRenderer.on('app_version', (event, arg) => {
       console.log('getting app version')
       ipcRenderer.removeAllListeners('app_version');
+      titleBar.updateTitle(arg.version);
       return setAppVersion(arg.version);
     });
 
@@ -63,18 +62,30 @@ function App(props) {
 
     let theme = localStorage.getItem('theme');
 
-    if (!theme) localStorage.setItem('theme', 'light');
+    if (!theme) {
+      localStorage.setItem('theme', 'dark');
+      theme = 'dark'
+    }
+
+    let body = document.getElementById("main");
+    body.className = `theme-${theme}`
 
     return setTheme(theme);
   }, []);
 
   const changeTheme = () => {
     let currentTheme = localStorage.getItem('theme');
+    let body = document.getElementById("main");
+    
     if (currentTheme === 'light') {
       setTheme('dark');
+      body.className = "theme-dark"
+
       return localStorage.setItem('theme', 'dark');
     } else {
       setTheme('light');
+      body.className = "theme-light"
+      
       return localStorage.setItem('theme', 'light');
     }
   };
@@ -83,13 +94,16 @@ function App(props) {
     ipcRenderer.send('restart_app');
   }
 
-return (
-  <div>
-    <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
-    <GlobalStyle />
+  const toggle = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+
+  return (
+    <div>
       <Router>
       <ReactNotification />
-          <NavigationHeader />
+          <NavigationHeader toggle={toggle} />
+          <Dropdown isOpen={dropdownOpen} toggle={toggle} />
             <Switch>
               <Route exact path="/" component={Items} />
               <Route exact path="/Keywords" component={Keywords} />
@@ -97,8 +111,7 @@ return (
               <Route exact path="/Logs" component={Logs} />
             </Switch>
         </Router>
-      </ThemeProvider>
-  </div> 
+    </div> 
   )
 };
 

@@ -5,6 +5,7 @@ const path = require('path');
 const isDev = require('electron-is-dev');
 const url = require('url');
 const scrape = require('./scrape');
+const { testDiscordWebhook }  = require('./functions');
 const fs = require('fs'); 
 var shell = require('electron').shell;
 const queryString = require('query-string');
@@ -27,6 +28,7 @@ function createWindow() {
   mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
   
   mainWindow.setMenu(null);
+  
 
   if (isDev) {
     mainWindow.webContents.openDevTools();
@@ -52,6 +54,11 @@ ipcMain.handle('setChromePath', async () => {
   let chromePath = findPath.filePaths.pop();
   console.log(chromePath);
   return chromePath;
+});
+
+ipcMain.handle('testDiscordWebhook', async (event, webhook) => {
+  console.log(webhook)
+  testDiscordWebhook(webhook)
 });
 
 ipcMain.handle('startScrape', async (event, config) => {

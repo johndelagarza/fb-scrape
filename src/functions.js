@@ -1,4 +1,3 @@
-const Discord = require('discord.js');
 const { ipcRenderer, remote, Notification } = window.require('electron');
 const { notify } = require('./utils/notification');
 
@@ -101,7 +100,7 @@ export const findNewListings = async (keyword, listings) => {
         });
         
         newListings = await newListings.filter(listing => listing !== null);
-        if (newListings.length < 5) newListings.forEach(listing => sendDiscordNotification(settings.discordWebhook, listing));
+        //if (newListings.length < 5) newListings.forEach(listing => sendDiscordNotification(settings.discordWebhook, listing));
         
         let newCurrentListings = newListings.concat(currentListings);
         
@@ -116,24 +115,24 @@ export const findNewListings = async (keyword, listings) => {
     };
 };
 
-export const sendDiscordNotification = async (discordWebhook, listing) => {
-    discordWebhook = discordWebhook.split('/webhooks/').pop();
-    let id = await discordWebhook.match(/[^/]+/);
-    let token = await discordWebhook.match(/[^/]+$/);
+// export const sendDiscordNotification = async (discordWebhook, listing) => {
+//     discordWebhook = discordWebhook.split('/webhooks/').pop();
+//     let id = await discordWebhook.match(/[^/]+/);
+//     let token = await discordWebhook.match(/[^/]+$/);
     
-    const hook = new Discord.WebhookClient(id, token);
-    const embed = new Discord.MessageEmbed()
-        .setColor('#0099ff')
-        .setTitle(listing.title)
-        .setURL(listing.url)
-        .addField('Price:', listing.price)
-        .addField('Location', listing.location)
-        .setImage(listing.image)
-        .setTimestamp();
-//return notify('Bad Discord Webhook', `Correct format: https://discord.com/api/webhooks/736765543024188/ZtKRS489WyPSb3oKDilFgh8h7xyts14Y3JJTxOOR-kggZgAu_5Gd54uJ966aloItd`, 'danger');
-    try {
-        await hook.send(embed);
-    } catch (error) {
-        notify('Error', `${error.message}`, 'danger');
-    }
-};
+//     const hook = new Discord.WebhookClient(id, token);
+//     const embed = new Discord.MessageEmbed()
+//         .setColor('#0099ff')
+//         .setTitle(listing.title)
+//         .setURL(listing.url)
+//         .addField('Price:', listing.price)
+//         .addField('Location', listing.location)
+//         .setImage(listing.image)
+//         .setTimestamp();
+// //return notify('Bad Discord Webhook', `Correct format: https://discord.com/api/webhooks/736765543024188/ZtKRS489WyPSb3oKDilFgh8h7xyts14Y3JJTxOOR-kggZgAu_5Gd54uJ966aloItd`, 'danger');
+//     try {
+//         await hook.send(embed);
+//     } catch (error) {
+//         notify('Error', `${error.message}`, 'danger');
+//     }
+// };

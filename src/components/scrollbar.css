@@ -1,0 +1,43 @@
+thead, tbody {
+    float: left;
+    width: 100%;
+}
+tbody {
+    overflow: scroll !important;
+    overflow-x: hidden !important;
+    height: 500px;
+}
+tr {
+    width: 100%;
+    display: table;
+    text-align: left;
+}
+
+#proxyListInput {
+    overflow: scroll !important;
+    overflow-x: hidden !important;
+}
+
+.scrollbar-thumb{
+    border-radius: 1rem !important;
+    cursor: pointer !important;
+}
+
+.sidebar::-webkit-scrollbar {
+    display: none;
+}
+
+.scroller::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scroller::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 1rem;
+}
+
+.scroller::-webkit-scrollbar-thumb {
+  background-color: var(--color-on-primary-bg-softer);
+  outline: 1px solid var(--color-on-primary-bg-softer);
+  border-radius: 1rem;
+}

@@ -1,32 +1,47 @@
 {
   "name": "fb-scrape",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "private": true,
   "dependencies": {
+    "@craco/craco": "^6.4.3",
+    "@discordjs/rest": "^0.3.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "browserify-zlib": "^0.2.0",
     "concurrently": "^5.2.0",
     "cross-env": "^7.0.2",
+    "crypto-browserify": "^3.12.0",
     "custom-electron-titlebar": "^3.2.6",
+    "discord-api-types": "^0.31.0",
     "discord.js": "^12.2.0",
     "electron-is-dev": "^1.2.0",
     "electron-redux": "^1.5.3",
     "electron-updater": "^4.3.1",
+    "electronmon": "^2.0.2",
+    "flowbite": "^1.4.1",
+    "lodash": "^4.17.21",
     "lowdb": "^3.0.0",
     "moment": "^2.27.0",
+    "path-browserify": "^1.0.1",
+    "postcss-loader": "^6.2.1",
+    "process": "^0.11.10",
     "puppeteer": "^5.0.0",
     "puppeteer-core": "^5.0.0",
+    "query-string": "^7.1.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-notifications-component": "^2.4.0",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.1",
+    "react-scripts": "^5.0.0",
+    "react-tooltip": "^4.2.21",
     "redux": "^4.0.5",
-    "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^0.88.2",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
     "styled-components": "^5.2.1",
+    "tailwind-scrollbar": "^1.2.4",
+    "url": "^0.11.0",
     "wait-on": "^5.0.1"
   },
   "main": "public/electron.js",
@@ -36,12 +51,12 @@
   },
   "homepage": "./",
   "scripts": {
-    "react-start": "react-scripts start",
+    "react-start": "craco start",
     "react-build": "react-scripts build",
     "electron-build": "electron-builder",
     "build": "yarn react-build && yarn electron-build build --win",
     "deploy": "yarn react-build && yarn electron-build build --win --publish always",
-    "start": "concurrently \"cross-env BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && electron .\""
+    "start": "concurrently \"cross-env BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && electronmon .\""
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -83,8 +98,14 @@
     ]
   },
   "devDependencies": {
+    "@tailwindcss/postcss7-compat": "^2.2.17",
+    "autoprefixer": "^10.4.4",
+    "dotenv": "^8.2.0",
     "electron": "^9.0.5",
     "electron-builder": "^22.7.0",
-    "electron-winstaller": "^4.0.1"
+    "electron-winstaller": "^4.0.1",
+    "postcss": "^8.4.12",
+    "tailwindcss": "^3.0.23",
+    "tailwindcss-textshadow": "^2.1.3"
   }
 }
