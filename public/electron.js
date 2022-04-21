@@ -5,7 +5,7 @@ const path = require('path');
 const isDev = require('electron-is-dev');
 const url = require('url');
 const scrape = require('./scrape');
-const { testDiscordWebhook }  = require('./functions');
+const { testDiscordWebhook, sendDiscordNotification }  = require('./functions');
 const fs = require('fs'); 
 var shell = require('electron').shell;
 const queryString = require('query-string');
@@ -16,12 +16,12 @@ function createWindow() {
  
     mainWindow = new BrowserWindow({
           // minWidth: 790, 
-          // minHeight: 890,
+          //minHeight: 900,
           frame: false,
           // resizable: false,
           titleBarStyle: "hidden",
           title: '',
-          webPreferences: { nodeIntegration: true },
+          webPreferences: { nodeIntegration: true, webSecurity: false },
           icon: path.join(__dirname, './icon2.png'),
           name: ''
       });
@@ -56,9 +56,9 @@ ipcMain.handle('setChromePath', async () => {
   return chromePath;
 });
 
-ipcMain.handle('testDiscordWebhook', async (event, webhook) => {
-  console.log(webhook)
-  testDiscordWebhook(webhook)
+ipcMain.handle('sendDiscordNotification', async (event, webhook, type, message) => {
+  
+  sendDiscordNotification(webhook, type, message)
 });
 
 ipcMain.handle('startScrape', async (event, config) => {

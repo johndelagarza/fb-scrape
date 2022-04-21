@@ -5,6 +5,8 @@ import 'react-notifications-component/dist/theme.css'
 import fbLogo from './icon.png';
 import { updateKeywords, startKeyword, stopKeyword  } from "../store/actions/action";
 
+const ipcRenderer = window.require('electron').ipcRenderer;
+
 function StartKeyword(props) {
     const [showConfirm, setConfirm] = useState(false);
 
@@ -13,7 +15,15 @@ function StartKeyword(props) {
             return alert('Please stop task first.');
         }
 
-        const notification = new window.Notification(`Task started: ${props.keyword.keyword}`, {body: `Scraping for new listings...`, icon: fbLogo});
+        if (props.status.settings.desktopNotifications) new window.Notification(`Task started: ${props.keyword.keyword}`, {body: `Scraping for new listings...`, icon: fbLogo});
+        if (props.status.settings.discordWebhook) {
+            ipcRenderer.invoke(
+                'sendDiscordNotification', 
+                props.status.settings.discordWebhook, 
+                "START", 
+                {title: `Task started: ${props.keyword.keyword}`, description: `Now watching for new listings`}
+            );
+        }
 
         return startScrape(props.startKeyword, props.status.settings, props.keyword, props.updateKeywords);
     };

@@ -8,13 +8,13 @@ function KeywordLogCell(props) {
     const [log, setLog] = useState(null);
 
     useEffect(()=> {
-        ipcRenderer.removeAllListeners(props.keyword)
-        ipcRenderer.on(props.keyword, (event, msg)=> {
-            props.addLog(msg)
+        ipcRenderer.removeAllListeners(props.keyword.id)
+        ipcRenderer.on(props.keyword.id, (event, msg)=> {
+            //props.addLog(msg)
             return setLog(msg.message);
         });
         return function cleanup() {
-            ipcRenderer.removeAllListeners(props.keyword)
+            ipcRenderer.removeAllListeners(props.keyword.id)
         }
     }, []);
     

@@ -40,7 +40,7 @@ export const stopScrape = (action, keywords) => {
     let updatedKeywords = keywords.map(keyword => {
         if (keyword.keyword === action.keyword.keyword) {
             delete keyword.pid
-            return { ...keyword, online: false };
+            return { ...keyword, online: false, lastActive: Date.now() };
         } else return keyword;
     });
     return updatedKeywords
@@ -61,7 +61,9 @@ export const scrape = async (keyword, path, settings, saveKeywords) => {
             keyword: keyword.keyword,
             url: keyword.url, 
             proxies: settings.hasOwnProperty('proxies') && settings.proxies.length > 0 ? settings.proxies : null, 
-            discordWebhook: settings.discordWebhook
+            discordWebhook: settings.discordWebhook,
+            headless: settings.headless,
+            rotateUserAgents: settings.rotateUserAgents
         });
         console.log(listings)
         if (!listings) return;
@@ -89,7 +91,19 @@ export const findNewListings = async (keyword, listings) => {
         let newListings = await listings.map((listing)=> {   
             if (!currentListingsIds.includes(listing.id)) {
                 console.log('New listing found!');
-                //const notification = new window.Notification(`New Listing Found: ${keyword.keyword}`, {body: `${listing.title} - ${listing.price}`, icon: listing});
+                
+                if (settings.discordWebhook !== null) {
+                    ipcRenderer.invoke(
+                        'sendDiscordNotification', 
+                        settings.discordWebhook, 
+                        "NEW_LISTING", 
+                        {title: `New Listing Found: ${keyword.keyword}`, description: listing}
+                    );
+                }
+
+                if (settings.desktopNotifications) {
+                    new window.Notification(`New Listing Found: ${keyword.keyword}`, {body: `${listing.title} - ${listing.price}`, icon: listing});
+                }
                 //notification.addEventListener('click', ()=> ipcRenderer.invoke('open-listing', listing.url))
                 
                 return listing;
@@ -104,8 +118,8 @@ export const findNewListings = async (keyword, listings) => {
         
         let newCurrentListings = newListings.concat(currentListings);
         
-        if (newCurrentListings.length > 50) {
-            newCurrentListings.length = 50;
+        if (newCurrentListings.length > 400) {
+            newCurrentListings.length = 200;
             return newCurrentListings;
         };
     

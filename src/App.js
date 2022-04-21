@@ -3,6 +3,7 @@ import { HashRouter as Router, Route, Switch, Redirect } from "react-router-dom"
 import ReactNotification from 'react-notifications-component';
 import 'react-notifications-component/dist/theme.css';
 
+import Login from './pages/Login';
 import Dropdown from './components/Dropdown';
 import NavigationHeader from './components/NavigationHeader';
 import Items from './pages/Home';
@@ -101,15 +102,16 @@ function App(props) {
   return (
     <div>
       <Router>
-      <ReactNotification />
-          <NavigationHeader toggle={toggle} />
-          <Dropdown isOpen={dropdownOpen} toggle={toggle} />
-            <Switch>
-              <Route exact path="/" component={Items} />
-              <Route exact path="/Keywords" component={Keywords} />
-              <Route exact path="/Settings" render={(props) => <Settings {...props} theme={theme} changeTheme={changeTheme} />} />
-              <Route exact path="/Logs" component={Logs} />
-            </Switch>
+      <ReactNotification className="fixed bottom-2 right-0" />
+        <Route exact path="/" component={Login} />
+        <NavigationHeader toggle={toggle} />
+        <Dropdown isOpen={dropdownOpen} toggle={toggle} />
+          <Switch>
+            <Route exact path="/home" component={Items} />
+            <Route exact path="/Keywords" component={Keywords} />
+            <Route exact path="/Settings" render={(props) => <Settings {...props} theme={theme} changeTheme={changeTheme} />} />
+            <Route exact path="/Logs" component={Logs} />
+          </Switch>
         </Router>
     </div> 
   )

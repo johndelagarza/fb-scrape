@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+var uniqid = require('uniqid'); 
 const { notify } = require('../utils/notification');
 
 const queryString = require('query-string');
@@ -29,16 +30,14 @@ function AddKeyword(props) {
         let currentUrls = localStorage.getItem('keywords');
        
         if (!currentUrls) {
-            let newKeywords = [{keyword: parsed.query, url: url, online: false}];
+            let newKeywords = [{id: uniqid(), keyword: parsed.query, url: url, online: false}];
             localStorage.setItem('keywords', JSON.stringify(newKeywords));
             setModal(!open)
             return props.saveKeywords(newKeywords);
         } else if (currentUrls.length > 0) {
             currentUrls = JSON.parse(currentUrls);
             console.log(currentUrls);
-            let doesKeywordAlreadyExist = currentUrls.filter(url => url.keyword === parsed.query);
-            if (doesKeywordAlreadyExist.length > 0) return notify('Error', `Keyword already saved`, 'info');
-            let newKeywords = [...currentUrls, {keyword: parsed.query, url: url, online: false}];
+            let newKeywords = [...currentUrls, {id: uniqid(), keyword: parsed.query, url: url, online: false}];
             localStorage.setItem('keywords', JSON.stringify(newKeywords));
             setModal(!open)
             return props.saveKeywords(newKeywords);

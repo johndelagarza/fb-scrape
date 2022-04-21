@@ -26,14 +26,13 @@ function EditKeyword(props) {
         
         //let keywordIndex = props.status.keywords.findIndex(e => e.keyword === parsed.query);
         //if (keywordIndex < 0) return notify('Error', `You cannot change the keyword`, 'info');
-        props.status.keywords[props.index] = { keyword: parsed.query, url: url, online: false, currentListings: props.status.keywords[props.index].keyword === parsed.query ? props.status.keywords[props.index].currentListings : [] };
-        console.log({ keyword: parsed.query, url: url, online: false, currentListings: props.status.keywords[props.index].keyword === parsed.query ? props.status.keywords[props.index].currentListings : [] })
+        props.status.keywords[props.index] = { keyword: parsed.query, url: url, online: false, currentListings: [] };
+        console.log({ keyword: parsed.query, url: url, online: false, currentListings: [] })
         localStorage.setItem('keywords', JSON.stringify(props.status.keywords));
         setModal(!open)
         return props.saveKeywords(props.status.keywords);
     };
 
-    console.log(props.keyword)
     return (
         <div className='flex justify-center'>
             <svg onClick={()=> setModal(true)} id="edit" className={`space-x-5 w-5 text-nanoBlue/50 hover:text-nanoBlue/100 transform hover:scale-110 duration-300 cursor-pointer`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">

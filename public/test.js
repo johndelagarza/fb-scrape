@@ -93,8 +93,10 @@ async function getListings(path, url, randomUserAgent, proxy, keyword, log) {
        // Launch incognito browser
         const page = await browser.newPage();
         await page.setExtraHTTPHeaders({'Accept-Language': 'en'}); // Make sure webpage displays english.
-        await page.setViewport({width: 1920, height: 1080}); // Set screen size to insure it loads everything.
-        await page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36"); // Set user-agent to insure we don't receive mobile version.
+       //await page.setViewport({width: 1920, height: 1080}); // Set screen size to insure it loads everything.
+       await page.setViewport({width: 390, height: 844}); // Set screen size to insure it loads everything.
+       //await page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36"); // Set user-agent to insure we don't receive mobile version.
+       await page.setUserAgent("Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1"); // Set user-agent to insure we don't receive mobile version.
         await page.setRequestInterception(true);
         
         page.on('request', (req) => {
@@ -110,11 +112,13 @@ async function getListings(path, url, randomUserAgent, proxy, keyword, log) {
         await page.goto(url, {timeout: 10000});
         
         await timeout(3000);
-        const listings = await page.waitForSelector('div[style="max-width:1872px"]', {timeout: 30000})
+        const listings = await page.waitForSelector('div[aria-label="Collection of Marketplace items"]', {timeout: 10000})
         //const listings = await page.waitForSelector('*[style="max-width: 1872px"]', {timeout: 30000})
             .then(async ()=> {
                 const products = await page.evaluate(() => {
                     let pageItems = Array.from(document.querySelectorAll('div[style="max-width:1872px"] > div > div')); 
+                    pageItems.length === 0 ? pageItems = Array.from(document.querySelectorAll('div[style="max-width: 1872px;"] > div > div')) : []
+                
                     //pageItems.length = 7;  
                     console.log('Listings found: ' + pageItems.length);   
                     return pageItems.map((listing)=> {
@@ -158,7 +162,7 @@ async function getListings(path, url, randomUserAgent, proxy, keyword, log) {
 
 test(
     'C:\\Program Files\\Google\\Chrome\\Application\\chrome', 
-    "https://www.facebook.com/marketplace/107896742565570/search?minPrice=50&maxPrice=600&daysSinceListed=1&deliveryMethod=local_pick_up&sortBy=creation_time_descend&query=fridge&exact=false",
+    "https://www.facebook.com/marketplace/107896742565570/search?minPrice=5&maxPrice=600&daysSinceListed=1&sortBy=creation_time_descend&query=chair&exact=false",
     "Fridge",
     null
 )

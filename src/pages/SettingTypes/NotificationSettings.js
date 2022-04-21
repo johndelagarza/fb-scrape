@@ -9,7 +9,7 @@ function NotificationSettings(props) {
   const testDiscordWebhook = async () => {
     let discordWebhookInput = document.getElementById("discordWebhookInput");
     console.log(discordWebhookInput.value)
-    const response = await ipcRenderer.invoke('testDiscordWebhook', discordWebhookInput.value);
+    const response = await ipcRenderer.invoke('sendDiscordNotification', discordWebhookInput.value, "TEST");
   };
 
     

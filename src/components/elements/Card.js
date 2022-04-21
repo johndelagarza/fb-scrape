@@ -10,11 +10,11 @@ export function Card(props) {
             </a>
             <div class="p-5">
                 <a>
-                    <h5 class="mb-2 text-sm font-semibold tracking-tight text-gray-900 dark:text-white whitespace-nowrap overflow-ellipsis overflow-hidden">{props.title}</h5>
+                    <h5 class="mb-2 text-sm font-semibold tracking-tight text-primaryText whitespace-nowrap overflow-ellipsis overflow-hidden">{props.title}</h5>
                 </a>
-                <p class="mb-3 text-xs font-normal text-gray-700 dark:text-gray-400">{props.price}</p>
-                <p class="mb-3 text-xs font-normal text-gray-700 dark:text-gray-400">{props.location}</p>
-                <p class="text-xs font-normal text-gray-700 dark:text-gray-400">{props.time}</p>
+                <p class="mb-3 text-xs font-normal text-onPrimaryBgSofter">{props.price}</p>
+                <p class="mb-3 text-xs font-normal text-onPrimaryBgSofter">{props.location}</p>
+                <p class="text-xs font-normal text-onPrimaryBgSofter">{props.time}</p>
             </div>
         </div>
     )

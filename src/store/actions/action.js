@@ -1,5 +1,18 @@
 import * as actionTypes from './actionTypes';
 
+export const login = (data) => {
+  return {
+    type: actionTypes.LOGIN,
+    data: data
+  };
+};
+
+export const logout = () => {
+  return {
+    type: actionTypes.LOGOUT
+  };
+};
+
 export const addLog = (log) => {
   return {
     type: actionTypes.ADD_LOG,

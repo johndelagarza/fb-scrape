@@ -1,9 +1,13 @@
-const puppeteer = require('puppeteer-core');
+//const puppeteer = require('puppeteer-core');
+const puppeteer = require('puppeteer-extra');
 const queryString = require('query-string');
 const moment = require('moment');
 
+const StealthPlugin = require('puppeteer-extra-plugin-stealth');
+puppeteer.use(StealthPlugin())
+
 async function scrape(config, log) {
-    const { path, url, proxies } = config;
+    const { path, url, proxies, headless, rotateUserAgents } = config;
     const urlParsed = queryString.parse(url);
     //console.log(urlParsed)
     const keyword = config.keyword;
@@ -25,15 +29,15 @@ async function scrape(config, log) {
     //console.log(newUrl)
     //log({keyword: keyword, message: newUrl, time: Math.floor(Date.now() / 1000)});
     //log({keyword: keyword, message: 'Pulling Listings', time: Math.floor(Date.now() / 1000)});
-    const products = await getListings(path, url, randomUserAgent, proxy, keyword, log);
+    const products = await getListings(path, url, randomUserAgent, proxy, keyword, log, headless);
     log({keyword: keyword, message: 'Returning listings.', time: Math.floor(Date.now() / 1000)});
     return products;
 };
 
-async function getListings(path, url, randomUserAgent, proxy, keyword, log) {
+async function getListings(path, url, randomUserAgent, proxy, keyword, log, headless) {
     
     const browser = await puppeteer.launch({
-        headless: true,
+        headless: headless,
         executablePath: path,
         args: (proxy ? [proxy] : ['--no-proxy-server'])
     });
@@ -43,7 +47,9 @@ async function getListings(path, url, randomUserAgent, proxy, keyword, log) {
         const page = await browser.newPage();
         await page.setExtraHTTPHeaders({'Accept-Language': 'en'}); // Make sure webpage displays english.
         await page.setViewport({width: 1920, height: 1080}); // Set screen size to insure it loads everything.
+        //await page.setViewport({width: 390, height: 844}); // Set screen size to insure it loads everything.
         await page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36"); // Set user-agent to insure we don't receive mobile version.
+        //await page.setUserAgent("Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1"); // Set user-agent to insure we don't receive mobile version.
         await page.setRequestInterception(true);
         
         page.on('request', (req) => {
@@ -67,7 +73,9 @@ async function getListings(path, url, randomUserAgent, proxy, keyword, log) {
                 const products = await page.evaluate(() => {
 
                     let pageItems = Array.from(document.querySelectorAll('div[style="max-width:1872px"] > div > div')); 
-                    pageItems.length = 7;  
+                    pageItems.length === 0 ? pageItems = Array.from(document.querySelectorAll('div[style="max-width: 1872px;"] > div > div')) : []
+
+                    //pageItems.length = 7;  
                     console.log('Listings found: ' + pageItems.length);   
                     return pageItems.map((listing)=> {
                             console.log(listing.innerText)
@@ -90,7 +98,7 @@ async function getListings(path, url, randomUserAgent, proxy, keyword, log) {
                         });
                     });
                     let finalProducts = products.filter(product => product !== null);
-                    console.log(finalProducts)
+                    console.log(finalProducts.length)
                     return finalProducts;
             });
         

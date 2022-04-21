@@ -2,13 +2,17 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter, Redirect } from 'react-router-dom';
 
-function Dropdown({ isOpen, toggle }) {
+function Dropdown({ status, isOpen, toggle }) {
     const [active, setActive] = useState('Home');
 
     const handleClick = (e) => {
         toggle();
         return setActive(e.target.id);
     };
+
+    if (window.location.hash === "#/") return null;
+
+    if (!status.user) return <Redirect push to="/" />;
 
     return (
         <div class={ isOpen ? "z-10	absolute top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden" : "hidden"}>
@@ -30,7 +34,7 @@ function Dropdown({ isOpen, toggle }) {
                     <Link
                         role="menuitem"
                         onClick={handleClick} 
-                        to="/" 
+                        to="/home" 
                         id="Home" 
                         className={`block px-3 py-2 rounded-md text-base font-medium text-primaryText hover:text-onHoverPrimaryText hover:bg-onPrimaryBgSoft duration-300 ${window.location.hash === "#/" ? 'text-nanoGreen hover:text-nanoGreen' : ''}`}
                     >

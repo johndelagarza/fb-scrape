@@ -1,3 +1,5 @@
+export const LOGIN = 'LOGIN';
+export const LOGOUT = 'LOGOUT';
 export const ADD_LOG = 'ADD_LOG';
 export const CLEAR_LOGS = 'CLEAR_LOGS';
 export const UPDATE_SETTINGS = 'UPDATE_SETTINGS';

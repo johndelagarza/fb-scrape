@@ -1,6 +1,6 @@
 function withOpacityValue(variable) {
   return ({ opacityValue }) => {
-    console.log(opacityValue)
+    
     if (opacityValue === undefined || opacityValue === 'var(--tw-bg-opacity)') {
       return `rgb(var(${variable}))`
     }

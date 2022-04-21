@@ -1,12 +1,16 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { Link, withRouter, Redirect } from 'react-router-dom';
 
-function NavigationHeader({ toggle }) {
+function NavigationHeader(props) {
     const [active, setActive] = useState('');
 
     const handleClick = (e) => {
         return setActive(e.target.id);
     };
+    console.log(props.status)
+    if (window.location.hash === "#/") return null;
+    if (!props.status.user) return <Redirect push to="/" />;
 
     return (
         <div id="nav" class="bg-primaryBackground relative pt-6 px-4 z-11">
@@ -18,7 +22,7 @@ function NavigationHeader({ toggle }) {
                             {/* <img class="h-lg w-auto lg:h-xl" src={nanoLogo} /> */}
                         </a>
                         <div class="-mr-2 flex items-center md:hidden">
-                            <button onClick={()=> toggle()} type="button" class="bg-onPrimaryBgSoft rounded-md p-3 inline-flex items-center justify-center text-gray-400 hover:text-onHoverPrimaryText hover:opacity-70 duration-200 focus:outline-none outline-none" id="main-menu" aria-haspopup="true">
+                            <button onClick={()=> props.toggle()} type="button" class="bg-onPrimaryBgSoft rounded-md p-3 inline-flex items-center justify-center text-gray-400 hover:text-onHoverPrimaryText hover:opacity-70 duration-200 focus:outline-none outline-none" id="main-menu" aria-haspopup="true">
                             <span class="sr-only">Open main menu</span>
                             
                             <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -31,7 +35,7 @@ function NavigationHeader({ toggle }) {
                 <div class="hidden md:flex md:w-3/4 md:justify-evenly mb-6">
                     <Link
                         onClick={handleClick} 
-                        to="/" 
+                        to="/home" 
                         id="Home" 
                         className={`text-xl font-medium text-primaryText hover:text-onHoverPrimaryText duration-300 ${window.location.hash === "#/" ? 'text-nanoGreen hover:text-nanoGreen' : ''}`}
                     >
@@ -67,5 +71,8 @@ function NavigationHeader({ toggle }) {
     )
 };
     
+const mapStateToProps = state => {
+    return { status: state.status }
+};
 
-export default withRouter(NavigationHeader);
+export default (withRouter(connect(mapStateToProps)(NavigationHeader)));

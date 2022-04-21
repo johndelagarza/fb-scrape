@@ -35,6 +35,7 @@ function Keywords(props) {
                 <div class="table w-full">
                     <div class="table-header-group ...">
                         <div class="table-row">
+                        <div class="table-cell text-left text-primaryText py-3 px-6">ID</div>
                         <div class="table-cell text-left text-primaryText py-3 px-6">Keyword</div>
                         <div class="table-cell text-left text-primaryText py-3 px-6">Log</div>
                         <div class="table-cell text-center text-primaryText py-3 px-6">Actions</div>
@@ -48,13 +49,15 @@ function Keywords(props) {
                                 return (
                                     <div id={index} className={`overflow-hidden table-row select-none text-primaryText text-xs border-b border-onPrimaryBgSofter ${activeRows.includes(index) ? 'bg-onPrimaryBgSofter' : ''}`}>
                                     {/* <tr id={index} className={`select-none text-primaryText text-xs md:text-base lg:text-base border-b border-onPrimaryBgSofter ${activeRows.includes(index) ? 'bg-onPrimaryBgSofter' : ''}`}> */}
-                                        
+                                        <div id="id" className="table-cell py-3 px-6 truncate pointer-events-none">
+                                            <span class="flex justify-left pointer-events-none">{e.id.substring(e.id.length - 4)}</span>
+                                        </div>
                                         <div id="keyword" className="table-cell py-3 px-6 truncate pointer-events-none">
                                             <span class="flex justify-left pointer-events-none">{e.keyword}</span>
                                         </div>
                                         <div id="log" className="table-cell py-3 px-6 pointer-events-none max-w-[60px] w-2/4">
                                             {/* <span class="flex justify-left pointer-events-none">{e.log}</span> */}
-                                            <KeywordLogCell keyword={e.keyword} active={e.online} />
+                                            <KeywordLogCell keyword={e} active={e.online} />
                                         </div>
                                         <div id="actions" className="flex whitespace-nowrap flex-nowrap py-3 px-6 space-x-5 justify-center">
                                             <StartKeyword 
@@ -65,7 +68,7 @@ function Keywords(props) {
                                             </svg> */}
                                             <EditKeyword index={index} keyword={e} saveKeywords={props.updateKeywords} />
                                             <DeleteKeyword 
-                                                keyword={e.keyword} 
+                                                keyword={e} 
                                                 saveKeywords={props.updateKeywords}
                                             />
                                         </div>
