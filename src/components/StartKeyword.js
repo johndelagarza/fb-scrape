@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link, withRouter, Redirect } from 'react-router-dom';
 import 'react-notifications-component/dist/theme.css'
 import fbLogo from './icon.png';
-import { updateKeywords, startKeyword, stopKeyword  } from "../store/actions/action";
+import { updateKeywords, startKeyword, stopKeyword  } from "../store/actions";
 
 const ipcRenderer = window.require('electron').ipcRenderer;
 

@@ -17,6 +17,7 @@
     "discord.js": "^12.2.0",
     "electron-is-dev": "^1.2.0",
     "electron-redux": "^1.5.3",
+    "electron-store": "^8.0.1",
     "electron-updater": "^4.3.1",
     "electronmon": "^2.0.2",
     "flowbite": "^1.4.1",

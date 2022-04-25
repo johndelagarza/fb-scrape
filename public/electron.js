@@ -3,18 +3,27 @@ const { autoUpdater } = require("electron-updater");
 const ipcMain = require('electron').ipcMain;
 const path = require('path');
 const isDev = require('electron-is-dev');
+const Store = require('electron-store');
 const url = require('url');
-const scrape = require('./scrape');
-const { testDiscordWebhook, sendDiscordNotification }  = require('./functions');
-const fs = require('fs'); 
+const fs = require('fs');
 var shell = require('electron').shell;
 const queryString = require('query-string');
+
+const { getWinSettings, saveBounds } = require('./setting');
+const scrape = require('./scrape');
+const { sendDiscordNotification }  = require('./functions');
+const {HANDLE_FETCH_DATA, FETCH_DATA_FROM_STORAGE, HANDLE_SAVE_DATA, SAVE_DATA_IN_STORAGE, REMOVE_DATA_FROM_STORAGE, HANDLE_REMOVE_DATA} = require("../src/utils/constants");
+
+const storage = new Store();
 
 let mainWindow;
 
 function createWindow() {
- 
+
+    const size = getWinSettings();
+
     mainWindow = new BrowserWindow({
+          width: size[0], height: size[1],
           // minWidth: 790, 
           //minHeight: 900,
           frame: false,
@@ -28,7 +37,12 @@ function createWindow() {
   mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
   
   mainWindow.setMenu(null);
-  
+
+  mainWindow.on("close", () => {
+    saveBounds(mainWindow.getSize());
+    mainWindow = null
+    app.quit();
+  });
 
   if (isDev) {
     mainWindow.webContents.openDevTools();
@@ -78,6 +92,34 @@ ipcMain.on('app_version', (event) => {
   console.log('CURRENT VERSION: ' + app.getVersion())
   event.sender.send('app_version', { version: app.getVersion() });
 });
+
+// Storage / Data handling
+
+ipcMain.handle(FETCH_DATA_FROM_STORAGE, (event, message) => {
+  console.log("Main received: FETCH_DATA_FROM_STORAGE with message:", message)
+  
+  let data = storage.get(message, []);
+
+  return data;
+});
+
+ipcMain.handle(SAVE_DATA_IN_STORAGE, (event, collection, newArray) => {
+  console.log("Main received: SAVE_DATA_IN_STORAGE")
+
+  let data = storage.set(collection, newArray);
+  
+  return data;
+});
+
+ipcMain.handle(REMOVE_DATA_FROM_STORAGE, (event, collection, newArray) => {
+  console.log('Main Received: REMOVE_DATA_FROM_STORAGE')
+
+  let data = storage.set(collection, newArray);
+  
+  return data;
+});
+
+// Auto-updater settings
 
 autoUpdater.on('update-available', (data) => {
   console.log('update available')

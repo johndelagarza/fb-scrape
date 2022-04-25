@@ -12,7 +12,7 @@ import Settings from './pages/Settings';
 import Logs from './pages/Logs';
 import icon from './assets/icon2.png';
 import { connect } from 'react-redux';
-import { addLog } from "./store/actions/action";
+import { addLog } from "./store/actions";
 
 const ipcRenderer = window.require('electron').ipcRenderer;
 const customTitlebar = window.require('custom-electron-titlebar');

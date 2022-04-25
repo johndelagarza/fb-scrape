@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom';
 import logo from '../assets/icon2.png';
 import { notify } from '../utils/notification';
 import { connect } from 'react-redux';
-import { login } from "../store/actions/action";
+import { login } from "../store/actions";
 
 const { loginRequest, checkAuth } = require('../api/auth');
 
@@ -55,12 +55,12 @@ function Login(props) {
             <div className="m-auto w-2/4 md:w-3/7 max-w-xl h-2xl bg-onPrimaryBg rounded-md px-10 py-8 fixed top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
                 <div className='flex w-full h-full'>
                     <div className="content-center grid grid-cols-1 space-y-5 w-full ml-auto mr-auto">
-                        <img class="inline ml-auto mr-auto" src={logo} width="70" />
+                        <img className="inline ml-auto mr-auto" src={logo} width="70" />
                         <input 
                             ref={emailRef}
                             type='email'
                             placeholder="Email"
-                            spellcheck="false"
+                            spellCheck="false"
                             onKeyPress={onKeyUp} 
                             autoFocus 
                             className="pt-2 rounded-md bg-onPrimaryBg text-onPrimaryBgSofter focus:outline-none outline-none placeholder-onPrimaryBgSofter w-full border-none focus:ring-0" 
@@ -85,7 +85,7 @@ function Login(props) {
 };
 
 const mapStateToProps = state => {
-    return { status: state.status }
+    return { auth: state.auth }
   };
   
   const mapDispatchToProps = dispatch => {

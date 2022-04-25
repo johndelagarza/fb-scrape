@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, NavLink, withRouter, Redirect, useLocation } from 'react-router-dom';
 import { notify } from '../utils/notification';
-import { logout } from "../store/actions/action";
+import { logout } from "../store/actions";
 //import './Scrollbar.css';
 //import logo from '../assets/nano-logo.png';
 

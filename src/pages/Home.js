@@ -2,20 +2,22 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import { Loader, Card } from '../components/elements/index.js';
 import './Items.css';
+import { loadSavedData, saveDataInStorage } from "../renderer.js";
 
 const moment = require('moment');
 
 function Home(props) {
     const [listings, setListings] = useState([]);
+    const [test, setTest] = useState('');
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(6);
 
     useEffect(()=> {
         setLoading(true);
-        getAllListings(props.status.keywords)
+        getAllListings(props.keywords.keywords)
             .then(data => setListings(data), setLoading(false));
-    }, [props.status.keywords]);
+    }, [props.keywords.keywords]);
     
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -30,7 +32,7 @@ function Home(props) {
                     <span>New Listings</span>
                 </div>
             </div>
-            <div class="divide-solid bg-primaryText h-[.7px] mt-3"></div>
+            <div className="divide-solid bg-primaryText h-[.7px] mt-3"></div>
             <div className='p-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-5'>
                 {
                     currentItems.length === 0 ? null
@@ -76,7 +78,7 @@ const getAllListings = async (keywords) => {
 };
 
 const mapStateToProps = state => {
-    return { status: state.status }
+    return { keywords: state.keywords }
   };
 
 export default connect(mapStateToProps)(Home)

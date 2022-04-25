@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter, Redirect } from 'react-router-dom';
 
-function Dropdown({ status, isOpen, toggle }) {
+function Dropdown({ auth, isOpen, toggle }) {
     const [active, setActive] = useState('Home');
 
     const handleClick = (e) => {
@@ -12,25 +12,25 @@ function Dropdown({ status, isOpen, toggle }) {
 
     if (window.location.hash === "#/") return null;
 
-    if (!status.user) return <Redirect push to="/" />;
+    if (!auth.user) return <Redirect push to="/" />;
 
     return (
-        <div class={ isOpen ? "z-10	absolute top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden" : "hidden"}>
-            <div class="rounded-lg shadow-md bg-primaryBg ring-1 ring-black ring-opacity-5 overflow-hidden">
-            <div class="px-5 pt-4 flex items-center justify-between">
+        <div className={ isOpen ? "z-10	absolute top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden" : "hidden"}>
+            <div className="rounded-lg shadow-md bg-primaryBg ring-1 ring-black ring-opacity-5 overflow-hidden">
+            <div className="px-5 pt-4 flex items-center justify-between">
                 <div>
-                <img class="h-lg w-auto" alt="" src={require('../assets/icon2.png')}/>
+                <img className="h-lg w-auto" alt="" src={require('../assets/icon2.png')}/>
                 </div>
-                <div class="-mr-2">
-                <button onClick={()=> toggle()} type="button" class="bg-onPrimaryBgSoft rounded-md p-3 inline-flex items-center justify-center text-primaryText hover:text-gray-500 hover:text-onHoverPrimaryText hover:opacity-70 focus:outline-none outline-none duration-200">
-                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                <div className="-mr-2">
+                <button onClick={()=> toggle()} type="button" className="bg-onPrimaryBgSoft rounded-md p-3 inline-flex items-center justify-center text-primaryText hover:text-gray-500 hover:text-onHoverPrimaryText hover:opacity-70 focus:outline-none outline-none duration-200">
+                    <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
                 </div>
             </div>
             <div role="menu" aria-orientation="vertical" aria-labelledby="main-menu">
-                <div class="px-2 pt-2 pb-3 space-y-1 text-center shadow-lg " role="none">
+                <div className="px-2 pt-2 pb-3 space-y-1 text-center shadow-lg " role="none">
                     <Link
                         role="menuitem"
                         onClick={handleClick} 
@@ -75,7 +75,7 @@ function Dropdown({ status, isOpen, toggle }) {
 };
 
 const mapStateToProps = state => {
-    return { status: state.status }
+    return { auth: state.auth }
 };
 
 export default (withRouter(connect(mapStateToProps)(Dropdown)));

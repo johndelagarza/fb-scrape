@@ -1,47 +1,39 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
+import propTypes from 'prop-types';
+
 var uniqid = require('uniqid'); 
 const { notify } = require('../utils/notification');
-
 const queryString = require('query-string');
 
-function AddKeyword(props) {
+function AddKeyword({ addKeyword }) {
     const [open, setModal] = useState(false);
     const [url, setUrl] = useState(null);
 
     useEffect(()=> {
-        // const close = (e) => {
-        //     if(e.keyCode === 27){
-        //       setActive(!active)
-        //     }
-        //   }
-        //   window.addEventListener('keydown', close)
-        // return () => window.removeEventListener('keydown', close)
+        // handle if user clicks ESC
+        const close = (e) => {
+            if (e.keyCode === 27) {
+              setModal(false)
+            }
+          }
+          document.addEventListener('keydown', close)
+        return () => document.removeEventListener('keydown', close)
     }, [open]);
     
-    const addUrl = async (url) => {
+    const add = async (url) => {
         const parsed = queryString.parse(url);
         console.log(parsed)
-        //if (!parsed.maxPrice) return alert('Error: URL must include max price filter.');
         if (!parsed.query) {
             parsed.query = 'Category'
             //return alert('Error: URL is missing a keyword.');
         }
-        //if (parsed.sortBy !== 'creation_time_descend') return alert('Error: URL must include creation_time_descend filter.');
-        let currentUrls = localStorage.getItem('keywords');
-       
-        if (!currentUrls) {
-            let newKeywords = [{id: uniqid(), keyword: parsed.query, url: url, online: false}];
-            localStorage.setItem('keywords', JSON.stringify(newKeywords));
-            setModal(!open)
-            return props.saveKeywords(newKeywords);
-        } else if (currentUrls.length > 0) {
-            currentUrls = JSON.parse(currentUrls);
-            console.log(currentUrls);
-            let newKeywords = [...currentUrls, {id: uniqid(), keyword: parsed.query, url: url, online: false}];
-            localStorage.setItem('keywords', JSON.stringify(newKeywords));
-            setModal(!open)
-            return props.saveKeywords(newKeywords);
-        };
+
+        if (!url) return notify('Invalid keyword', 'No URL detected', 'warning');
+
+        setModal(!open);
+        document.getElementById("addKeywordInput").value = ""
+        addKeyword({id: uniqid(), keyword: parsed.query, url: url, online: false});
+        return;
     };
 
     return (
@@ -61,15 +53,15 @@ function AddKeyword(props) {
                         </div>
 
                         <div className="relative inline">
-                            <textarea 
+                            <textarea
                                 id="addKeywordInput"
                                 onChange={(e)=> setUrl(e.target.value)}
                                 rows="1" cols="1" 
-                                spellcheck="false" 
+                                spellCheck="false" 
                                 className="border-none scrollbar-thin scrollbar-thumb-rounded-md scrollbar-track-onPrimaryBg scrollbar-thumb-onPrimaryBgSofter hover:scrollbar-thumb-onPrimaryBgSofter bg-primaryBg mt-5 px-2 py-1 resize-none w-full max-h-1/2 h-1/2 ml-auto mr-auto flex rounded-md text-nanoGreen text-sm focus:outline-none focus:ring-0" 
                                 placeholder={`URL`} 
                             />
-                            <button onClick={()=> addUrl(url)} className="w-full bg-onPrimaryBg/50 mt-5 text-shadow rounded-md p-2 inline-flex items-center justify-center text-onHoverPrimaryText hover:bg-onPrimaryBgSoft">
+                            <button onClick={()=> add(url)} className="w-full bg-onPrimaryBg/50 mt-5 text-shadow rounded-md p-2 inline-flex items-center justify-center text-onHoverPrimaryText hover:bg-onPrimaryBgSoft">
                                 Save
                             </button>
                         </div>
@@ -78,6 +70,10 @@ function AddKeyword(props) {
             </div>
         </div>
     );
+};
+
+AddKeyword.propTypes = {
+    addKeyword: propTypes.func
 };
         
 export default AddKeyword;

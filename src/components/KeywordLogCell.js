@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import propTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { addLog } from "../store/actions/action";
+import { addLog } from "../store/actions";
 
 const { ipcRenderer } = window.require('electron');
 
@@ -19,7 +20,7 @@ function KeywordLogCell(props) {
     }, []);
     
     return (
-        <span class="flex justify-left pointer-events-none text-xs whitespace-nowrap text-ellipsis overflow-hidden">
+        <span className="flex justify-left pointer-events-none text-xs whitespace-nowrap text-ellipsis overflow-hidden">
             {
                 !props.active ? 
                     'Stopped' 

@@ -1,48 +1,55 @@
-import * as actionTypes from './actionTypes';
+//import * as actionTypes from './actionTypes';
 
 export const login = (data) => {
   return {
-    type: actionTypes.LOGIN,
+    type: 'LOGIN',
     data: data
   };
 };
 
 export const logout = () => {
   return {
-    type: actionTypes.LOGOUT
+    type: 'LOGOUT'
   };
 };
 
 export const addLog = (log) => {
   return {
-    type: actionTypes.ADD_LOG,
+    type: 'ADD_LOG',
     log: log
   };
 };
 
 export const clearLogs = () => {
   return {
-    type: actionTypes.CLEAR_LOGS
+    type: 'CLEAR_LOGS'
   };
 };
 
 export const updateSettings = (settings) => {
     return {
-      type: actionTypes.UPDATE_SETTINGS,
+      type: 'UPDATE_SETTINGS',
       settings: settings
     };
+};
+
+export const setKeywords = (data) => {
+  return {
+    type: 'SET_KEYWORDS',
+    data: data
+  };
 };
   
 export const updateKeywords = (keywords) => {
   return {
-    type: actionTypes.UPDATE_KEYWORDS,
+    type: 'UPDATE_KEYWORDS',
     keywords: keywords
   };
 };
 
 export const startKeyword = (keyword, path, settings, saveKeywords) => {
   return {
-    type: actionTypes.START_KEYWORD,
+    type: 'START_KEYWORD',
     keyword: keyword,
     path: path,
     settings: settings,
@@ -52,14 +59,27 @@ export const startKeyword = (keyword, path, settings, saveKeywords) => {
 
 export const stopKeyword = (keyword) => {
   return {
-    type: actionTypes.STOP_KEYWORD,
+    type: 'STOP_KEYWORD',
     keyword: keyword
+  };
+};
+
+export const addKeyword = (keyword) => {
+  return {
+    type: 'ADD_KEYWORD',
+    data: keyword
+  };
+};
+export const editKeyword = (keyword) => {
+  return {
+    type: 'EDIT_KEYWORD',
+    data: keyword
   };
 };
 
 export const deleteKeyword = (keyword) => {
   return {
-    type: actionTypes.DELETE_KEYWORD,
-    keyword: keyword
+    type: 'DELETE_KEYWORD',
+    data: keyword
   };
 };

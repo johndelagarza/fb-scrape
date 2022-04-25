@@ -8,31 +8,31 @@ function NavigationHeader(props) {
     const handleClick = (e) => {
         return setActive(e.target.id);
     };
-    console.log(props.status)
+    console.log(props)
     if (window.location.hash === "#/") return null;
-    if (!props.status.user) return <Redirect push to="/" />;
+    if (!props.auth.user) return <Redirect push to="/" />;
 
     return (
-        <div id="nav" class="bg-primaryBackground relative pt-6 px-4 z-11">
-            <nav class="relative flex items-center justify-center w-full" aria-label="Global">
-                <div class="flex items-center flex-grow flex-shrink-0 lg:flex-grow-0  md:hidden lg:hidden">
-                    <div class="flex items-center justify-between w-full md:w-auto">
+        <div id="nav" className="bg-primaryBackground relative pt-6 px-4 z-11">
+            <nav className="relative flex items-center justify-center w-full" aria-label="Global">
+                <div className="flex items-center flex-grow flex-shrink-0 lg:flex-grow-0  md:hidden lg:hidden">
+                    <div className="flex items-center justify-between w-full md:w-auto">
                         <a href="/">
-                            <span class="sr-only">Workflow</span>
-                            {/* <img class="h-lg w-auto lg:h-xl" src={nanoLogo} /> */}
+                            <span className="sr-only">Workflow</span>
+                            {/* <img className="h-lg w-auto lg:h-xl" src={nanoLogo} /> */}
                         </a>
-                        <div class="-mr-2 flex items-center md:hidden">
-                            <button onClick={()=> props.toggle()} type="button" class="bg-onPrimaryBgSoft rounded-md p-3 inline-flex items-center justify-center text-gray-400 hover:text-onHoverPrimaryText hover:opacity-70 duration-200 focus:outline-none outline-none" id="main-menu" aria-haspopup="true">
-                            <span class="sr-only">Open main menu</span>
+                        <div className="-mr-2 flex items-center md:hidden">
+                            <button onClick={()=> props.toggle()} type="button" className="bg-onPrimaryBgSoft rounded-md p-3 inline-flex items-center justify-center text-gray-400 hover:text-onHoverPrimaryText hover:opacity-70 duration-200 focus:outline-none outline-none" id="main-menu" aria-haspopup="true">
+                            <span className="sr-only">Open main menu</span>
                             
-                            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
                             </button>
                         </div>
                     </div>
                 </div>
-                <div class="hidden md:flex md:w-3/4 md:justify-evenly mb-6">
+                <div className="hidden md:flex md:w-3/4 md:justify-evenly mb-6">
                     <Link
                         onClick={handleClick} 
                         to="/home" 
@@ -72,7 +72,7 @@ function NavigationHeader(props) {
 };
     
 const mapStateToProps = state => {
-    return { status: state.status }
+    return { auth: state.auth }
 };
 
 export default (withRouter(connect(mapStateToProps)(NavigationHeader)));

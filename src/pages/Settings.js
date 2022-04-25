@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { updateSettings } from "../store/actions/action";
+import { updateSettings } from "../store/actions";
 import SettingsSidebar from '../components/SettingsSidebar';
 import ScrapeSettings from './SettingTypes/ScrapeSettings';
 import ProxiesSettings from './SettingTypes/ProxiesSettings';
