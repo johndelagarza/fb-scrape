@@ -8,7 +8,7 @@ function NavigationHeader(props) {
     const handleClick = (e) => {
         return setActive(e.target.id);
     };
-    console.log(props)
+    
     if (window.location.hash === "#/") return null;
     if (!props.auth.user) return <Redirect push to="/" />;
 

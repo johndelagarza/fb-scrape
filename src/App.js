@@ -12,19 +12,22 @@ import Settings from './pages/Settings';
 import Logs from './pages/Logs';
 import icon from './assets/icon2.png';
 import { connect } from 'react-redux';
-import { addLog } from "./store/actions";
+import { loadSavedData } from "./renderer";
+import { setKeywords, setSettings } from "./store/actions";
 
 const ipcRenderer = window.require('electron').ipcRenderer;
 const customTitlebar = window.require('custom-electron-titlebar');
 const { notify } = require('./utils/notification');
 
-function App(props) {
+function App({ setKeywords, setSettings, }) {
   const [ dropdownOpen, setDropdownOpen ] = useState(false);
   const [appVersion, setAppVersion] = useState('');
   const [theme, setTheme] = useState('dark');
 
   useEffect(()=> {
-    console.log(props.status)
+    loadSavedData("keywords").then(data => setKeywords(data));
+    loadSavedData("settings").then(data => setSettings(data));
+
     let titleBar = new customTitlebar.Titlebar({
       backgroundColor: customTitlebar.Color.fromHex("#13131C"),
       titleHorizontalAlignment: 'left',
@@ -123,7 +126,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-      addLog: (log) => dispatch(addLog(log))
+      setKeywords: (data) => dispatch(setKeywords(data)),
+      setSettings: (data) => dispatch(setSettings(data))
   };
 };
 

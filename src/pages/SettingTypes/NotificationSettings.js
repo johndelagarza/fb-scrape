@@ -4,14 +4,13 @@ import { notify } from '../../utils/notification';
 
 const ipcRenderer = window.require('electron').ipcRenderer;
 
-function NotificationSettings(props) {
+function NotificationSettings({ settings, updateSettings }) {
 
   const testDiscordWebhook = async () => {
     let discordWebhookInput = document.getElementById("discordWebhookInput");
     console.log(discordWebhookInput.value)
     const response = await ipcRenderer.invoke('sendDiscordNotification', discordWebhookInput.value, "TEST");
   };
-
     
   return (
     <div className='container mt-5 lg:mt-0 px-5 text-primaryText'>
@@ -23,8 +22,8 @@ function NotificationSettings(props) {
       <div class="flex h-[30px]">
         
         <input id="discordWebhookInput" 
-          defaultValue={props.settings.hasOwnProperty('discordWebhook') ? props.settings.discordWebhook : ''}
-          onBlur={(e)=> props.saveSettings({...props.settings, discordWebhook: e.target.value})}
+          defaultValue={settings.hasOwnProperty('discordWebhook') ? settings.discordWebhook : ''}
+          onBlur={(e)=> updateSettings({...settings, discordWebhook: e.target.value})}
           spellcheck="false" 
           className="border-none hover:scrollbar-thumb-onPrimaryBgSofter bg-onPrimaryBgSoft w-full p-1 pl-4 rounded-l-full text-nanoGreen text-xs focus:outline-none focus:ring-0" 
           placeholder="https://discord.com/api/webhooks/776415516290326803/fqn4TkNDaeX-9ltW6vkwUaCxGXzcMpvy5Lk8FFWG29FPcZJhaItTqI-eljDv8GN_3Shb" 
@@ -40,11 +39,11 @@ function NotificationSettings(props) {
         <p className='text-xs my-2 text-onPrimaryBgSofter'>Receive desktop notifications</p>
         <label for="headlessBrowserToggle" class="flex relative items-center mb-4 cursor-pointer max-w-fit">
           <input type="checkbox" id="headlessBrowserToggle" class="sr-only" 
-            checked={props.settings.hasOwnProperty('desktopNotifications') ? props.settings.desktopNotifications : props.saveSettings({...props.settings, desktopNotifications: true})} 
-            onClick={()=> props.saveSettings({...props.settings, desktopNotifications: (props.settings.desktopNotifications ? !props.settings.desktopNotifications : true)})} 
+            checked={settings.hasOwnProperty('desktopNotifications') ? settings.desktopNotifications : updateSettings({...settings, desktopNotifications: true})} 
+            onClick={()=> updateSettings({...settings, desktopNotifications: (settings.desktopNotifications ? !settings.desktopNotifications : true)})} 
           />
           <div class="w-11 h-6 bg-onPrimaryBgSofter rounded-full border border-onPrimaryBgSofter toggle-bg"></div>
-          <span class="ml-3 font-medium text-onPrimaryBgSofter text-xs">{props.settings.hasOwnProperty('desktopNotifications') ? props.settings.desktopNotifications.toString() : ''}</span>
+          <span class="ml-3 font-medium text-onPrimaryBgSofter text-xs">{settings.hasOwnProperty('desktopNotifications') ? settings.desktopNotifications.toString() : ''}</span>
         </label>
         <div class="divide-solid bg-onPrimaryBgSofter h-[.7px] my-3" />
       </div>

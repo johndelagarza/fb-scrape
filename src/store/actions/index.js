@@ -26,10 +26,19 @@ export const clearLogs = () => {
   };
 };
 
-export const updateSettings = (settings) => {
+export const setSettings = (data) => {
+  console.log(data)
+  return {
+    type: 'SET_SETTINGS',
+    data: data
+  };
+};
+
+export const updateSettings = (data) => {
+  
     return {
       type: 'UPDATE_SETTINGS',
-      settings: settings
+      data: data
     };
 };
 

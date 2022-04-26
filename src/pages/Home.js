@@ -6,25 +6,25 @@ import { loadSavedData, saveDataInStorage } from "../renderer.js";
 
 const moment = require('moment');
 
-function Home(props) {
+function Home({ keywords }) {
     const [listings, setListings] = useState([]);
-    const [test, setTest] = useState('');
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(6);
 
-    useEffect(()=> {
-        setLoading(true);
-        getAllListings(props.keywords.keywords)
-            .then(data => setListings(data), setLoading(false));
-    }, [props.keywords.keywords]);
+    // useEffect(()=> {
+    //     setLoading(true);
+    //     getAllListings(keywords)
+    //         .then(data => setListings(data), setLoading(false));
+    // }, [keywords.length]);
     
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = listings.slice(indexOfFirstItem, indexOfLastItem);
 
-    if (loading) return <Loader active={loading} />
-    
+    //if (loading) return <Loader active={loading} />
+    console.log(keywords)
+    console.log(listings)
     return (
         <div className="container mx-[28px] mt-5 lg:mt-0 px-5">
             <div className="flex text-primaryText font-sans font-medium h-[36.67px]">
@@ -78,7 +78,7 @@ const getAllListings = async (keywords) => {
 };
 
 const mapStateToProps = state => {
-    return { keywords: state.keywords }
+    return { keywords: state.keywords.keywords }
   };
 
 export default connect(mapStateToProps)(Home)

@@ -12,14 +12,6 @@ import '../components/scrollbar.css'
 import { loadSavedData, saveDataInStorage } from "../renderer.js";
 
 function Keywords({ keywords, setKeywords, addKeyword, editKeyword, deleteKeyword }) {
-    //const [ keywords, setKeywords ] = useState([]);
-
-    useEffect(()=> {
-        loadSavedData("keywords").then(data => setKeywords(data));
-        return;
-    }, []);
-
-    console.log(keywords.length)
 
     return (
         <div className='container mx-auto mt-5 lg:mt-0 px-5 scroller'>

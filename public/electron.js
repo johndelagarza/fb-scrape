@@ -40,8 +40,8 @@ function createWindow() {
 
   mainWindow.on("close", () => {
     saveBounds(mainWindow.getSize());
-    mainWindow = null
-    app.quit();
+    // mainWindow = null
+    // app.quit();
   });
 
   if (isDev) {
@@ -103,18 +103,18 @@ ipcMain.handle(FETCH_DATA_FROM_STORAGE, (event, message) => {
   return data;
 });
 
-ipcMain.handle(SAVE_DATA_IN_STORAGE, (event, collection, newArray) => {
+ipcMain.handle(SAVE_DATA_IN_STORAGE, (event, collection, newData) => {
   console.log("Main received: SAVE_DATA_IN_STORAGE")
 
-  let data = storage.set(collection, newArray);
+  let data = storage.set(collection, newData);
   
   return data;
 });
 
-ipcMain.handle(REMOVE_DATA_FROM_STORAGE, (event, collection, newArray) => {
+ipcMain.handle(REMOVE_DATA_FROM_STORAGE, (event, collection, newData) => {
   console.log('Main Received: REMOVE_DATA_FROM_STORAGE')
 
-  let data = storage.set(collection, newArray);
+  let data = storage.set(collection, newData);
   
   return data;
 });
