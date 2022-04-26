@@ -1,16 +1,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
-import SettingsSidebar from '../components/SettingsSidebar';
-import ScrapeSettings from './SettingTypes/ScrapeSettings';
-import ProxiesSettings from './SettingTypes/ProxiesSettings';
-import NotificationSettings from './SettingTypes/NotificationSettings';
-import ThemeSettings from './SettingTypes/ThemeSettings';
-import { setSettings, updateSettings } from "../store/actions";
-import { loadSavedData, saveDataInStorage } from "../renderer.js";
-
-const ipcRenderer = window.require('electron').ipcRenderer;
-//const Discord = require('discord.js');
+import Sidebar from './components/Sidebar';
+import Scrape from './components/Scrape';
+import Proxies from './components/Proxies';
+import Notifications from './components/Notifications';
+import Themes from './components/Themes';
+import { setSettings, updateSettings } from "../../store/actions";
+import { loadSavedData, saveDataInStorage } from "../../renderer.js";
 
 function Settings({ settings, setSettings, updateSettings, changeTheme, theme }) {
 
@@ -23,17 +20,17 @@ function Settings({ settings, setSettings, updateSettings, changeTheme, theme })
     console.log(settings)
     return (
         <div id="Settings" className='w-full'>
-            <SettingsSidebar />
+            <Sidebar />
             <div style={{paddingLeft: "208px"}}>
                 {
                     query.get("type") === "scrape" ? (
-                        <ScrapeSettings settings={settings} setSettings={setSettings} updateSettings={updateSettings} />
+                        <Scrape settings={settings} updateSettings={updateSettings} />
                     ) : query.get("type") === "proxies" ? (
-                        <ProxiesSettings settings={settings} setSettings={setSettings} updateSettings={updateSettings} />
+                        <Proxies settings={settings} updateSettings={updateSettings} />
                     ) : query.get("type") === "notifications" ? (
-                        <NotificationSettings settings={settings} setSettings={setSettings} updateSettings={updateSettings} />
+                        <Notifications settings={settings} updateSettings={updateSettings} />
                     ) : query.get("type") === "themes" ? (
-                        <ThemeSettings settings={settings} setSettings={setSettings} updateSettings={updateSettings} />
+                        <Themes settings={settings} updateSettings={updateSettings} />
                     ) : 
                     
                     <></>

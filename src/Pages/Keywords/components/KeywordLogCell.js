@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import propTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { addLog } from "../store/actions";
+import { addLog } from "../../../store/actions/";
 
 const { ipcRenderer } = window.require('electron');
 

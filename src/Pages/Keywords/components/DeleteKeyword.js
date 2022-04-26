@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import propTypes from 'prop-types';
 
 function DeleteKeyword({ keyword, deleteKeyword }) {
-    const [confirm, setConfirm] = useState(false);
     
     return (
         <svg id="delete" onClick={()=> deleteKeyword(keyword)} className={`w-5 ml-3 text-error/50 hover:text-error/100 transform hover:scale-110 duration-300 cursor-pointer`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import ReactTooltip from 'react-tooltip';
-import { notify } from '../../utils/notification';
+import { notify } from '../../../utils/notification';
 
 const ipcRenderer = window.require('electron').ipcRenderer;
 

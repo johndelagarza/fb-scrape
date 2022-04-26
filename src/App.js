@@ -3,13 +3,13 @@ import { HashRouter as Router, Route, Switch, Redirect } from "react-router-dom"
 import ReactNotification from 'react-notifications-component';
 import 'react-notifications-component/dist/theme.css';
 
-import Login from './pages/Login';
+import Login from './Pages/Login/Login';
 import Dropdown from './components/Dropdown';
 import NavigationHeader from './components/NavigationHeader';
-import Items from './pages/Home';
-import Keywords from './pages/Keywords';
-import Settings from './pages/Settings';
-import Logs from './pages/Logs';
+import Items from './Pages/Home/Home';
+import Keywords from './Pages/Keywords/Keywords';
+import Settings from './Pages/Settings/Settings';
+import Logs from './Pages/Logs/Logs';
 import icon from './assets/icon2.png';
 import { connect } from 'react-redux';
 import { loadSavedData } from "./renderer";

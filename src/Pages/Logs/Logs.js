@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import propTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link, withRouter, Redirect } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
-import { clearLogs, addLog } from "../store/actions";
+import { clearLogs, addLog } from "../../store/actions";
 
 const moment = require('moment');
 const ipcRenderer = window.require('electron').ipcRenderer;

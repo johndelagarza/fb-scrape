@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
-import { Loader, Card } from '../components/elements/index.js';
-import './Items.css';
-import { loadSavedData, saveDataInStorage } from "../renderer.js";
+import { Loader, Card } from '../../components/elements/index.js';
+import './Home.css';
+import { loadSavedData, saveDataInStorage } from "../../renderer.js";
 
 const moment = require('moment');
 

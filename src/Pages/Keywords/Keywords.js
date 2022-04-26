@@ -2,16 +2,15 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import propTypes from 'prop-types';
 
-import AddKeyword from '../components/AddKeyword';
-import DeleteKeyword from '../components/DeleteKeyword';
-import StartKeyword from '../components/StartKeyword';
-import EditKeyword from '../components/EditKeyword';
-import KeywordLogCell from '../components/KeywordLogCell';
-import { addLog, setKeywords, addKeyword, editKeyword, deleteKeyword } from "../store/actions";
-import '../components/scrollbar.css'
-import { loadSavedData, saveDataInStorage } from "../renderer.js";
+import AddKeyword from './components/AddKeyword';
+import DeleteKeyword from './components/DeleteKeyword';
+import StartKeyword from './components/StartKeyword';
+import EditKeyword from './components/EditKeyword';
+import KeywordLogCell from './components/KeywordLogCell';
+import { addLog, setKeywords, addKeyword, editKeyword, deleteKeyword } from "../../store/actions";
+import '../../components/scrollbar.css';
 
-function Keywords({ keywords, setKeywords, addKeyword, editKeyword, deleteKeyword }) {
+function Keywords({ keywords, addKeyword, editKeyword, deleteKeyword }) {
 
     return (
         <div className='container mx-auto mt-5 lg:mt-0 px-5 scroller'>

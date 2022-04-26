@@ -25,4 +25,4 @@ async function removeDataFromStorage(collection, newArray) {
     return data;
 };
   
-  module.exports = { loadSavedData, saveDataInStorage, removeDataFromStorage }
+module.exports = { loadSavedData, saveDataInStorage, removeDataFromStorage }

@@ -1,6 +1,5 @@
 import React from 'react';
-import { notify } from '../../utils/notification';
-import '../../components/scrollbar.css'
+import '../../../components/scrollbar.css'
 
 function ProxiesSettings({ settings, updateSettings }) {
 

@@ -1,11 +1,11 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
-import logo from '../assets/icon2.png';
-import { notify } from '../utils/notification';
+import logo from '../../assets/icon2.png';
+import { notify } from '../../utils/notification';
 import { connect } from 'react-redux';
-import { login } from "../store/actions";
+import { login } from "../../store/actions";
 
-const { loginRequest, checkAuth } = require('../api/auth');
+const { loginRequest, checkAuth } = require('../../api/auth');
 
 function Login(props) {
     const emailRef = React.useRef(null);

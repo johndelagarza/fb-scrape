@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import propTypes from 'prop-types';
 
 var _ = require('lodash');
-const { notify } = require('../utils/notification');
+const { notify } = require('../../../utils/notification');
 
 const queryString = require('query-string');
 

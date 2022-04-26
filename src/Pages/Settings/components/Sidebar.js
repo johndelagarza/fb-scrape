@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Link, NavLink, withRouter, Redirect, useLocation } from 'react-router-dom';
-import { notify } from '../utils/notification';
-import { logout } from "../store/actions";
+import { Link, useLocation } from 'react-router-dom';
+import { logout } from "../../../store/actions";
 
 function SettingsSidebar({ user, logout }) {
     const [ active, setActive ] = useState('');
