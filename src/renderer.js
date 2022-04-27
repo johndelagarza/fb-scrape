@@ -1,5 +1,5 @@
 const { ipcRenderer } = require("electron");
-const { FETCH_DATA_FROM_STORAGE, SAVE_DATA_IN_STORAGE, REMOVE_DATA_FROM_STORAGE} = require("./utils/constants")
+const { FETCH_DATA_FROM_STORAGE, SAVE_DATA_IN_STORAGE, REMOVE_DATA_FROM_STORAGE} = require("./helpers/constants")
 
 // -----------------------------------------------------------------
 // Functions for calling main

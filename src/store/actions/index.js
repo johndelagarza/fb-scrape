@@ -49,20 +49,20 @@ export const setKeywords = (data) => {
   };
 };
   
-export const updateKeywords = (keywords) => {
-  return {
-    type: 'UPDATE_KEYWORDS',
-    keywords: keywords
-  };
-};
+// export const updateKeyword = (data) => {
+//   return {
+//     type: 'UPDATE_KEYWORD',
+//     data: data
+//   };
+// };
 
-export const startKeyword = (keyword, path, settings, saveKeywords) => {
+export const startKeyword = (keyword, path, settings, saveKeyword) => {
   return {
     type: 'START_KEYWORD',
     keyword: keyword,
     path: path,
     settings: settings,
-    saveKeywords: saveKeywords
+    saveKeyword: saveKeyword
   };
 };
 

@@ -34,18 +34,18 @@
 //         case actionTypes.UPDATE_KEYWORDS: {
 //             return { ...state, keywords: action.keywords};
 //         }
-//         case actionTypes.START_KEYWORD: {
-//             console.log('spawning scrape');
+        // case actionTypes.START_KEYWORD: {
+        //     console.log('spawning scrape');
             
-//             let intervalPid = startScrape(action);
-//             console.log(action.keyword)
-//             let updatedKeywords = state.keywords.map(keyword => keyword.keyword === action.keyword.keyword ? 
-//                 { ...keyword, online: true, pid: intervalPid, currentListings: (Date.now() - action.keyword.lastActive) > 1.44e+7 ? [] : action.keyword.currentListings } : keyword);
+        //     let intervalPid = startScrape(action);
+        //     console.log(action.keyword)
+        //     let updatedKeywords = state.keywords.map(keyword => keyword.keyword === action.keyword.keyword ? 
+        //         { ...keyword, online: true, pid: intervalPid, currentListings: (Date.now() - action.keyword.lastActive) > 1.44e+7 ? [] : action.keyword.currentListings } : keyword);
             
-//             localStorage.setItem('keywords', JSON.stringify(updatedKeywords));
-//             scrape(action.keyword, action.path, action.settings, action.saveKeywords);
-//             return { ...state, keywords: updatedKeywords };
-//         }
+        //     localStorage.setItem('keywords', JSON.stringify(updatedKeywords));
+        //     scrape(action.keyword, action.path, action.settings, action.saveKeywords);
+        //     return { ...state, keywords: updatedKeywords };
+        // }
 //         case actionTypes.STOP_KEYWORD: {
 //             let updatedKeywords = stopScrape(action, state.keywords);
 //             console.log(updatedKeywords);

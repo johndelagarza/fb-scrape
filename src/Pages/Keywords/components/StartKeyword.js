@@ -2,39 +2,40 @@ import React, { useState } from 'react'
 import { connect } from 'react-redux';
 import 'react-notifications-component/dist/theme.css'
 import fbLogo from '../../../assets/icon2.png';
-import { updateKeywords, startKeyword, stopKeyword  } from "../../../store/actions/";
+import { editKeyword, startKeyword, stopKeyword  } from "../../../store/actions/";
 
 const ipcRenderer = window.require('electron').ipcRenderer;
 
-function StartKeyword(props) {
-    const [showConfirm, setConfirm] = useState(false);
+function StartKeyword({ settings, keyword, stopKeyword, editKeyword }) {
 
     const handleStart = () => {
-        if (props.keyword.hasOwnProperty('pid')) {
+        if (keyword.hasOwnProperty('pid')) {
             return alert('Please stop task first.');
         }
 
-        if (props.status.settings.desktopNotifications) new window.Notification(`Task started: ${props.keyword.keyword}`, {body: `Scraping for new listings...`, icon: fbLogo});
-        if (props.status.settings.discordWebhook) {
+        if (settings.desktopNotifications) new window.Notification(`Task started: ${keyword.keyword}`, {body: `Scraping for new listings...`, icon: fbLogo});
+        if (settings.discordWebhook) {
             ipcRenderer.invoke(
                 'sendDiscordNotification', 
-                props.status.settings.discordWebhook, 
+                settings.discordWebhook, 
                 "START", 
-                {title: `Task started: ${props.keyword.keyword}`, description: `Now watching for new listings`}
+                {title: `Task started: ${keyword.keyword}`, description: `Now watching for new listings`}
             );
         }
 
-        return startScrape(props.startKeyword, props.status.settings, props.keyword, props.updateKeywords);
+        return startScrape(startKeyword, settings, keyword, editKeyword);
     };
 
     const handleStop = () => {
-        return props.stopKeyword(props.keyword);
+        
+        return stopKeyword(keyword);
     };
-    
+    console.log(settings);
+        console.log(keyword)
     return (
         <>
         {
-            props.keyword.hasOwnProperty('pid') ?
+            keyword.hasOwnProperty('pid') ?
                 <svg onClick={handleStop} className={`w-6 ml-3 text-error/50 hover:text-error/100 transform hover:scale-110 duration-300 cursor-pointer`} xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 752 752" fill="currentColor">
                     <path xmlns="http://www.w3.org/2000/svg" d="m562.93 612.79h-374.77c-26.922 0-48.945-22.027-48.945-48.941v-374.77c0-26.922 22.023-48.945 48.945-48.945h374.77c26.918 0 48.945 22.023 48.945 48.945v374.77c-0.003906 26.914-22.027 48.941-48.949 48.941z" fill-rule="evenodd"/>
                 </svg>
@@ -48,12 +49,12 @@ function StartKeyword(props) {
 };
 
 const mapStateToProps = state => {
-    return { status: state.status }
+    return { settings: state.settings, keywords: state.keywords }
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        updateKeywords: (keywords) => dispatch(updateKeywords(keywords)),
+        editKeyword: (keyword) => dispatch(editKeyword(keyword)),
         startKeyword: (keyword, path, settings, save) => dispatch(startKeyword(keyword, path, settings, save)),
         stopKeyword: (keyword) => dispatch(stopKeyword(keyword))
     };
