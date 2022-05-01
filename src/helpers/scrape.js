@@ -2,16 +2,6 @@ import { loadSavedData, saveDataInStorage, removeDataFromStorage } from "../rend
 const { ipcRenderer, remote, Notification } = window.require('electron');
 const { notify } = require('./notification');
 
-// export const getSettings = () => {
-//     let settings = localStorage.getItem('settings');
-
-//     if (!settings) {
-//         return null;
-//     } else if (settings) {
-//         return JSON.parse(settings);
-//     };
-// };
-
 // export const getKeywords = () => {
 //     let keywords = localStorage.getItem('keywords');
 
@@ -30,32 +20,30 @@ const { notify } = require('./notification');
 // };
 
 export const startScrape = (action) => {
-    //scrape(action.keyword, action.path, action.settings, action.saveKeywords);
-    const intervalPid = setInterval(()=> scrape(action.keyword, action.path, action.settings, action.saveKeyword), parseInt(action.settings.interval));
+
+    const intervalPid = setInterval(async ()=> {
+        let keywords = await loadSavedData("keywords");
+        let index = keywords.findIndex(e => e.id === action.keyword.id);
+        
+        action.editKeyword({...keywords[index], lastActive: Date.now()});
+        scrape({...keywords[index], lastActive: Date.now()}, action.path, action.settings, action.editKeyword)
+
+    }, parseInt(action.settings.interval));
+    
     return intervalPid;
 };
 
-export const stopScrape = (action, keywords) => {
-    clearInterval(action.keyword.pid);
-
-    let updatedKeywords = keywords.map(keyword => {
-        if (keyword.keyword === action.keyword.keyword) {
-            delete keyword.pid
-            return { ...keyword, online: false, lastActive: Date.now() };
-        } else return keyword;
-    });
-    return updatedKeywords
-};
-
-export const scrape = async (keyword, path, settings, saveKeyword) => {
-    
-    //if (!keywords[elementIdex].pid) return alert('Error: No process id, killing scrape.');
-    if (keyword.online === false) return alert('Error: Stopped, killing scrape.');
+export const scrape = async (keyword, path, settings, editKeyword) => {
+    console.log(keyword)
+// if keyword is not online, return
+    if (keyword.online === false) return notify('Error:', 'Stopped, killing scrape.', 'danger');
+// initate the scrape
 
     try {
-        const listings = await ipcRenderer.invoke('startScrape', {
+
+        const listings = await ipcRenderer.invoke('start-scrape', {
             path: path, 
-            keyword: keyword.keyword,
+            keyword: keyword,
             url: keyword.url, 
             proxies: settings.hasOwnProperty('proxies') && settings.proxies.length > 0 ? settings.proxies : null, 
             discordWebhook: settings.discordWebhook,
@@ -64,12 +52,12 @@ export const scrape = async (keyword, path, settings, saveKeyword) => {
         });
         console.log(listings)
         if (!listings) return;
+// compare stored listings vs new ones and then edit the keyword's currentListings value
         const newListings = await findNewListings(keyword, listings);
         
         let updatedKeyword = {...keyword, currentListings: newListings};
-        //let newKeywords = await keywords.map(e => e.id === keyword.id ? updatedKeyword : e);
         
-        return saveKeyword(updatedKeyword);
+        return editKeyword(updatedKeyword);
     } catch (error) {
         console.trace(error.message);
         return console.log(error.message);
@@ -81,7 +69,7 @@ export const findNewListings = async (keyword, listings) => {
     if (keyword.hasOwnProperty('currentListings') && typeof Array) {
         let currentListings = keyword.currentListings;
         let currentListingsIds = await currentListings.map(listing => listing.id);
-        let settings = JSON.parse(localStorage.getItem('settings'));
+        let settings = await loadSavedData('settings');
 
         let newListings = await listings.map((listing)=> {   
             if (!currentListingsIds.includes(listing.id)) {
@@ -89,7 +77,7 @@ export const findNewListings = async (keyword, listings) => {
                 
                 if (settings.discordWebhook !== null) {
                     ipcRenderer.invoke(
-                        'sendDiscordNotification', 
+                        'send-discord-notification', 
                         settings.discordWebhook, 
                         "NEW_LISTING", 
                         {title: `New Listing Found: ${keyword.keyword}`, description: listing}
@@ -122,4 +110,16 @@ export const findNewListings = async (keyword, listings) => {
     } else {
         return listings;
     };
+};
+
+export const stopScrape = (action, keywords) => {
+    clearInterval(action.keyword.pid);
+
+    let updatedKeywords = keywords.map(keyword => {
+        if (keyword.keyword === action.keyword.keyword) {
+            delete keyword.pid
+            return { ...keyword, online: false, lastActive: Date.now() };
+        } else return keyword;
+    });
+    return updatedKeywords
 };

@@ -3,32 +3,14 @@ import propTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
 import { clearLogs, addLog } from "../../store/actions";
+import { formatDate } from '../../helpers/formateDate';
+var uniqid = require('uniqid'); 
 
 const moment = require('moment');
 const ipcRenderer = window.require('electron').ipcRenderer;
 
 function Logs({ keywords, logs, addLog, clearLogs }) {
-    //const [logs, setLogs] = useState([]);
 
-    useEffect(()=> {
-
-        for (const { keyword } of keywords) {
-
-            ipcRenderer.on(keyword, (event, msg)=> {
-                console.log(msg)
-                addLog(msg)
-                //return //setLog(msg.message);
-            });
-        };
-        return function cleanup() {
-            for (const { keyword } of keywords) {
-                ipcRenderer.removeAllListeners(keyword)
-            }
-        }
-
-        //return setLogs(logs);
-    }, [logs.length]);
-    
     return (
         <div className='container mx-auto mt-5 lg:mt-0 px-5'>
             <div className="flex justify-between text-primaryText font-sans font-medium">
@@ -45,6 +27,7 @@ function Logs({ keywords, logs, addLog, clearLogs }) {
                 <div className="table w-full text-md">
                     <div className="table-header-group ...">
                         <div className="table-row">
+                        <div className="table-cell text-left text-primaryText py-3 px-6">ID</div>
                         <div className="table-cell text-left text-primaryText py-3 px-6">Keyword</div>
                         <div className="table-cell text-left text-primaryText py-3 px-6">Event</div>
                         <div className="table-cell text-center text-primaryText py-3 px-6">Time</div>
@@ -56,17 +39,20 @@ function Logs({ keywords, logs, addLog, clearLogs }) {
                         : 
                             logs.sort((x, y) => y.time - x.time).map((log)=> {
                                 return (
-                                    <div className={`overflow-hidden table-row text-primaryText text-xs border-b border-onPrimaryBgSofter`}>
+                                    <div key={uniqid()} className={`overflow-hidden table-row text-primaryText text-xs border-b border-onPrimaryBgSofter`}>
                                     {/* <tr id={index} className={`select-none text-primaryText text-xs md:text-base lg:text-base border-b border-onPrimaryBgSofter ${activeRows.includes(index) ? 'bg-onPrimaryBgSofter' : ''}`}> */}
                                         
-                                        <div key={(log.keyword + log.time + log.message).toString()} id="keyword" className="table-cell py-3 px-6 truncate pointer-events-none">
+                                        <div key={uniqid()} id="id" className="table-cell py-3 px-6 truncate pointer-events-none">
+                                            <span className="flex justify-left pointer-events-none">{log.id.substring(log.id.length - 4)}</span>
+                                        </div>
+                                        <div key={uniqid()} id="keyword" className="table-cell py-3 px-6 truncate pointer-events-none">
                                             <span className="flex justify-left pointer-events-none">{log.keyword}</span>
                                         </div>
-                                        <div data-tip={log.message} id="log" className="table-cell py-3 px-6 max-w-[60px] w-2/4 whitespace-nowrap text-ellipsis overflow-hidden">
+                                        <div key={uniqid()} data-tip={log.message} id="log" className="table-cell py-3 px-6 max-w-[60px] w-2/4 whitespace-nowrap text-ellipsis overflow-hidden">
                                             <span className="flex justify-left">{log.message}</span>
                                         </div>
-                                        <div id="actions" className="flex whitespace-nowrap flex-nowrap py-3 px-6 space-x-5 justify-center">
-                                            <span className="flex justify-left pointer-events-none">{log.time}</span>
+                                        <div key={uniqid()} id="actions" className="flex whitespace-nowrap flex-nowrap py-3 px-6 space-x-5 justify-center">
+                                            <span className="flex justify-left pointer-events-none">{formatDate(Date(log.time))}</span>
                                         </div>
                                     </div>
                                 )

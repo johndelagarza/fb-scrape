@@ -12,7 +12,7 @@ module.exports = {
     content: [
       './src/pages/**/*.js',
       './src/components/**/*.js',
-      './src/utils/**/*.js',
+      './src/helpers/**/*.js',
       './src/*.js',
       "./node_modules/flowbite/**/*.js"
     ],

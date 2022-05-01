@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import propTypes from 'prop-types';
 
 var uniqid = require('uniqid'); 
-const { notify } = require('../../../utils/notification');
+const { notify } = require('../../../helpers/notification');
 const queryString = require('query-string');
 
 function AddKeyword({ addKeyword }) {

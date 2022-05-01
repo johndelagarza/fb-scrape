@@ -20,7 +20,7 @@ async function scrape(config, log) {
     let randomUserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36';
     //proxies !== null ? proxy == '--proxy-server=' + proxies[randomProxy(proxies)] : null;
     
-    log({keyword: keyword, message: `${proxies ? proxy : 'No proxy'}`, time: Math.floor(Date.now() / 1000)});
+    log({id: keyword.id, keyword: keyword.keyword, message: `${proxies ? proxy : 'No proxy'}`, time: Math.floor(Date.now() / 1000)});
     //log({keyword: keyword, message: randomUserAgent, time: Math.floor(Date.now() / 1000) });
     let maxPrice = parseInt(100000) + (Math.floor(Math.random() * 25) + 1);
     //let urlBase = url.match(/(.*)[?]/);
@@ -29,12 +29,12 @@ async function scrape(config, log) {
     //console.log(newUrl)
     //log({keyword: keyword, message: newUrl, time: Math.floor(Date.now() / 1000)});
     //log({keyword: keyword, message: 'Pulling Listings', time: Math.floor(Date.now() / 1000)});
-    const products = await getListings(path, url, randomUserAgent, proxy, keyword, log, headless);
-    log({keyword: keyword, message: 'Returning listings.', time: Math.floor(Date.now() / 1000)});
+    const products = await getListings(path, url, randomUserAgent, proxy, keyword, headless, log);
+    log({id: keyword.id, keyword: keyword.keyword, message: 'Returning listings.', time: Math.floor(Date.now() / 1000)});
     return products;
 };
 
-async function getListings(path, url, randomUserAgent, proxy, keyword, log, headless) {
+async function getListings(path, url, randomUserAgent, proxy, keyword, headless, log) {
     
     const browser = await puppeteer.launch({
         headless: headless,
@@ -61,7 +61,7 @@ async function getListings(path, url, randomUserAgent, proxy, keyword, log, head
             }
         });
         
-        log({keyword: keyword, message: 'Opening Facebook Marketplace', time: Math.floor(Date.now() / 1000)});
+        log({id: keyword.id, keyword: keyword.keyword, message: 'Opening Facebook Marketplace', time: Math.floor(Date.now() / 1000)});
         await page.goto(url, {timeout: 10000});
         
         await timeout(3000);
@@ -104,11 +104,11 @@ async function getListings(path, url, randomUserAgent, proxy, keyword, log, head
         
        
         browser.close();
-        log({keyword: keyword, message: 'Listings found: ' + listings.length, time: Math.floor(Date.now() / 1000)});
+        log({id: keyword.id, keyword: keyword.keyword, message: 'Listings found: ' + listings.length, time: Math.floor(Date.now() / 1000)});
         return listings;
     } catch (error) {
         console.log(error.message);
-        log({keyword: keyword, message: error.message, time: Math.floor(Date.now() / 1000)});
+        log({id: keyword.id, keyword: keyword.keyword, message: error.message, time: Math.floor(Date.now() / 1000)});
        
         browser.close();
         return null;

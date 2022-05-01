@@ -12,7 +12,7 @@ const queryString = require('query-string');
 const { getWinSettings, saveBounds } = require('./setting');
 const scrape = require('./scrape');
 const { sendDiscordNotification }  = require('./functions');
-const {HANDLE_FETCH_DATA, FETCH_DATA_FROM_STORAGE, HANDLE_SAVE_DATA, SAVE_DATA_IN_STORAGE, REMOVE_DATA_FROM_STORAGE, HANDLE_REMOVE_DATA} = require("../src/utils/constants");
+const {HANDLE_FETCH_DATA, FETCH_DATA_FROM_STORAGE, HANDLE_SAVE_DATA, SAVE_DATA_IN_STORAGE, REMOVE_DATA_FROM_STORAGE, HANDLE_REMOVE_DATA} = require("../src/helpers/constants");
 
 const storage = new Store();
 
@@ -70,12 +70,12 @@ ipcMain.handle('setChromePath', async () => {
   return chromePath;
 });
 
-ipcMain.handle('sendDiscordNotification', async (event, webhook, type, message) => {
+ipcMain.handle('send-discord-notification', async (event, webhook, type, message) => {
   
   sendDiscordNotification(webhook, type, message)
 });
 
-ipcMain.handle('startScrape', async (event, config) => {
+ipcMain.handle('start-scrape', async (event, config) => {
 
   //console.log(config)
   const newListings = await scrape.scrape(config, log);
@@ -136,7 +136,7 @@ ipcMain.on('restart_app', () => {
 
 function log(msg) {
   console.log(msg)
-  return mainWindow.webContents.send(msg.keyword, msg);
+  return mainWindow.webContents.send(msg.id, msg);
 }
 
 

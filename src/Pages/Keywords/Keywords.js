@@ -5,6 +5,7 @@ import propTypes from 'prop-types';
 import AddKeyword from './components/AddKeyword';
 import DeleteKeyword from './components/DeleteKeyword';
 import StartKeyword from './components/StartKeyword';
+import StopKeyword from './components/StopKeyword';
 import EditKeyword from './components/EditKeyword';
 import KeywordLogCell from './components/KeywordLogCell';
 import { addLog, setKeywords, addKeyword, editKeyword, deleteKeyword } from "../../store/actions";
@@ -56,9 +57,7 @@ function Keywords({ keywords, addKeyword, editKeyword, deleteKeyword }) {
                                             <StartKeyword 
                                                 keyword={e}  
                                             />
-                                            {/* <svg id="test" className={`w-4 ml-3  text-nanoBlue/50 hover:text-nanoBlue/100 transform hover:scale-110 duration-300 cursor-pointer`} xmlns="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/1999/xlink" fill="currentColor" viewBox="0 0 208.776 208.776" stroke="currentColor">
-                                                <path className="pointer-events-none" d="M203.289,50.917L149.938,1.848c-2.822-2.596-7.208-2.438-9.836,0.354l-1.647,1.75c-2.671,2.838-2.51,7.312,0.359,9.95  l1.148,1.055L11.517,151.411c-5.63,5.98-8.567,13.795-8.271,22.003s3.788,15.791,9.833,21.351l6.479,5.96  c5.646,5.192,12.976,8.051,20.642,8.051c8.378,0,16.475-3.497,22.214-9.595L191.342,62.214l0.823,0.757  c2.822,2.596,7.208,2.438,9.836-0.354l1.647-1.75C206.319,58.029,206.158,53.555,203.289,50.917z M126.849,116.138L79.627,93.644  l65.875-69.983l36.659,33.717L126.849,116.138z"/>
-                                            </svg> */}
+                                            <StopKeyword keyword={e} />
                                             <EditKeyword index={index} keyword={e} editKeyword={editKeyword} />
                                             <DeleteKeyword 
                                                 keyword={e} 

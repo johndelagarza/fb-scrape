@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import logo from '../../assets/icon2.png';
-import { notify } from '../../utils/notification';
+import { notify } from '../../helpers/notification';
 import { connect } from 'react-redux';
 import { login } from "../../store/actions";
 

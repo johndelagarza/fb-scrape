@@ -13,19 +13,28 @@ const keywords = (state = INITIAL_STATE, action) => {
         
         case 'SET_KEYWORDS':
             console.log(action.data)
-            return { ...state, keywords: action.data }
+
+            updatedKeywords = action.data.map(keyword => {
+                if (keyword.hasOwnProperty('pid')) {
+                    clearInterval(keyword.pid);
+                    delete keyword.pid
+                    return { ...keyword, online: false };
+                } else return keyword;
+            });
+
+            return { ...state, keywords: updatedKeywords }
 
         case 'ADD_KEYWORD':
             updatedKeywords = [...state.keywords, action.data];
             
             saveDataInStorage("keywords", updatedKeywords);
-            console.log(updatedKeywords)
+
 
             return {...state, keywords: updatedKeywords }
 
         case 'EDIT_KEYWORD':
             updatedKeywords = _.map(state.keywords, (keyword) => keyword.id === action.data.id ? action.data : keyword)
-            console.log(updatedKeywords)
+            
             saveDataInStorage("keywords", updatedKeywords);
 
             return {...state, keywords: updatedKeywords }
@@ -43,11 +52,28 @@ const keywords = (state = INITIAL_STATE, action) => {
             let intervalPid = startScrape(action);
             console.log(action)
             updatedKeywords = _.map(state.keywords, (keyword) => keyword.id === action.keyword.id ? 
-                { ...keyword, online: true, pid: intervalPid, currentListings: (Date.now() - action.keyword.lastActive) > 1.44e+7 ? [] : action.keyword.currentListings } : keyword);
+                action.keyword = { ...keyword, online: true, pid: intervalPid, lastActive: Date.now(), currentListings: (Date.now() - action.keyword.lastActive) > 1.44e+7 ? [] : action.keyword.currentListings } : keyword);
             saveDataInStorage("keywords", updatedKeywords);
             
-            scrape(action.keyword, action.path, action.settings, action.saveKeyword);
+            scrape(action.keyword, action.path, action.settings, action.editKeyword);
             return { ...state, keywords: updatedKeywords };
+        }
+
+        case 'STOP_KEYWORD': {
+            console.log(action.data)
+            clearInterval(action.data.pid);
+
+            updatedKeywords = _.map(state.keywords, (keyword) => {
+                if (keyword.id === action.data.id) {
+                    delete keyword.pid
+                    return {...keyword, online: false, lastActive: Date.now()};
+                }
+                return keyword;
+            });
+
+            saveDataInStorage("keywords", updatedKeywords);
+
+            return {...state, keywords: updatedKeywords }
         }
 
       default:

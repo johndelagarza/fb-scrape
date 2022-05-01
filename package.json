@@ -33,6 +33,7 @@
     "puppeteer-extra-plugin-stealth": "^2.9.0",
     "query-string": "^7.1.1",
     "react": "^16.13.1",
+    "react-countdown": "^2.3.2",
     "react-dom": "^16.13.1",
     "react-notifications-component": "^2.4.0",
     "react-redux": "^7.2.0",

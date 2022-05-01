@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import ReactTooltip from 'react-tooltip';
-import { notify } from '../../../utils/notification';
+import { notify } from '../../../helpers/notification';
 
 const ipcRenderer = window.require('electron').ipcRenderer;
 
@@ -9,7 +9,7 @@ function NotificationSettings({ settings, updateSettings }) {
   const testDiscordWebhook = async () => {
     let discordWebhookInput = document.getElementById("discordWebhookInput");
     console.log(discordWebhookInput.value)
-    const response = await ipcRenderer.invoke('sendDiscordNotification', discordWebhookInput.value, "TEST");
+    const response = await ipcRenderer.invoke('send-discord-notification', discordWebhookInput.value, "TEST");
   };
     
   return (

@@ -1,39 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import propTypes from 'prop-types';
 import { connect } from 'react-redux';
+import Countdown from 'react-countdown';
 import { addLog } from "../../../store/actions/";
 
 const { ipcRenderer } = window.require('electron');
 
-function KeywordLogCell(props) {
+function KeywordLogCell({ keyword, active, addLog, settings }) {
     const [log, setLog] = useState(null);
 
     useEffect(()=> {
-        ipcRenderer.removeAllListeners(props.keyword.id)
-        ipcRenderer.on(props.keyword.id, (event, msg)=> {
-            //props.addLog(msg)
+        ipcRenderer.removeAllListeners(keyword.id)
+        ipcRenderer.on(keyword.id, (event, msg)=> {
+            
+            addLog(msg)
             return setLog(msg.message);
         });
+
         return function cleanup() {
-            ipcRenderer.removeAllListeners(props.keyword.id)
+            ipcRenderer.removeAllListeners(keyword.id)
         }
     }, []);
     
     return (
         <span className="flex justify-left pointer-events-none text-xs whitespace-nowrap text-ellipsis overflow-hidden">
+            {/* <Countdown date={keyword.lastActive + settings.interval} /> */}
             {
-                !props.active ? 
-                    'Stopped' 
-                : log ? 
-                    log
-                : 'Waiting...'
+                !active ? 'Stopped' 
+                : log && log !== "Returning listings." ? log
+                : <span>Waiting: <Countdown date={keyword.lastActive + settings.interval} /></span>
             }
         </span>           
     )
 };
 
 const mapStateToProps = state => {
-    return { status: state.status }
+    return { logs: state.logs, settings: state.settings }
 };
 
 const mapDispatchToProps = dispatch => {

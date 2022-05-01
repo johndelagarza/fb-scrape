@@ -13,10 +13,25 @@ export const logout = () => {
   };
 };
 
-export const addLog = (log) => {
+export const setUser = (data) => {
+  return {
+    type: 'SET_USER',
+    data: data
+  };
+};
+
+export const setLogs = (data) => {
+  
+  return {
+    type: 'SET_LOGS',
+    data: data
+  };
+};
+
+export const addLog = (data) => {
   return {
     type: 'ADD_LOG',
-    log: log
+    data: data
   };
 };
 
@@ -27,7 +42,7 @@ export const clearLogs = () => {
 };
 
 export const setSettings = (data) => {
-  console.log(data)
+  
   return {
     type: 'SET_SETTINGS',
     data: data
@@ -48,28 +63,22 @@ export const setKeywords = (data) => {
     data: data
   };
 };
-  
-// export const updateKeyword = (data) => {
-//   return {
-//     type: 'UPDATE_KEYWORD',
-//     data: data
-//   };
-// };
 
-export const startKeyword = (keyword, path, settings, saveKeyword) => {
+export const startKeyword = (keyword, path, settings, editKeyword) => {
+
   return {
     type: 'START_KEYWORD',
     keyword: keyword,
     path: path,
     settings: settings,
-    saveKeyword: saveKeyword
+    editKeyword: editKeyword
   };
 };
 
 export const stopKeyword = (keyword) => {
   return {
     type: 'STOP_KEYWORD',
-    keyword: keyword
+    data: keyword
   };
 };
 

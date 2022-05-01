@@ -6,17 +6,26 @@ const INITIAL_STATE = {
 };
 
 const logs = (state = INITIAL_STATE, action) => {
+
     switch(action.type) {
         
         case 'SET_LOGS':
-            console.log(action.data)
+            if (state.logs.length > 100) {
+                return { ...state, logs: [] }
+            }
             return { ...state, logs: action.data }
 
         case 'ADD_LOG':
-
+            
             saveDataInStorage("logs", [...state.logs, action.data]);
 
             return {...state, logs: [...state.logs, action.data] }
+
+        case 'CLEAR_LOGS':
+            
+            saveDataInStorage("logs", []);
+
+            return {...state, logs: [] }
 
       default:
         return state;

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactTooltip from 'react-tooltip';
-import { notify } from '../../../utils/notification';
+import { notify } from '../../../helpers/notification';
 
 const ipcRenderer = window.require('electron').ipcRenderer;
 

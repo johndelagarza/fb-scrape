@@ -13,20 +13,31 @@ import Logs from './Pages/Logs/Logs';
 import icon from './assets/icon2.png';
 import { connect } from 'react-redux';
 import { loadSavedData } from "./renderer";
-import { setKeywords, setSettings } from "./store/actions";
+import { setKeywords, setSettings, setLogs, setUser } from "./store/actions";
+import { checkAuth } from './api/auth';
 
 const ipcRenderer = window.require('electron').ipcRenderer;
 const customTitlebar = window.require('custom-electron-titlebar');
-const { notify } = require('./utils/notification');
+const { notify } = require('./helpers/notification');
 
-function App({ setKeywords, setSettings, }) {
+function App({ setKeywords, setSettings, setLogs, setUser, auth }) {
   const [ dropdownOpen, setDropdownOpen ] = useState(false);
   const [appVersion, setAppVersion] = useState('');
   const [theme, setTheme] = useState('dark');
 
+  const noAuthRoutes = ['/login', '/logout']
+
   useEffect(()=> {
+
+    const isNoAuthRoute = noAuthRoutes.includes(window.location.pathname);
+  
+    if (!isNoAuthRoute) {
+      checkAuth().then(response => response.success ? setUser(response.success.user) : null)
+    };
+
     loadSavedData("keywords").then(data => setKeywords(data));
     loadSavedData("settings").then(data => setSettings(data));
+    loadSavedData("logs").then(data => setLogs(data));
 
     let titleBar = new customTitlebar.Titlebar({
       backgroundColor: customTitlebar.Color.fromHex("#13131C"),
@@ -101,7 +112,7 @@ function App({ setKeywords, setSettings, }) {
   const toggle = () => {
     setDropdownOpen(!dropdownOpen);
   };
-
+  console.log(auth)
   return (
     <div>
       <Router>
@@ -121,13 +132,15 @@ function App({ setKeywords, setSettings, }) {
 };
 
 const mapStateToProps = state => {
-  return { status: state.status }
+  return { auth: state.auth }
 };
 
 const mapDispatchToProps = dispatch => {
   return {
       setKeywords: (data) => dispatch(setKeywords(data)),
-      setSettings: (data) => dispatch(setSettings(data))
+      setSettings: (data) => dispatch(setSettings(data)),
+      setLogs: (data) => dispatch(setLogs(data)),
+      setUser: (data) => dispatch(setUser(data))
   };
 };
 
